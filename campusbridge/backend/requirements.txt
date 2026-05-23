@@ -1,0 +1,14 @@
+# cd /Users/snehachoudhary/Desktop/CampusBridge/campusbridge/backend
+# cd /Users/snehachoudhary/Desktop/CampusBridge/campusbridge/backend
+# source venv/bin/activate
+
+
+# pkill -f uvicorn
+"""
+pkill -f uvicorn
+cd /Users/snehachoudhary/Desktop/CampusBridge/campusbridge/backend
+source venv/bin/activate
+uvicorn main:app --reload
+"""
+
+# uvicorn main:app --reload

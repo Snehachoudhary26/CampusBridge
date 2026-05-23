@@ -1,0 +1,27 @@
+pkill -f uvicorn
+
+http://127.0.0.1:8000/docs
+
+cd /Users/snehachoudhary/Desktop/CampusBridge/frontend
+rm -rf node_modules package-lock.json
+npm install react@18 react-dom@18
+npm install react-router-dom@6 axios framer-motion react-hot-toast zustand
+npm install -D tailwindcss@3 postcss autoprefixer
+npm run dev
+
+cd /Users/snehachoudhary/Desktop/CampusBridge/campusbridge/backend
+source venv/bin/activate
+uvicorn main:app --reload
+
+deactivate
+cd /Users/snehachoudhary/Desktop/CampusBridge/frontend
+npm run dev
+
+cd /Users/snehachoudhary/Desktop/CampusBridge/frontend
+rm -rf node_modules package-lock.json
+npm install
+npm run dev
+
+
+
+
