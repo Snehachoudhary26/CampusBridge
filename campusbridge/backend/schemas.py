@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
@@ -10,6 +10,7 @@ class UserRegister(BaseModel):
     department: str
     school: str
     semester: int
+    enrollment_no: Optional[str] = None
 
 class UserLogin(BaseModel):
     email: str
@@ -23,13 +24,13 @@ class UserResponse(BaseModel):
     school: str
     semester: int
     created_at: datetime
-
     class Config:
         from_attributes = True
 
 class Token(BaseModel):
     access_token: str
     token_type: str
+    user: UserResponse
 
 class ListingCreate(BaseModel):
     title: str
@@ -57,7 +58,6 @@ class ListingResponse(BaseModel):
     is_flagged: bool
     seller_id: int
     created_at: datetime
-
     class Config:
         from_attributes = True
 
@@ -73,7 +73,6 @@ class MessageResponse(BaseModel):
     listing_id: int
     receiver_id: int
     created_at: datetime
-
     class Config:
         from_attributes = True
 

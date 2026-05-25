@@ -10,6 +10,7 @@ import ListingDetail from './pages/ListingDetail'
 import Messages from './pages/Messages'
 import Analytics from './pages/Analytics'
 import Profile from './pages/Profile'
+import Admin from './pages/Admin'
 import ARIAChat from './components/ARIAChat'
 
 export default function App() {
