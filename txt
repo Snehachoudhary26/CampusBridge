@@ -25,3 +25,28 @@ npm run dev
 
 
 
+
+
+
+cd /Users/snehachoudhary/Desktop/CampusBridge/frontend
+rm -rf node_modules package-lock.json
+npm install vite@5.4.2 --save-dev
+npm install
+npm run dev
+
+
+cd /Users/snehachoudhary/Desktop/CampusBridge/frontend
+rm -rf node_modules package-lock.json
+
+# Pin vite to stable version in package.json
+ #sed -i '' 's/"vite": "[^"]*"/"vite": "5.4.2"/' package.json
+
+npm install
+npm run dev
+
+
+cd /Users/snehachoudhary/Desktop/CampusBridge/frontend
+rm -rf node_modules package-lock.json
+
+npm install --legacy-peer-deps
+npm run dev

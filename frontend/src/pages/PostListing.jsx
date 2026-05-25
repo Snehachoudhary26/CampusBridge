@@ -5,12 +5,12 @@ import toast from 'react-hot-toast'
 import API from '../api/axios'
 import useAuthStore from '../store/authStore'
 
-const categories = ['Books', 'Laptop', 'Calculator', 'Drawing Instruments', 'Stationery', 'Fan', 'Cooler', 'Hostel Items', 'Electronics', 'Other']
-const listingTypes = ['sell', 'rent', 'borrow', 'swap']
+const categories = ['Books','Laptop','Calculator','Drawing Instruments','Stationery','Fan','Cooler','Hostel Items','Electronics','Other']
+const listingTypes = ['sell','rent','borrow','swap']
 
 export default function PostListing() {
   const navigate = useNavigate()
-  const { isAuthenticated, user } = useAuthStore()
+  const { isAuthenticated } = useAuthStore()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [predicting, setPredicting] = useState(false)
@@ -18,303 +18,283 @@ export default function PostListing() {
   const [image, setImage] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
   const [form, setForm] = useState({
-    title: '',
-    description: '',
-    price: '',
-    condition: 3,
-    category: '',
-    listing_type: 'sell',
-    department_tag: '',
-    semester_tag: '',
-    original_price: '',
-    months_used: '',
+    title: '', description: '', category: '', listing_type: 'sell',
+    price: '', condition: 3, months_used: 0,
   })
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      toast.error('Please login to post a listing')
-      navigate('/login')
-    }
-  }, [isAuthenticated])
+  useEffect(() => { if (!isAuthenticated) { toast.error('Please login first'); navigate('/login') } }, [])
 
-  const handleImageChange = (e) => {
+  const update = (k, v) => setForm(f => ({ ...f, [k]: v }))
+
+  const handleImage = (e) => {
     const file = e.target.files[0]
-    if (file) {
-      setImage(file)
-      setImagePreview(URL.createObjectURL(file))
-    }
+    if (file) { setImage(file); setImagePreview(URL.createObjectURL(file)) }
   }
 
   const predictPrice = async () => {
-    if (!form.category || !form.original_price || !form.months_used) {
-      toast.error('Fill category, original price and months used first')
-      return
-    }
+    if (!form.category || !form.condition) { toast.error('Select category and condition first'); return }
     setPredicting(true)
     try {
       const res = await API.post('/predict/price', {
-        category: form.category,
-        original_price: parseFloat(form.original_price),
-        condition: form.condition,
-        months_used: parseInt(form.months_used),
-        demand_score: 0.5
+        category: form.category, condition: parseInt(form.condition),
+        months_used: parseInt(form.months_used) || 0, listing_type: form.listing_type,
       })
       setPriceData(res.data)
-      setForm(prev => ({ ...prev, price: res.data.predicted_price }))
-      toast.success('AI price prediction ready!')
-    } catch (err) {
-      toast.error('Price prediction failed')
-    } finally {
-      setPredicting(false)
-    }
+      toast.success('AI price prediction ready! 🤖')
+    } catch { toast.error('Prediction failed') }
+    finally { setPredicting(false) }
   }
 
   const handleSubmit = async () => {
-    if (!form.title || !form.price || !form.category) {
-      toast.error('Please fill all required fields')
-      return
-    }
+    if (!form.title || !form.category || !form.price) { toast.error('Fill all required fields'); return }
     setLoading(true)
     try {
-      const formData = new FormData()
-      formData.append('title', form.title)
-      formData.append('description', form.description)
-      formData.append('price', form.price)
-      formData.append('condition', form.condition)
-      formData.append('category', form.category)
-      formData.append('listing_type', form.listing_type)
-      if (form.department_tag) formData.append('department_tag', form.department_tag)
-      if (form.semester_tag) formData.append('semester_tag', form.semester_tag)
-      if (image) formData.append('image', image)
-
-      await API.post('/listings/', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
-      toast.success('Listing posted successfully!')
+      const fd = new FormData()
+      Object.entries(form).forEach(([k, v]) => fd.append(k, v))
+      if (image) fd.append('image', image)
+      await API.post('/listings/', fd, { headers: { 'Content-Type': 'multipart/form-data' } })
+      toast.success('Listing posted! 🎉')
       navigate('/listings')
-    } catch (err) {
-      toast.error(err.response?.data?.detail || 'Failed to post listing')
-    } finally {
-      setLoading(false)
-    }
+    } catch (err) { toast.error(err.response?.data?.detail || 'Failed to post') }
+    finally { setLoading(false) }
   }
 
+  const inputStyle = {
+    width: '100%', padding: '12px 16px', borderRadius: 10,
+    border: '1.5px solid #D0ECE8', outline: 'none', fontSize: 15,
+    color: '#0D2B35', background: '#F8FFFE', boxSizing: 'border-box', transition: 'border 0.2s',
+  }
+  const labelStyle = { fontSize: 13, fontWeight: 600, color: '#4A6572', display: 'block', marginBottom: 6 }
+
   return (
-    <div className="min-h-screen bg-[#0A1628] py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <h1 className="text-white text-2xl font-bold mb-2">Post a Listing</h1>
-          <p className="text-gray-400 text-sm mb-6">Share your item with RGPV students</p>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(160deg, #FFFFFF 0%, #E8FDFB 60%, #D0F8F3 100%)', padding: '40px 20px' }}>
+      <div style={{ maxWidth: 680, margin: '0 auto' }}>
 
-          <div className="flex items-center gap-2 mb-8">
-            {[1, 2, 3].map(s => (
-              <div key={s} className="flex items-center gap-2">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${step >= s ? 'bg-[#00C896] text-[#0A1628]' : 'bg-[#112240] text-gray-400 border border-[#00C896]/20'}`}>{s}</div>
-                {s < 3 && <div className={`h-0.5 w-12 transition-all ${step > s ? 'bg-[#00C896]' : 'bg-[#112240]'}`} />}
+        {/* Header */}
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
+          style={{ textAlign: 'center', marginBottom: 36 }}>
+          <h1 style={{ fontSize: 30, fontWeight: 900, color: '#0D2B35', marginBottom: 8 }}>Post a Listing</h1>
+          <p style={{ color: '#7A9BA8' }}>List your item for the RGPV campus community</p>
+        </motion.div>
+
+        {/* Step bar */}
+        <div style={{ display: 'flex', gap: 8, marginBottom: 32 }}>
+          {[1, 2, 3].map(s => (
+            <div key={s} style={{
+              flex: 1, height: 5, borderRadius: 4,
+              background: step >= s ? 'linear-gradient(90deg, #00C9B1, #00A896)' : '#E0F0EC',
+              transition: 'all 0.3s',
+            }} />
+          ))}
+        </div>
+
+        <motion.div
+          key={step} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
+          style={{
+            background: '#fff', borderRadius: 24, padding: '40px',
+            boxShadow: '0 8px 40px rgba(0,201,177,0.1)', border: '1px solid #D0F5F0',
+          }}
+        >
+
+          {/* ── STEP 1 ── */}
+          {step === 1 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <p style={{ color: '#A0BCBB', fontSize: 13, fontWeight: 600 }}>STEP 1 OF 3 — Basic Details</p>
+
+              <div>
+                <label style={labelStyle}>Title *</label>
+                <input style={inputStyle} placeholder="e.g. RD Sharma Maths Book Sem 3"
+                  value={form.title} onChange={e => update('title', e.target.value)}
+                  onFocus={e => e.target.style.borderColor = '#00C9B1'}
+                  onBlur={e => e.target.style.borderColor = '#D0ECE8'} />
               </div>
-            ))}
-            <div className="ml-2 text-gray-400 text-sm">
-              {step === 1 ? 'Basic Info' : step === 2 ? 'Upload Image' : 'Pricing'}
+
+              <div>
+                <label style={labelStyle}>Description</label>
+                <textarea style={{ ...inputStyle, minHeight: 100, resize: 'vertical' }}
+                  placeholder="Describe the item — condition, edition, reason for selling..."
+                  value={form.description} onChange={e => update('description', e.target.value)}
+                  onFocus={e => e.target.style.borderColor = '#00C9B1'}
+                  onBlur={e => e.target.style.borderColor = '#D0ECE8'} />
+              </div>
+
+              <div>
+                <label style={labelStyle}>Category *</label>
+                <select style={{ ...inputStyle, cursor: 'pointer' }}
+                  value={form.category} onChange={e => update('category', e.target.value)}
+                  onFocus={e => e.target.style.borderColor = '#00C9B1'}
+                  onBlur={e => e.target.style.borderColor = '#D0ECE8'}>
+                  <option value="">Select category</option>
+                  {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label style={labelStyle}>Listing Type *</label>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                  {listingTypes.map(t => (
+                    <button key={t} onClick={() => update('listing_type', t)} style={{
+                      padding: '10px 22px', borderRadius: 10, border: '1.5px solid',
+                      borderColor: form.listing_type === t ? '#00C9B1' : '#D0ECE8',
+                      background: form.listing_type === t ? 'linear-gradient(135deg, #00C9B1, #00A896)' : '#fff',
+                      color: form.listing_type === t ? '#fff' : '#4A6572',
+                      fontWeight: 600, fontSize: 14, cursor: 'pointer', textTransform: 'capitalize',
+                    }}>{t}</button>
+                  ))}
+                </div>
+              </div>
+
+              <button onClick={() => { if (!form.title || !form.category) { toast.error('Fill title and category'); return } setStep(2) }}
+                style={{
+                  width: '100%', padding: '14px', borderRadius: 10, border: 'none',
+                  background: 'linear-gradient(135deg, #00C9B1, #00A896)',
+                  color: '#fff', fontWeight: 700, fontSize: 16, cursor: 'pointer',
+                  boxShadow: '0 6px 20px rgba(0,201,177,0.35)', marginTop: 4,
+                }}>Next →</button>
             </div>
-          </div>
+          )}
 
-          <div className="bg-[#112240] rounded-2xl border border-[#00C896]/20 p-6">
+          {/* ── STEP 2 ── */}
+          {step === 2 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <p style={{ color: '#A0BCBB', fontSize: 13, fontWeight: 600 }}>STEP 2 OF 3 — Pricing & Condition</p>
 
-            {step === 1 && (
-              <div className="flex flex-col gap-4">
-                <div>
-                  <label className="text-gray-300 text-sm mb-2 block">Title *</label>
-                  <input
-                    type="text"
-                    value={form.title}
-                    onChange={e => setForm({ ...form, title: e.target.value })}
-                    placeholder="e.g. Data Structures book by Cormen"
-                    className="w-full bg-[#0A1628] text-white border border-[#00C896]/20 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#00C896] placeholder-gray-500"
-                  />
+              <div>
+                <label style={labelStyle}>Condition (1=Poor · 5=Like New) *</label>
+                <div style={{ display: 'flex', gap: 10 }}>
+                  {[1,2,3,4,5].map(n => (
+                    <button key={n} onClick={() => update('condition', n)} style={{
+                      flex: 1, padding: '12px 0', borderRadius: 10, border: '1.5px solid',
+                      borderColor: form.condition === n ? '#00C9B1' : '#D0ECE8',
+                      background: form.condition === n ? 'linear-gradient(135deg, #00C9B1, #00A896)' : '#fff',
+                      color: form.condition === n ? '#fff' : '#4A6572',
+                      fontWeight: 700, fontSize: 16, cursor: 'pointer',
+                    }}>{n}</button>
+                  ))}
                 </div>
+              </div>
 
-                <div>
-                  <label className="text-gray-300 text-sm mb-2 block">Description</label>
-                  <textarea
-                    value={form.description}
-                    onChange={e => setForm({ ...form, description: e.target.value })}
-                    placeholder="Describe the condition, edition, any damage..."
-                    rows={3}
-                    className="w-full bg-[#0A1628] text-white border border-[#00C896]/20 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#00C896] placeholder-gray-500 resize-none"
-                  />
-                </div>
+              <div>
+                <label style={labelStyle}>Months Used</label>
+                <input type="number" style={inputStyle} placeholder="e.g. 6"
+                  value={form.months_used} onChange={e => update('months_used', e.target.value)}
+                  onFocus={e => e.target.style.borderColor = '#00C9B1'}
+                  onBlur={e => e.target.style.borderColor = '#D0ECE8'} />
+              </div>
 
-                <div className="grid grid-cols-2 gap-4">
+              {/* AI Price Predictor */}
+              <div style={{
+                background: 'linear-gradient(135deg, #E8FDFB, #D0F8F3)',
+                borderRadius: 14, padding: 20, border: '1px solid #B2EFE8',
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                   <div>
-                    <label className="text-gray-300 text-sm mb-2 block">Category *</label>
-                    <select
-                      value={form.category}
-                      onChange={e => setForm({ ...form, category: e.target.value })}
-                      className="w-full bg-[#0A1628] text-white border border-[#00C896]/20 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#00C896]"
-                    >
-                      <option value="">Select category</option>
-                      {categories.map(c => <option key={c} value={c}>{c}</option>)}
-                    </select>
+                    <p style={{ fontWeight: 700, color: '#0D2B35', marginBottom: 2 }}>🤖 AI Price Prediction</p>
+                    <p style={{ fontSize: 13, color: '#6A8A96' }}>Let our ML model suggest a fair price</p>
                   </div>
-                  <div>
-                    <label className="text-gray-300 text-sm mb-2 block">Listing Type *</label>
-                    <select
-                      value={form.listing_type}
-                      onChange={e => setForm({ ...form, listing_type: e.target.value })}
-                      className="w-full bg-[#0A1628] text-white border border-[#00C896]/20 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#00C896]"
-                    >
-                      {listingTypes.map(t => <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
-                    </select>
-                  </div>
+                  <button onClick={predictPrice} disabled={predicting} style={{
+                    padding: '9px 20px', borderRadius: 8, border: 'none',
+                    background: predicting ? '#B2EFE8' : 'linear-gradient(135deg, #00C9B1, #00A896)',
+                    color: '#fff', fontWeight: 700, fontSize: 13, cursor: predicting ? 'not-allowed' : 'pointer',
+                  }}>{predicting ? '...' : 'Predict'}</button>
                 </div>
-
-                <div>
-                  <label className="text-gray-300 text-sm mb-2 block">Condition</label>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4, 5].map(n => (
-                      <button
-                        key={n}
-                        onClick={() => setForm({ ...form, condition: n })}
-                        className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${form.condition === n ? 'bg-[#00C896] text-[#0A1628]' : 'bg-[#0A1628] text-gray-400 border border-[#00C896]/20 hover:border-[#00C896]'}`}
-                      >
-                        {n}★
-                      </button>
+                {priceData && (
+                  <div style={{ display: 'flex', gap: 12 }}>
+                    {[['Min', priceData.min_price], ['Suggested', priceData.suggested_price], ['Max', priceData.max_price]].map(([label, val]) => (
+                      <div key={label} onClick={() => label === 'Suggested' && update('price', Math.round(val))}
+                        style={{
+                          flex: 1, textAlign: 'center', background: label === 'Suggested' ? '#00C9B1' : '#fff',
+                          borderRadius: 10, padding: '10px 0', cursor: label === 'Suggested' ? 'pointer' : 'default',
+                          border: '1px solid #B2EFE8',
+                        }}>
+                        <div style={{ fontSize: 11, color: label === 'Suggested' ? 'rgba(255,255,255,0.8)' : '#7A9BA8', marginBottom: 2 }}>{label}</div>
+                        <div style={{ fontWeight: 800, color: label === 'Suggested' ? '#fff' : '#0D2B35' }}>₹{Math.round(val)}</div>
+                      </div>
                     ))}
                   </div>
-                  <p className="text-gray-500 text-xs mt-1">1 = Poor condition, 5 = Like new</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-gray-300 text-sm mb-2 block">Department Tag</label>
-                    <input
-                      type="text"
-                      value={form.department_tag}
-                      onChange={e => setForm({ ...form, department_tag: e.target.value })}
-                      placeholder="e.g. B.Tech CSE"
-                      className="w-full bg-[#0A1628] text-white border border-[#00C896]/20 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#00C896] placeholder-gray-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-gray-300 text-sm mb-2 block">Semester Tag</label>
-                    <input
-                      type="number"
-                      value={form.semester_tag}
-                      onChange={e => setForm({ ...form, semester_tag: e.target.value })}
-                      placeholder="e.g. 3"
-                      min="1" max="10"
-                      className="w-full bg-[#0A1628] text-white border border-[#00C896]/20 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#00C896] placeholder-gray-500"
-                    />
-                  </div>
-                </div>
-
-                <button onClick={() => setStep(2)} className="w-full bg-[#00C896] text-[#0A1628] py-3 rounded-lg font-bold text-sm hover:bg-[#00b386] transition-colors mt-2">
-                  Next — Upload Image →
-                </button>
-              </div>
-            )}
-
-            {step === 2 && (
-              <div className="flex flex-col gap-4">
-                <div>
-                  <label className="text-gray-300 text-sm mb-2 block">Item Photo</label>
-                  <div
-                    onClick={() => document.getElementById('imageInput').click()}
-                    className="border-2 border-dashed border-[#00C896]/30 rounded-xl p-8 text-center cursor-pointer hover:border-[#00C896] transition-colors"
-                  >
-                    {imagePreview ? (
-                      <img src={imagePreview} alt="preview" className="max-h-48 mx-auto rounded-lg object-contain" />
-                    ) : (
-                      <div>
-                        <div className="text-4xl mb-3">📸</div>
-                        <p className="text-gray-400 text-sm">Click to upload a photo of your item</p>
-                        <p className="text-gray-500 text-xs mt-1">JPG, PNG up to 5MB</p>
-                      </div>
-                    )}
-                  </div>
-                  <input id="imageInput" type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
-                </div>
-
-                <div className="flex gap-3 mt-2">
-                  <button onClick={() => setStep(1)} className="flex-1 border border-[#00C896]/30 text-gray-300 py-3 rounded-lg font-medium text-sm hover:border-[#00C896] transition-colors">
-                    ← Back
-                  </button>
-                  <button onClick={() => setStep(3)} className="flex-1 bg-[#00C896] text-[#0A1628] py-3 rounded-lg font-bold text-sm hover:bg-[#00b386] transition-colors">
-                    Next — Set Price →
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {step === 3 && (
-              <div className="flex flex-col gap-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-gray-300 text-sm mb-2 block">Original Price (₹)</label>
-                    <input
-                      type="number"
-                      value={form.original_price}
-                      onChange={e => setForm({ ...form, original_price: e.target.value })}
-                      placeholder="What you paid"
-                      className="w-full bg-[#0A1628] text-white border border-[#00C896]/20 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#00C896] placeholder-gray-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-gray-300 text-sm mb-2 block">Months Used</label>
-                    <input
-                      type="number"
-                      value={form.months_used}
-                      onChange={e => setForm({ ...form, months_used: e.target.value })}
-                      placeholder="How long used"
-                      className="w-full bg-[#0A1628] text-white border border-[#00C896]/20 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#00C896] placeholder-gray-500"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  onClick={predictPrice}
-                  disabled={predicting}
-                  className="w-full border border-[#00C896] text-[#00C896] py-3 rounded-lg font-medium text-sm hover:bg-[#00C896]/10 transition-colors disabled:opacity-50"
-                >
-                  {predicting ? 'Predicting...' : '🤖 Get AI Price Suggestion'}
-                </button>
-
-                {priceData && (
-                  <div className="bg-[#0A1628] rounded-xl p-4 border border-[#00C896]/20">
-                    <p className="text-[#00C896] font-semibold text-sm mb-2">AI Suggested Price Range</p>
-                    <p className="text-white text-lg font-bold">₹{priceData.lower_bound.toLocaleString()} — ₹{priceData.upper_bound.toLocaleString()}</p>
-                    {priceData.chart && (
-                      <img src={priceData.chart} alt="price chart" className="w-full mt-3 rounded-lg" />
-                    )}
-                  </div>
                 )}
-
-                <div>
-                  <label className="text-gray-300 text-sm mb-2 block">Your Asking Price (₹) *</label>
-                  <input
-                    type="number"
-                    value={form.price}
-                    onChange={e => setForm({ ...form, price: e.target.value })}
-                    placeholder="Enter your price"
-                    className="w-full bg-[#0A1628] text-white border border-[#00C896]/20 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#00C896] placeholder-gray-500"
-                  />
-                </div>
-
-                <div className="flex gap-3 mt-2">
-                  <button onClick={() => setStep(2)} className="flex-1 border border-[#00C896]/30 text-gray-300 py-3 rounded-lg font-medium text-sm hover:border-[#00C896] transition-colors">
-                    ← Back
-                  </button>
-                  <button
-                    onClick={handleSubmit}
-                    disabled={loading}
-                    className="flex-1 bg-[#00C896] text-[#0A1628] py-3 rounded-lg font-bold text-sm hover:bg-[#00b386] transition-colors disabled:opacity-50"
-                  >
-                    {loading ? 'Posting...' : '🚀 Post Listing'}
-                  </button>
-                </div>
               </div>
-            )}
-          </div>
+
+              <div>
+                <label style={labelStyle}>Your Price (₹) *</label>
+                <input type="number" style={inputStyle} placeholder="Enter price"
+                  value={form.price} onChange={e => update('price', e.target.value)}
+                  onFocus={e => e.target.style.borderColor = '#00C9B1'}
+                  onBlur={e => e.target.style.borderColor = '#D0ECE8'} />
+              </div>
+
+              <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
+                <button onClick={() => setStep(1)} style={{
+                  flex: 1, padding: '13px', borderRadius: 10,
+                  border: '1.5px solid #D0ECE8', background: '#fff',
+                  color: '#4A6572', fontWeight: 600, cursor: 'pointer',
+                }}>← Back</button>
+                <button onClick={() => { if (!form.price) { toast.error('Enter a price'); return } setStep(3) }} style={{
+                  flex: 2, padding: '13px', borderRadius: 10, border: 'none',
+                  background: 'linear-gradient(135deg, #00C9B1, #00A896)',
+                  color: '#fff', fontWeight: 700, fontSize: 16, cursor: 'pointer',
+                  boxShadow: '0 6px 20px rgba(0,201,177,0.3)',
+                }}>Next →</button>
+              </div>
+            </div>
+          )}
+
+          {/* ── STEP 3 ── */}
+          {step === 3 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <p style={{ color: '#A0BCBB', fontSize: 13, fontWeight: 600 }}>STEP 3 OF 3 — Add Photo & Review</p>
+
+              {/* Image Upload */}
+              <div>
+                <label style={labelStyle}>Item Photo</label>
+                <label style={{
+                  display: 'block', border: '2px dashed #B2EFE8', borderRadius: 14,
+                  padding: '32px', textAlign: 'center', cursor: 'pointer',
+                  background: '#F8FFFE', transition: 'all 0.2s',
+                }}>
+                  {imagePreview
+                    ? <img src={imagePreview} alt="preview" style={{ maxHeight: 200, borderRadius: 10, objectFit: 'contain' }} />
+                    : <>
+                        <div style={{ fontSize: 40, marginBottom: 8 }}>📸</div>
+                        <p style={{ color: '#00A896', fontWeight: 600 }}>Click to upload photo</p>
+                        <p style={{ color: '#A0BCBB', fontSize: 13 }}>JPG, PNG up to 5MB</p>
+                      </>
+                  }
+                  <input type="file" accept="image/*" onChange={handleImage} style={{ display: 'none' }} />
+                </label>
+              </div>
+
+              {/* Summary */}
+              <div style={{ background: '#F8FFFE', borderRadius: 14, padding: 20, border: '1px solid #D0ECE8' }}>
+                <p style={{ fontWeight: 700, color: '#0D2B35', marginBottom: 14 }}>📋 Listing Summary</p>
+                {[
+                  ['Title', form.title], ['Category', form.category],
+                  ['Type', form.listing_type], ['Price', `₹${form.price}`],
+                  ['Condition', `${form.condition}/5`],
+                ].map(([k, v]) => (
+                  <div key={k} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                    <span style={{ color: '#7A9BA8', fontSize: 14 }}>{k}</span>
+                    <span style={{ color: '#0D2B35', fontWeight: 600, fontSize: 14, textTransform: 'capitalize' }}>{v}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
+                <button onClick={() => setStep(2)} style={{
+                  flex: 1, padding: '13px', borderRadius: 10,
+                  border: '1.5px solid #D0ECE8', background: '#fff',
+                  color: '#4A6572', fontWeight: 600, cursor: 'pointer',
+                }}>← Back</button>
+                <button onClick={handleSubmit} disabled={loading} style={{
+                  flex: 2, padding: '13px', borderRadius: 10, border: 'none',
+                  background: loading ? '#B2EFE8' : 'linear-gradient(135deg, #00C9B1, #00A896)',
+                  color: '#fff', fontWeight: 700, fontSize: 16,
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  boxShadow: '0 6px 20px rgba(0,201,177,0.3)',
+                }}>{loading ? 'Posting...' : '🚀 Post Listing'}</button>
+              </div>
+            </div>
+          )}
         </motion.div>
       </div>
     </div>

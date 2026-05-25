@@ -1,105 +1,97 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import useAuthStore from '../store/authStore'
 
 export default function Navbar() {
-  const { user, isAuthenticated, logout } = useAuthStore()
+  const { isAuthenticated, user, logout } = useAuthStore()
   const navigate = useNavigate()
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+  const location = useLocation()
+  const handleLogout = () => { logout(); navigate('/') }
 
-  const handleLogout = () => {
-    logout()
-    navigate('/')
-  }
-
-  const handleSearch = (e) => {
-    e.preventDefault()
-    if (searchQuery.trim()) {
-      navigate(`/listings?search=${searchQuery}`)
-    }
-  }
+  const navLinks = [
+    { to: '/', label: 'Home' },
+    { to: '/listings', label: 'Browse' },
+    { to: '/messages', label: 'Messages' },
+    { to: '/analytics', label: 'Analytics' },
+  ]
 
   return (
-    <nav className="bg-[#0A1628] border-b border-[#00C896]/20 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-3">
-        <div className="flex items-center justify-between gap-4">
+    <motion.nav
+      initial={{ y: -70 }} animate={{ y: 0 }} transition={{ duration: 0.5 }}
+      style={{
+        background: 'rgba(255,255,255,0.95)',
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid #D0F5F0',
+        position: 'sticky', top: 0, zIndex: 1000,
+        padding: '0 48px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        height: '68px',
+        boxShadow: '0 2px 20px rgba(0,201,177,0.08)',
+      }}
+    >
+      {/* Logo */}
+      <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span style={{ fontSize: 26 }}>🎓</span>
+        <span style={{
+          fontSize: 20, fontWeight: 800,
+          background: 'linear-gradient(135deg, #00C9B1, #00A896)',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+        }}>CampusBridge</span>
+      </Link>
 
-          <Link to="/" className="flex items-center gap-2 flex-shrink-0">
-            <div className="w-8 h-8 bg-[#00C896] rounded-lg flex items-center justify-center text-[#0A1628] font-bold text-sm">CB</div>
-            <span className="text-white font-bold text-lg hidden sm:block">CampusBridge</span>
+      {/* Nav Links */}
+      <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+        {navLinks.map(link => (
+          <Link key={link.to} to={link.to} style={{
+            padding: '8px 18px', borderRadius: 8,
+            textDecoration: 'none', fontSize: 15, fontWeight: 500,
+            color: location.pathname === link.to ? '#00C9B1' : '#4A6572',
+            background: location.pathname === link.to ? 'rgba(0,201,177,0.08)' : 'transparent',
+            transition: 'all 0.2s',
+          }}>
+            {link.label}
           </Link>
+        ))}
 
-          <form onSubmit={handleSearch} className="flex-1 max-w-xl">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search books, laptops, calculators..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#112240] text-white placeholder-gray-400 border border-[#00C896]/20 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-[#00C896] transition-colors"
-              />
-              <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-[#00C896]">
-                🔍
-              </button>
-            </div>
-          </form>
+        <Link to="/post" style={{
+          padding: '8px 20px', borderRadius: 8, textDecoration: 'none',
+          border: '1.5px solid #00C9B1', color: '#00A896',
+          fontWeight: 600, fontSize: 15, marginLeft: 8, transition: 'all 0.2s',
+        }}>
+          + List Item
+        </Link>
 
-          <div className="hidden md:flex items-center gap-4">
-            <Link to="/listings" className="text-gray-300 hover:text-[#00C896] text-sm transition-colors">Browse</Link>
-            {isAuthenticated ? (
-              <>
-                <Link to="/post-listing" className="bg-[#00C896] text-[#0A1628] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#00b386] transition-colors">+ Sell</Link>
-                <Link to="/messages" className="text-gray-300 hover:text-[#00C896] text-sm transition-colors">Messages</Link>
-                <div className="relative group">
-                  <button className="flex items-center gap-2 text-gray-300 hover:text-white">
-                    <div className="w-8 h-8 bg-[#00C896]/20 rounded-full flex items-center justify-center text-[#00C896] text-sm font-bold">
-                      {user?.name?.charAt(0).toUpperCase()}
-                    </div>
-                  </button>
-                  <div className="absolute right-0 top-10 bg-[#112240] border border-[#00C896]/20 rounded-lg py-2 w-48 hidden group-hover:block shadow-xl">
-                    <div className="px-4 py-2 border-b border-[#00C896]/10">
-                      <p className="text-white text-sm font-medium">{user?.name}</p>
-                      <p className="text-gray-400 text-xs">{user?.department}</p>
-                    </div>
-                    <Link to="/my-listings" className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-[#00C896]/10 text-sm">My Listings</Link>
-                    <Link to="/profile" className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-[#00C896]/10 text-sm">Profile</Link>
-                    <Link to="/dashboard" className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-[#00C896]/10 text-sm">Dashboard</Link>
-                    <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 text-sm">Logout</button>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <Link to="/login" className="text-gray-300 hover:text-[#00C896] text-sm transition-colors">Login</Link>
-                <Link to="/register" className="bg-[#00C896] text-[#0A1628] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#00b386] transition-colors">Join Free</Link>
-              </>
-            )}
+        {isAuthenticated ? (
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginLeft: 8 }}>
+            <Link to="/profile" style={{
+              padding: '8px 18px', borderRadius: 8,
+              background: 'rgba(0,201,177,0.1)', color: '#00A896',
+              textDecoration: 'none', fontWeight: 600, fontSize: 15,
+            }}>
+              👤 {user?.name?.split(' ')[0] || 'Profile'}
+            </Link>
+            <button onClick={handleLogout} style={{
+              padding: '8px 16px', borderRadius: 8, border: 'none',
+              background: '#FFF0F0', color: '#E05555',
+              cursor: 'pointer', fontSize: 14, fontWeight: 500,
+            }}>Logout</button>
           </div>
-
-          <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-white text-2xl">☰</button>
-        </div>
-
-        {menuOpen && (
-          <div className="md:hidden mt-3 pb-3 border-t border-[#00C896]/20 pt-3 flex flex-col gap-3">
-            <Link to="/listings" className="text-gray-300 text-sm" onClick={() => setMenuOpen(false)}>Browse</Link>
-            {isAuthenticated ? (
-              <>
-                <Link to="/post-listing" className="text-[#00C896] text-sm font-semibold" onClick={() => setMenuOpen(false)}>+ Sell Item</Link>
-                <Link to="/messages" className="text-gray-300 text-sm" onClick={() => setMenuOpen(false)}>Messages</Link>
-                <Link to="/my-listings" className="text-gray-300 text-sm" onClick={() => setMenuOpen(false)}>My Listings</Link>
-                <Link to="/dashboard" className="text-gray-300 text-sm" onClick={() => setMenuOpen(false)}>Dashboard</Link>
-                <button onClick={handleLogout} className="text-red-400 text-sm text-left">Logout</button>
-              </>
-            ) : (
-              <>
-                <Link to="/login" className="text-gray-300 text-sm" onClick={() => setMenuOpen(false)}>Login</Link>
-                <Link to="/register" className="text-[#00C896] text-sm font-semibold" onClick={() => setMenuOpen(false)}>Join Free</Link>
-              </>
-            )}
+        ) : (
+          <div style={{ display: 'flex', gap: 10, marginLeft: 8 }}>
+            <Link to="/login" style={{
+              padding: '9px 22px', borderRadius: 8, textDecoration: 'none',
+              border: '1.5px solid #D0F5F0', color: '#00A896',
+              fontWeight: 600, fontSize: 15,
+            }}>Login</Link>
+            <Link to="/register" style={{
+              padding: '9px 22px', borderRadius: 8, textDecoration: 'none',
+              background: 'linear-gradient(135deg, #00C9B1, #00A896)',
+              color: '#fff', fontWeight: 700, fontSize: 15,
+              boxShadow: '0 4px 15px rgba(0,201,177,0.35)',
+            }}>Sign Up</Link>
           </div>
         )}
       </div>
-    </nav>
+    </motion.nav>
   )
 }
