@@ -86,7 +86,7 @@ listings_data = [
     {
         "title": "Casio fx-991ES PLUS — Borrow for Exam (₹600/day)",
         "description": "Borrow my Casio fx-991ES PLUS scientific calculator for ₹600/day. All 417 functions working. RGPV exam approved. ⚠️ Terms: Any damage or loss during borrowing must be repaired or compensated fully by the borrower.",
-        "price": 600, "condition": 5, "category": "Calculator", "listing_type": "borrow", "seller_idx": 2,
+        "price": 100, "condition": 5, "category": "Calculator", "listing_type": "borrow", "seller_idx": 2,
         "image_url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcR0OAdNkqt0-lIXvcsnPpfF1J03WNZbTgejCXsKj1xjK4oZvZ9EJ17-neuqV3U_YIM5rKDJpvYQ9aRtiGKTR65hBrLSzqWsMkMLsvVmrhYxHXR_DgmtDfWcTh8VysonrToS-e5QxvcQsh4&usqp=CAc",
     },
     {
@@ -99,13 +99,13 @@ listings_data = [
         "title": "C-Type to USB-A Cable — 1 Metre Fast Charge",
         "description": "1 metre USB-C to USB-A braided cable. Supports fast charging upto 18W. Compatible with all Android phones. No fraying. Selling as I bought a wireless charger.",
         "price": 300, "condition": 5, "category": "Electronics", "listing_type": "sell", "seller_idx": 3,
-        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYCbAW-TK5Xe8dfxYn6ohd495K3NVgLvE-Tg&s",
+        "image_url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSpU-BdgYDUKBk19Bs4JiD8_RgJIGEvhehaq42fC_jma1Sbj-GsiroNjwqdY3ImYMOewocSLTwqG_8RSTPuBqPLpg6swsHEMCPF_5Yz2FY_&usqp=CAc",
     },
     {
         "title": "Laptop — Borrow for Project or Presentation (₹200/day)",
         "description": "Borrow my laptop for ₹200/day. Windows 11, i5, 8GB RAM, SSD. Perfect for project demos, presentations, or when your laptop is under repair. ⚠️ Terms & Conditions: Any damage or hardware issue caused during borrowing period must be fully repaired by the borrower at their own expense.",
         "price": 200, "condition": 5, "category": "Laptop", "listing_type": "borrow", "seller_idx": 0,
-        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYCbAW-TK5Xe8dfxYn6ohd495K3NVgLvE-Tg&s",
+        "image_url": "https://i5.walmartimages.com/seo/HP-15-6-Ryzen-5-8GB-256GB-Laptop-Rose-Gold_36809cf3-480b-47a5-94f0-e1d5e70c58c0_3.fcc0d6494b0e279a13c32c80c28abfa3.jpeg",
     },
     {
         "title": "Old JEE Mains Notes — Handwritten Complete Set",
