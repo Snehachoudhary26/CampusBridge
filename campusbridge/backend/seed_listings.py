@@ -1,29 +1,23 @@
-"""
-Seed script - 51 real campus listings
-Run: python seed_listings.py
-"""
 from database import SessionLocal, engine, Base
-from models import User, Listing, ListingType
+from models import User, Listing
 from auth import hash_password
 
 Base.metadata.create_all(bind=engine)
 db = SessionLocal()
 
-# ── Clear existing listings ──────────────────────────────────────
 db.query(Listing).delete()
 db.commit()
-print("🗑️  Cleared old listings")
+print("🗑️ Cleared old listings")
 
-# ── Demo Users ───────────────────────────────────────────────────
 demo_users = [
-    {"name": "Arjun Sharma",   "email": "arjun@rgpv.ac.in",   "department": "B.Tech CSE (AI & ML)",               "school": "School of Information Technology",         "semester": 5},
-    {"name": "Priya Verma",    "email": "priya@rgpv.ac.in",   "department": "B.Tech Computer Science",            "school": "University Institute of Technology",       "semester": 3},
-    {"name": "Rahul Patel",    "email": "rahul@rgpv.ac.in",   "department": "B.Tech Mechanical",                  "school": "University Institute of Technology",       "semester": 7},
-    {"name": "Kavya Singh",    "email": "kavya@rgpv.ac.in",   "department": "B.Tech CSE (Data Science)",          "school": "School of Information Technology",         "semester": 4},
-    {"name": "Mohit Gupta",    "email": "mohit@rgpv.ac.in",   "department": "B.Tech Electronics and Communication","school": "University Institute of Technology",       "semester": 6},
-    {"name": "Ananya Joshi",   "email": "ananya@rgpv.ac.in",  "department": "MBA",                                "school": "School of Applied Management",             "semester": 2},
-    {"name": "Vikram Yadav",   "email": "vikram@rgpv.ac.in",  "department": "B.Tech Civil",                       "school": "University Institute of Technology",       "semester": 5},
-    {"name": "Sneha Mishra",   "email": "sneha2@rgpv.ac.in",  "department": "B.Tech Information Technology",      "school": "University Institute of Technology",       "semester": 3},
+    {"name": "Arjun Sharma",  "email": "arjun@rgpv.ac.in",  "department": "B.Tech CSE (AI & ML)",                 "school": "School of Information Technology",    "semester": 5},
+    {"name": "Priya Verma",   "email": "priya@rgpv.ac.in",  "department": "B.Tech Computer Science",              "school": "University Institute of Technology",  "semester": 3},
+    {"name": "Rahul Patel",   "email": "rahul@rgpv.ac.in",  "department": "B.Tech Mechanical",                    "school": "University Institute of Technology",  "semester": 7},
+    {"name": "Kavya Singh",   "email": "kavya@rgpv.ac.in",  "department": "B.Tech CSE (Data Science)",            "school": "School of Information Technology",    "semester": 4},
+    {"name": "Mohit Gupta",   "email": "mohit@rgpv.ac.in",  "department": "B.Tech Electronics and Communication", "school": "University Institute of Technology",  "semester": 6},
+    {"name": "Ananya Joshi",  "email": "ananya@rgpv.ac.in", "department": "MBA",                                  "school": "School of Applied Management",        "semester": 2},
+    {"name": "Vikram Yadav",  "email": "vikram@rgpv.ac.in", "department": "B.Tech Civil",                         "school": "University Institute of Technology",  "semester": 5},
+    {"name": "Sneha Mishra",  "email": "sneha2@rgpv.ac.in", "department": "B.Tech Information Technology",        "school": "University Institute of Technology",  "semester": 3},
 ]
 
 created_users = []
@@ -46,376 +40,120 @@ for u in demo_users:
 db.commit()
 print(f"✅ {len(created_users)} demo users ready")
 
-# ── 51 Real Listings ─────────────────────────────────────────────
 listings_data = [
-
-    # ── HOSTEL ITEMS ────────────────────────────────────────────
     {
-        "title": "Bed with Mattress — Single Hostel Size",
-        "description": "Strong iron bed frame with 4-inch foam mattress. Hostel standard size 72x30 inches. Used for 1 year, clean and sturdy. Perfect for new hostel students. Self pickup from Boys Hostel Block C.",
-        "price": 3500, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 2, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&q=80",
+        "title": "Electric Iron — 750W Heavy Duty Press",
+        "description": "Accurate 750W heavy duty electric iron. Perfect for pressing uniforms and formals before college and viva. Heats up quickly. No leakage. Selling as buying a steam iron.",
+        "price": 400, "condition": 4, "category": "Hostel Items", "listing_type": "sell", "seller_idx": 2,
+        "image_url": "https://5.imimg.com/data5/SELLER/Default/2021/11/TT/XZ/XM/5847953/accurate-heavy-weight-iron-press-750-watt.jpg",
     },
     {
-        "title": "Warm Woolen Blanket — Navy Blue",
-        "description": "Thick woolen blanket, perfect for Bhopal winters. Navy blue color, no damage or stains. Washed and clean. Selling because going home permanently.",
-        "price": 400, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 1, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1600369671696-1e963fc71ad0?w=500&q=80",
+        "title": "Metal Punching Machine — 2 Hole",
+        "description": "Heavy duty 2-hole metal punching machine. Punches upto 20 sheets cleanly. Essential for lab files, practical records, and project reports. Barely used. Must have for every semester.",
+        "price": 70, "condition": 5, "category": "Stationery", "listing_type": "sell", "seller_idx": 3,
+        "image_url": "https://m.media-amazon.com/images/I/61Cmsb8fEbL._AC_UF1000,1000_QL80_.jpg",
     },
     {
-        "title": "Pillow — Soft Cotton, Hostel Size",
-        "description": "Standard size cotton pillow, slightly used. Soft and comfortable. Cover included. Selling as I am shifting rooms and bought a new set.",
-        "price": 200, "condition": 3, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 7, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=500&q=80",
+        "title": "Matka — Clay Water Pot with Tap & Stand",
+        "description": "Traditional clay matka with brass tap and stand. Keeps water naturally cool without electricity. Perfect for Bhopal summers. Eco-friendly and healthy. Selling as shifting hostel.",
+        "price": 100, "condition": 5, "category": "Hostel Items", "listing_type": "sell", "seller_idx": 5,
+        "image_url": "https://m.media-amazon.com/images/I/41bX2nr2-cL.jpg",
     },
     {
-        "title": "Wooden Study Table with Drawer",
-        "description": "Solid wood study table with 2 drawers. Enough space for laptop + books. Good for hostel room. Minor scratch on side, not visible when placed against wall. Selling as I am graduating.",
-        "price": 2500, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 0, "semester_tag": 3,
-        "image_url": "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=500&q=80",
+        "title": "GATE Mathematics & ECE — Previous Year Papers",
+        "description": "GATE preparation book for Mathematics and ECE stream. Previous year solved papers with detailed explanations. Must have for GATE aspirants. Light use, all pages intact.",
+        "price": 400, "condition": 4, "category": "Books", "listing_type": "sell", "seller_idx": 4,
+        "image_url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTKQ09AtRM-Mudduz_vA2H6cEAlIpqP-f6bV5xCoAQbxWelT9zlhCaRqrGS1EaORl1SAdG7BqaxTki8cm8MnJCkxwI4ch4-kaxJ9XVeCP9MogrHRv1vfSq4&usqp=CAc",
     },
-    {
-        "title": "Adjustable Office Chair — Mesh Back",
-        "description": "Comfortable mesh back chair with height adjustment. Perfect for long study sessions. Used for 1.5 years, all functions working. Selling because I prefer sitting on bed now.",
-        "price": 1800, "condition": 3, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 6, "semester_tag": 3,
-        "image_url": "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=500&q=80",
-    },
-    {
-        "title": "Steel Almirah / Locker — 2 Door",
-        "description": "Heavy duty steel almirah with lock and key. 2 doors, multiple shelves. Secure for keeping valuables. Used for 2 years. Minor rust on bottom, structurally sound.",
-        "price": 4000, "condition": 3, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 2, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1558997519-83ea9252edf8?w=500&q=80",
-    },
-    {
-        "title": "Bucket & Mug Set — Bathroom Essentials",
-        "description": "Plastic bucket (20L) with mug. Both in good condition. Essential for hostel bathroom. Selling as I bought a new matching set. Color: pink bucket, blue mug.",
-        "price": 150, "condition": 3, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 1, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1563453392212-326f5e854473?w=500&q=80",
-    },
-    {
-        "title": "Laundry Basket — Large Blue",
-        "description": "Large plastic laundry basket with handles. Fits 2-3 days of clothes easily. Selling as I bought a bag instead. Clean and good condition.",
-        "price": 250, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 7, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500&q=80",
-    },
-    {
-        "title": "LED Table Lamp — Eye Care, USB Powered",
-        "description": "USB powered LED study lamp with brightness adjustment. Eye care mode, no flicker. Perfect for night studies. Battery not required. Selling as I bought a bigger lamp.",
-        "price": 500, "condition": 5, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 3, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500&q=80",
-    },
-    {
-        "title": "Tiffin Box — 3 Container Steel Set",
-        "description": "Stainless steel 3-tier tiffin box with locking clips. Leak proof. Perfect for carrying food from mess or canteen. Selling as I am going home.",
-        "price": 300, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 5, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1585704032915-c3400305e979?w=500&q=80",
-    },
-    {
-        "title": "Electric Kettle — 1.5L Stainless Steel",
-        "description": "1.5 litre electric kettle, boils in 3 minutes. Perfect for making Maggi, tea, coffee in hostel room. Used for 8 months. Auto shut-off works perfectly.",
-        "price": 700, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 4, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=500&q=80",
-    },
-    {
-        "title": "Prestige Induction Stove — 1600W",
-        "description": "Prestige induction cooktop 1600W. 7 preset cooking modes. Works perfectly. Selling as mess food improved. Comes with original box.",
-        "price": 1500, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 5, "semester_tag": 3,
-        "image_url": "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=500&q=80",
-    },
-    {
-        "title": "Haier Mini Fridge — 52L (Rent per Month)",
-        "description": "Rent my Haier 52L mini fridge for ₹800/month. Perfect for hostel room. Keeps medicines, drinks, fruits cold. Available from June. Minimum 1 month rental.",
-        "price": 800, "condition": 4, "category": "Hostel Items",
-        "listing_type": "rent", "seller_idx": 0, "semester_tag": 3,
-        "image_url": "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=500&q=80",
-    },
-    {
-        "title": "Microwave Oven — 20L Solo",
-        "description": "20 litre solo microwave. Heats food in 2 minutes. Used for 1 year in PG accommodation. All buttons working. Selling as shifting to home.",
-        "price": 4500, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 6, "semester_tag": 5,
-        "image_url": "https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=500&q=80",
-    },
-    {
-        "title": "Sandwich Maker — 2 Slice Non-Stick",
-        "description": "Non-stick sandwich maker, makes 2 sandwiches at once. Perfect for hostel breakfast. Heats in 3 minutes. Clean and working perfectly.",
-        "price": 600, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 3, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1619221882220-947b3d3c8861?w=500&q=80",
-    },
-    {
-        "title": "Clothes Drying Stand — Foldable",
-        "description": "Steel foldable clothes drying stand. Holds 10-12 clothes at once. Easy to fold and store under bed. Used for 6 months. Selling as moving to PG with dryer.",
-        "price": 400, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 7, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80",
-    },
-    {
-        "title": "Mosquito Repellent Machine + Refills",
-        "description": "Electric mosquito repellent with 3 refill bottles. Bhopal mosquitoes are no joke! Works all night. Selling as I am going home for vacation.",
-        "price": 150, "condition": 5, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 1, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1584744982491-665216d95f8b?w=500&q=80",
-    },
-    {
-        "title": "Black Umbrella — Large Size",
-        "description": "Large black umbrella, windproof. Perfect for Bhopal rains. Auto open mechanism. Selling as I bought a compact travel umbrella.",
-        "price": 250, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 2, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1558618047-f4739ada6af0?w=500&q=80",
-    },
-    {
-        "title": "Steel Utensils Set — Plate, Bowl, Glass, Spoon",
-        "description": "Complete stainless steel utensil set. Plate, 2 bowls, 2 glasses, spoon, fork. Hostel mess essential. Selling as I am going to home permanently.",
-        "price": 500, "condition": 3, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 5, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=500&q=80",
-    },
-    {
-        "title": "Pedal Dustbin — 5L",
-        "description": "Small pedal dustbin for hostel room. Keeps room clean. 5 litre capacity. Hygienic and no touch operation. Selling as leaving hostel.",
-        "price": 150, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 7, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80",
-    },
-    {
-        "title": "Slippers — Comfortable Flip Flops",
-        "description": "Comfortable rubber flip flops, bathroom slippers. Size 8. Barely used. Selling as size got small. Good for bathroom and hostel use.",
-        "price": 120, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 4, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&q=80",
-    },
-    {
-        "title": "First Aid Kit — Complete Medical Box",
-        "description": "Complete first aid kit with bandages, antiseptic, cotton, scissors, thermometer, and medicines for common problems. Essential for hostel. All items within expiry.",
-        "price": 350, "condition": 5, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 0, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=500&q=80",
-    },
-    {
-        "title": "Home Repair Toolkit — Hammer, Screwdriver Set",
-        "description": "Basic toolkit with hammer, screwdriver set (4 sizes), pliers, and wrench. Useful for fixing hostel furniture. Selling as I don't need it anymore.",
-        "price": 400, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 6, "semester_tag": 3,
-        "image_url": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=500&q=80",
-    },
-    {
-        "title": "Matka — Clay Water Pot with Stand",
-        "description": "Traditional clay matka with iron stand and steel glass. Keeps water naturally cool — no electricity needed! Perfect for summer. Bhopal summers are brutal, stay cool naturally.",
-        "price": 300, "condition": 5, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 2, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1509423350716-97f9360b4e09?w=500&q=80",
-    },
-    {
-        "title": "Clothes Clips — 50 Piece Set",
-        "description": "Pack of 50 colorful plastic clothes clips. Essential for hostel drying. Never lose your clothes from balcony railing again! Selling leftover stock.",
-        "price": 50, "condition": 5, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 1, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80",
-    },
-    {
-        "title": "Backpack — 35L Laptop Bag",
-        "description": "35L backpack with dedicated laptop compartment (fits 15.6 inch). Multiple pockets, USB charging port on side. Used for 1 year, no damage. Perfect for college.",
-        "price": 800, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 3, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&q=80",
-    },
-    {
-        "title": "Humidifier — USB Mini, Night Light",
-        "description": "USB mini humidifier with LED night light. Helps in dry Bhopal winters. Works for 6-8 hours on full tank. Very quiet, perfect for sleeping. Selling as gifted a bigger one.",
-        "price": 800, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 7, "semester_tag": 3,
-        "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80",
-    },
-    {
-        "title": "Electric Iron — Dry Iron 750W",
-        "description": "750W dry iron with non-stick soleplate. Heats up in 30 seconds. Look presentable for college and viva! Used for 1 year. Selling as buying steam iron.",
-        "price": 600, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 5, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80",
-    },
-    {
-        "title": "Hot Water Rod — Immersion Heater",
-        "description": "500W immersion water heater rod. Heats bucket of water in 10 minutes. Essential for winters in hostel! Safe with auto-cutoff. Selling as room has geyser now.",
-        "price": 200, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 4, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80",
-    },
-    {
-        "title": "Steel Water Bottle — 1L Insulated",
-        "description": "1 litre stainless steel insulated water bottle. Keeps water cold for 12 hours, hot for 6 hours. Silver color. No leaks. Selling as bought branded one.",
-        "price": 300, "condition": 4, "category": "Hostel Items",
-        "listing_type": "sell", "seller_idx": 6, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500&q=80",
-    },
-    {
-        "title": "Pen Stand — Metal Mesh Desk Organizer",
-        "description": "Metal mesh pen stand that holds pens, scissors, rulers, and markers. Keeps study table organized. Selling as I bought a bigger desk organizer.",
-        "price": 150, "condition": 4, "category": "Stationery",
-        "listing_type": "sell", "seller_idx": 3, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&q=80",
-    },
-
-    # ── ELECTRONICS ─────────────────────────────────────────────
-    {
-        "title": "Extension Board — 6 Socket with USB",
-        "description": "6 socket extension board with 2 USB charging ports and surge protection. 1.5 metre wire. Perfect for hostel room with fewer sockets. Works perfectly.",
-        "price": 350, "condition": 4, "category": "Electronics",
-        "listing_type": "sell", "seller_idx": 4, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80",
-    },
-    {
-        "title": "Mobile Charger — 20W Fast Charge",
-        "description": "20W USB-C fast charger compatible with Android phones. Original quality. Cable included. Selling as I switched to iPhone. Works with OnePlus, Samsung, Xiaomi.",
-        "price": 300, "condition": 5, "category": "Electronics",
-        "listing_type": "sell", "seller_idx": 7, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=500&q=80",
-    },
-    {
-        "title": "Earphones — Wired with Mic",
-        "description": "Wired earphones with mic, 3.5mm jack. Crystal clear sound, deep bass. Works with all phones and laptops. Selling as switched to wireless.",
-        "price": 250, "condition": 4, "category": "Electronics",
-        "listing_type": "sell", "seller_idx": 0, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80",
-    },
-    {
-        "title": "Wi-Fi Router — TP-Link 300Mbps",
-        "description": "TP-Link 300Mbps WiFi router with 2 antennas. Perfect for hostel room to share LAN connection wirelessly. Works upto 50 feet range. Selling as hostel installed WiFi.",
-        "price": 1200, "condition": 4, "category": "Electronics",
-        "listing_type": "sell", "seller_idx": 3, "semester_tag": 4,
-        "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80",
-    },
-    {
-        "title": "JBL Bluetooth Speaker — GO 3",
-        "description": "JBL GO 3 portable waterproof Bluetooth speaker. Loud clear sound for its size. 5 hours battery. Selling as bought a bigger speaker. Color: black.",
-        "price": 1500, "condition": 4, "category": "Electronics",
-        "listing_type": "sell", "seller_idx": 4, "semester_tag": 4,
-        "image_url": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&q=80",
-    },
-    {
-        "title": "Pen Drive — 32GB USB 3.0",
-        "description": "32GB USB 3.0 pen drive. Fast transfer speed. Perfect for submitting assignments, carrying presentations. No data on it. Selling as I use cloud now.",
-        "price": 400, "condition": 5, "category": "Electronics",
-        "listing_type": "sell", "seller_idx": 1, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80",
-    },
-    {
-        "title": "Portable Hard Drive — 1TB Seagate",
-        "description": "Seagate 1TB external hard drive. USB 3.0. Store all your college projects, movies, and data. Works perfectly. Formatted and empty. Selling as bought SSD.",
-        "price": 2500, "condition": 4, "category": "Electronics",
-        "listing_type": "sell", "seller_idx": 0, "semester_tag": 4,
-        "image_url": "https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&q=80",
-    },
-    {
-        "title": "ID Card Holder with Lanyard — Pack of 3",
-        "description": "Pack of 3 transparent ID card holders with blue lanyards. RGPV ID card must be worn at all times! Never lose yours again. Brand new pack.",
-        "price": 50, "condition": 5, "category": "Stationery",
-        "listing_type": "sell", "seller_idx": 5, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80",
-    },
-
-    # ── FAN & COOLER ─────────────────────────────────────────────
-    {
-        "title": "Bajaj Table Fan — 3 Speed, 12 inch",
-        "description": "Bajaj 12-inch table fan with 3 speed settings. Oscillates 90 degrees. Works silently. Perfect for hostel desk. Selling as hostel installed ceiling fan.",
-        "price": 800, "condition": 4, "category": "Fan",
-        "listing_type": "sell", "seller_idx": 2, "semester_tag": 3,
-        "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80",
-    },
-    {
-        "title": "Symphony Air Cooler — 20L (Rent per Month)",
-        "description": "Symphony 20L air cooler available for rent at ₹500/month. Beat Bhopal summer heat! Cools upto 15x15 ft room. Available May to August. Deposit ₹500 refundable.",
-        "price": 500, "condition": 4, "category": "Cooler",
-        "listing_type": "rent", "seller_idx": 4, "semester_tag": 3,
-        "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80",
-    },
-
-    # ── BOOKS ────────────────────────────────────────────────────
     {
         "title": "Engineering Mathematics — B.S. Grewal",
-        "description": "The must-have Engineering Maths book by B.S. Grewal. Covers all topics for Sem 1, 2, 3. Some solved examples highlighted. Essential for RGPV engineering students.",
-        "price": 350, "condition": 4, "category": "Books",
-        "listing_type": "sell", "seller_idx": 0, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&q=80",
+        "description": "Engineering Mathematics by B.S. Grewal. Covers full RGPV syllabus for Sem 1 and 2. Some chapters have highlighted text. Great condition overall. Best book for engineering maths.",
+        "price": 130, "condition": 4, "category": "Books", "listing_type": "sell", "seller_idx": 0,
+        "image_url": "https://easy2learning.in/static/uploads/books/WhatsApp_Image_2025-06-12_at_15.56.26.jpeg",
     },
     {
-        "title": "Computer Science Books Set — 5 Books",
-        "description": "Complete set: Data Structures, Operating Systems, Computer Networks, DBMS, Theory of Computation. All 5 books for CSE core subjects. Some notes written in margins. Great for exams!",
-        "price": 800, "condition": 3, "category": "Books",
-        "listing_type": "sell", "seller_idx": 1, "semester_tag": 4,
-        "image_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80",
+        "title": "Foldable Clothes Drying Stand with Wheels",
+        "description": "Premium foldable clothes drying stand with wheels. Multiple bars, foldable wings. Easy to move and store. Holds 15-20 clothes. Perfect for hostel room. Selling as going home.",
+        "price": 300, "condition": 4, "category": "Hostel Items", "listing_type": "sell", "seller_idx": 7,
+        "image_url": "https://rukminim2.flixcart.com/image/480/640/xif0q/cloth-dryer-stand/h/b/a/15-premium-clothes-stand-for-drying-with-wheels-foldable-wings-original-imagwyhfkpthhfps.jpeg?q=20",
     },
     {
-        "title": "Shivani Basic Mechanical Engineering — J.P. Sharma",
-        "description": "Shivani publication Basic Mechanical Engineering by J.P. Sharma. Perfect for Sem 1 and 2 mechanical concepts. RGPV syllabus covered completely. Good condition.",
-        "price": 280, "condition": 4, "category": "Books",
-        "listing_type": "sell", "seller_idx": 2, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1589998059171-988d887df646?w=500&q=80",
+        "title": "Sandwich Maker — 2 Slice Non Stick Grill",
+        "description": "Non-stick sandwich maker, makes 2 sandwiches at once. Ready in 3 minutes. Perfect for hostel breakfast. No oil needed. Clean and working perfectly. Selling as going home for vacation.",
+        "price": 450, "condition": 4, "category": "Hostel Items", "listing_type": "sell", "seller_idx": 5,
+        "image_url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRKJ1kw6iOtC83VnupGVm71bCvJzlOtTHmr2i0PR1bYt4ovzgm8xh9fDQb0DWYa6JF9JdYUtosePPjhmdWw8sjDIgzbPtUiD56UAQ5a77Icouwbs8nb_nqd7p2Y96Of-CYUxvUrkA&usqp=CAc",
     },
     {
-        "title": "GATE Previous Year Papers — Mechanical 14 Years",
-        "description": "GATE 2009-2022 solved papers for Mechanical Engineering. 14 years of papers with detailed solutions. Must have for GATE preparation. Light usage, mostly read only.",
-        "price": 400, "condition": 4, "category": "Books",
-        "listing_type": "sell", "seller_idx": 2, "semester_tag": 7,
-        "image_url": "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=500&q=80",
+        "title": "Casio fx-991ES PLUS — Borrow for Exam (₹600/day)",
+        "description": "Borrow my Casio fx-991ES PLUS scientific calculator for ₹600/day. All 417 functions working. RGPV exam approved. ⚠️ Terms: Any damage or loss during borrowing must be repaired or compensated fully by the borrower.",
+        "price": 600, "condition": 5, "category": "Calculator", "listing_type": "borrow", "seller_idx": 2,
+        "image_url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcR0OAdNkqt0-lIXvcsnPpfF1J03WNZbTgejCXsKj1xjK4oZvZ9EJ17-neuqV3U_YIM5rKDJpvYQ9aRtiGKTR65hBrLSzqWsMkMLsvVmrhYxHXR_DgmtDfWcTh8VysonrToS-e5QxvcQsh4&usqp=CAc",
     },
     {
-        "title": "Old GATE Preparation Notes — Handwritten",
-        "description": "Complete handwritten notes for GATE preparation. Topics: Engineering Maths, Aptitude, Subject-wise notes. Made by a senior who scored 98 percentile. Selling after clearing GATE.",
-        "price": 500, "condition": 3, "category": "Books",
-        "listing_type": "sell", "seller_idx": 2, "semester_tag": 8,
-        "image_url": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=500&q=80",
+        "title": "Complete Drafter Set — Mini Drafter + Instruments",
+        "description": "Full engineering drawing set with mini drafter, compass, set squares, protractor and scales. Used for 1 semester. All pieces intact. Perfect for Civil, Mechanical and Architecture students.",
+        "price": 500, "condition": 4, "category": "Drawing Instruments", "listing_type": "sell", "seller_idx": 6,
+        "image_url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQx5PH4_GkSrzWySAhiIyjQsw_ti7xqt60Hdm3byXgc00WPY1RflIr9z62teAUvUHa4xXlmXa2b-BNsdQVZAA8XsQYgWI7jLRLwimf2VOfbUzZiaiCNw6dwJaEgJrsPCiCAJqXR1PxfDZI&usqp=CAc",
     },
     {
-        "title": "Classmate Notebooks — Pack of 6 (200 pages each)",
-        "description": "6 Classmate 200-page notebooks, single line. New pack, unused. Selling as I prefer digital notes now. Great for theory subjects and assignments.",
-        "price": 120, "condition": 5, "category": "Stationery",
-        "listing_type": "sell", "seller_idx": 3, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&q=80",
-    },
-
-    # ── STATIONERY ────────────────────────────────────────────────
-    {
-        "title": "Pens + Highlighters Set — 10 pieces",
-        "description": "Set of 5 blue pens (Reynolds), 3 highlighters (yellow, pink, green), and 2 black markers. Brand new. Perfect for semester start. Selling extra stock.",
-        "price": 80, "condition": 5, "category": "Stationery",
-        "listing_type": "sell", "seller_idx": 7, "semester_tag": 1,
-        "image_url": "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=500&q=80",
+        "title": "C-Type to USB-A Cable — 1 Metre Fast Charge",
+        "description": "1 metre USB-C to USB-A braided cable. Supports fast charging upto 18W. Compatible with all Android phones. No fraying. Selling as I bought a wireless charger.",
+        "price": 300, "condition": 5, "category": "Electronics", "listing_type": "sell", "seller_idx": 3,
+        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYCbAW-TK5Xe8dfxYn6ohd495K3NVgLvE-Tg&s",
     },
     {
-        "title": "Stapler — Heavy Duty 24/6",
-        "description": "Heavy duty stapler with 1000 staples included. Staples upto 30 pages at once. Perfect for project reports and assignments. Used only few times.",
-        "price": 150, "condition": 5, "category": "Stationery",
-        "listing_type": "sell", "seller_idx": 6, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=500&q=80",
+        "title": "Laptop — Borrow for Project or Presentation (₹200/day)",
+        "description": "Borrow my laptop for ₹200/day. Windows 11, i5, 8GB RAM, SSD. Perfect for project demos, presentations, or when your laptop is under repair. ⚠️ Terms & Conditions: Any damage or hardware issue caused during borrowing period must be fully repaired by the borrower at their own expense.",
+        "price": 200, "condition": 5, "category": "Laptop", "listing_type": "borrow", "seller_idx": 0,
+        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYCbAW-TK5Xe8dfxYn6ohd495K3NVgLvE-Tg&s",
     },
     {
-        "title": "Punching Machine — 2 Hole, 20 Sheets",
-        "description": "2-hole punching machine, punches 20 sheets at once. Essential for filing practical records and lab files. Selling as department provides one now.",
-        "price": 200, "condition": 4, "category": "Stationery",
-        "listing_type": "sell", "seller_idx": 5, "semester_tag": 2,
-        "image_url": "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=500&q=80",
+        "title": "Old JEE Mains Notes — Handwritten Complete Set",
+        "description": "Complete handwritten JEE Mains notes. Physics, Chemistry, Mathematics all covered topic-wise. Very detailed and well organized. Made by a serious JEE aspirant. Price negotiable — serious buyers contact only.",
+        "price": 1, "condition": 3, "category": "Books", "listing_type": "sell", "seller_idx": 1,
+        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQs4aOTqb7eTdMQlu4K_rESRdTn-VUjJz-zdQ&s",
     },
-
-    # ── CALCULATOR ───────────────────────────────────────────────
     {
-        "title": "Casio fx-991ES PLUS — Scientific Calculator",
-        "description": "Casio fx-991ES PLUS with 417 functions. Approved for RGPV exams. Calculates integrals, matrices, statistics. Used for 2 semesters. All buttons responsive. Comes with slide cover.",
-        "price": 650, "condition": 4, "category": "Calculator",
-        "listing_type": "sell", "seller_idx": 2, "semester_tag": 3,
-        "image_url": "https://images.unsplash.com/photo-1587145820266-a5951ee6f620?w=500&q=80",
+        "title": "Table Fan — 3 Speed Oscillating 12 inch",
+        "description": "12-inch table fan with 3 speed settings and 90 degree oscillation. Works silently. Perfect for study desk. Selling as hostel installed ceiling fans in all rooms now.",
+        "price": 600, "condition": 4, "category": "Fan", "listing_type": "sell", "seller_idx": 7,
+        "image_url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcReR4cUUfxSJI0hrrzGnXAUNIZAKdqIz9TpDyaJYIRUhhS5X5X1zEuhDKWOR-qMO8xjWfyIfYmPoQmYJjy9eXIFwH52sNzotRZ1TH7B_Im6gLj55qOMGtl0Qg&usqp=CAc",
+    },
+    {
+        "title": "LED Study Table Lamp — Flexible Neck 3 Brightness",
+        "description": "LED study lamp with flexible neck and 3 brightness levels. Eye care warm light. USB powered. Perfect for late night studies. Selling as shifting to new room with better lighting.",
+        "price": 230, "condition": 5, "category": "Hostel Items", "listing_type": "sell", "seller_idx": 4,
+        "image_url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRjZTvm5wkY-glIvD5cuRnT8Y_qechjGQYSfB31C66oAOato3vke2EfmyxOutWjvyJ2WvG4RzTCWcnBp7PPLAFJ5I9rPQKgofiUUDvH4wc&usqp=CAc",
+    },
+    {
+        "title": "Steel Almirah — 2 Door with Lock & Key",
+        "description": "Heavy steel almirah with 2 doors, multiple shelves and hanging rod. Comes with lock and 2 keys. Secure for valuables, clothes and documents. Used for 2 years. Structurally solid.",
+        "price": 2400, "condition": 3, "category": "Hostel Items", "listing_type": "sell", "seller_idx": 2,
+        "image_url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSnp4j56dbWE-EIejCNCLX5VA9A49HqihTnl47LhJiGY4_aCok-9_i1mRKWzGd4HojcVBu7ZdD4e9DHk0KPT2neRC5yawqp6wqJLWYGpsKW2rXBYC3WQfRkhw&usqp=CAc",
+    },
+    {
+        "title": "Folding Bed — Single with Foam Mattress",
+        "description": "Foldable single bed with foam mattress. Easy to fold and store. Perfect for small hostel rooms. Strong steel frame. Used for 1 year, clean mattress. Selling as going home permanently.",
+        "price": 1500, "condition": 4, "category": "Hostel Items", "listing_type": "sell", "seller_idx": 6,
+        "image_url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQUpTSzSb-Md2G2KeQyhKKihAXQbLCe4GIQNYptvq5Z3UUlbkwbzSzcEt3ZO0rlDD9IvmCrTdIG5kgogV2QyV08J96rd_vn1JyYJ-W3m-iPzbEVsB1zvcT1za3y7G-n9muoQudqdZcjFss&usqp=CAc",
+    },
+    {
+        "title": "Foldable Study Table for Bed — Laptop Desk",
+        "description": "Portable foldable laptop table for use on bed. Adjustable angle. Perfect for studying in bed or watching lectures. Lightweight and easy to carry. Selling as I prefer sitting at desk now.",
+        "price": 125, "condition": 4, "category": "Hostel Items", "listing_type": "sell", "seller_idx": 1,
+        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFsDWm_yuwOp3zJ0QE6wO58Z1BX14p79_17g&s",
+    },
+    {
+        "title": "Stapler — Heavy Duty with 500 Staples",
+        "description": "Heavy duty stapler with 500 staples included. Staples upto 25 pages at once. Essential for project reports, assignments and practical files. Good working condition.",
+        "price": 100, "condition": 4, "category": "Stationery", "listing_type": "sell", "seller_idx": 7,
+        "image_url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTeUWcuMOWw8gjRYFRtzliuy1UqDjPQmNGsRQt7xAuci8G3dCQzUg5iroIHVIbheonZAURQeVyDAWdnKt9BRWpT36pFdNNYwR-cYOQZp_o2CHe-XwcNMN1I5Ldcg0-MP_BgVWX7JpU0sU0&usqp=CAc",
+    },
+    {
+        "title": "Immersion Water Heater Rod — 500W",
+        "description": "500W immersion water heater rod. Heats a bucket of water in 10 minutes. Essential for cold hostel winters! Safe with insulated handle. Selling as my room got a geyser installed.",
+        "price": 230, "condition": 4, "category": "Hostel Items", "listing_type": "sell", "seller_idx": 3,
+        "image_url": "https://5.imimg.com/data5/SELLER/Default/2022/7/IN/MT/SO/110052248/immersion-rod-heater-500x500.jpg",
     },
 ]
 
@@ -430,7 +168,7 @@ for l in listings_data:
         category=l["category"],
         listing_type=l["listing_type"],
         department_tag=seller.department,
-        semester_tag=l.get("semester_tag"),
+        semester_tag=None,
         image_url=l.get("image_url"),
         seller_id=seller.id,
         is_active=True,
@@ -441,6 +179,5 @@ for l in listings_data:
 
 db.commit()
 db.close()
-print(f"✅ {count} real listings created!")
-print("🎓 CampusBridge marketplace is now live with real data!")
-print("🔑 All demo users password: demo1234")
+print(f"✅ {count} real listings created with your images!")
+print("🔑 Demo user password: demo1234")

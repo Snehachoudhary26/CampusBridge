@@ -197,7 +197,7 @@ export default function Home() {
                 }}
               >
                 {item.image_url
-                  ? <img src={item.image_url} alt={item.title} style={{ width: '100%', height: 180, objectFit: 'cover' }} />
+                  ? <img src={item.image_url} alt={item.title} style={{ width: '100%', height: 180, objectFit: 'contain', background: '#F8FFFE', padding: '8px' }} />
                   : <div style={{ height: 180, background: 'linear-gradient(135deg, #E0FBF8, #D0F8F3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 48 }}>📦</div>
                 }
                 <div style={{ padding: 20 }}>

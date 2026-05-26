@@ -76,7 +76,7 @@ export default function ListingDetail() {
             {/* Image */}
             <div style={{ borderRadius: 20, overflow: 'hidden', marginBottom: 24, border: '1px solid #D0F5F0' }}>
               {listing.image_url
-                ? <img src={listing.image_url} alt={listing.title} style={{ width: '100%', maxHeight: 420, objectFit: 'cover' }} />
+                ? <img src={listing.image_url} alt={listing.title} style={{ width: '100%', maxHeight: 400, objectFit: 'contain', background: '#F8FFFE', padding: '16px' }} />
                 : <div style={{
                     height: 320, background: 'linear-gradient(135deg, #E0FBF8, #D0F8F3)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 80,
