@@ -5,6 +5,51 @@ import API from '../api/axios'
 import useAuthStore from '../store/authStore'
 import toast from 'react-hot-toast'
 
+const quickReplies = {
+  availability: [
+    { icon: '✅', text: 'Yes, still available!' },
+    { icon: '❌', text: 'Sorry, it has already been sold.' },
+    { icon: '⏳', text: 'Hold on, let me check and get back to you.' },
+  ],
+  price: [
+    { icon: '💰', text: 'Price is fixed, no negotiation.' },
+    { icon: '🤝', text: 'Yes, price is negotiable. Make me an offer!' },
+    { icon: '📉', text: 'I can do a small discount for quick pickup.' },
+  ],
+  location: [
+    { icon: '📍', text: 'I am in Boys Hostel Block B, Room 204.' },
+    { icon: '📍', text: 'I am in Girls Hostel Block A, Room 102.' },
+    { icon: '🏫', text: 'We can meet near the main gate of RGPV campus.' },
+    { icon: '☕', text: 'Let\'s meet at the college canteen tomorrow.' },
+  ],
+  condition: [
+    { icon: '⭐', text: 'Item is in excellent condition, barely used.' },
+    { icon: '✅', text: 'Works perfectly fine, no issues at all.' },
+    { icon: '📝', text: 'Minor wear and tear but fully functional.' },
+  ],
+  timing: [
+    { icon: '📅', text: 'I am available today evening after 5 PM.' },
+    { icon: '📅', text: 'Available this weekend, Saturday or Sunday.' },
+    { icon: '⚡', text: 'Available right now, come whenever you want!' },
+  ],
+  general: [
+    { icon: '👍', text: 'Sure, sounds good!' },
+    { icon: '🙏', text: 'Thank you for your interest!' },
+    { icon: '📞', text: 'Please call me on my number for faster response.' },
+    { icon: '✅', text: 'Deal confirmed! See you soon.' },
+    { icon: '❓', text: 'Can you please share more details?' },
+  ],
+}
+
+const replyCategories = [
+  { key: 'general', label: '👍 General', },
+  { key: 'availability', label: '📦 Availability' },
+  { key: 'price', label: '💰 Price' },
+  { key: 'location', label: '📍 Location' },
+  { key: 'condition', label: '⭐ Condition' },
+  { key: 'timing', label: '📅 Timing' },
+]
+
 export default function Messages() {
   const { isAuthenticated, user } = useAuthStore()
   const navigate = useNavigate()
@@ -14,6 +59,8 @@ export default function Messages() {
   const [input, setInput] = useState('')
   const [sending, setSending] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [showQuickReplies, setShowQuickReplies] = useState(false)
+  const [activeCategory, setActiveCategory] = useState('general')
   const bottomRef = useRef(null)
 
   useEffect(() => {
@@ -37,22 +84,23 @@ export default function Messages() {
 
   const openConversation = async (conv) => {
     setActiveConv(conv)
+    setShowQuickReplies(false)
     try {
       const res = await API.get(`/messages/${conv.listing_id}/${conv.other_user_id}`)
       setMessages(Array.isArray(res.data) ? res.data : [])
     } catch { setMessages([]) }
   }
 
-  const sendMessage = async () => {
-    if (!input.trim() || !activeConv) return
-    const text = input.trim()
+  const sendMessage = async (text) => {
+    const msgText = text || input.trim()
+    if (!msgText || !activeConv) return
     setInput('')
+    setShowQuickReplies(false)
     setSending(true)
 
-    // Optimistic update
     const tempMsg = {
       id: Date.now(),
-      content: text,
+      content: msgText,
       sender_id: user.id,
       receiver_id: activeConv.other_user_id,
       listing_id: activeConv.listing_id,
@@ -62,15 +110,14 @@ export default function Messages() {
 
     try {
       await API.post('/messages/', {
-        content: text,
+        content: msgText,
         listing_id: activeConv.listing_id,
         receiver_id: activeConv.other_user_id,
       })
       fetchConversations()
     } catch {
-      toast.error('Failed to send message')
+      toast.error('Failed to send')
       setMessages(prev => prev.filter(m => m.id !== tempMsg.id))
-      setInput(text)
     } finally { setSending(false) }
   }
 
@@ -78,16 +125,16 @@ export default function Messages() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#F5FFFE' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '28px 24px' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '28px 24px' }}>
 
         <motion.h1 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
           style={{ fontSize: 26, fontWeight: 900, color: '#0D2B35', marginBottom: 24 }}>
           💬 Messages
         </motion.h1>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: 20, height: '72vh' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: 20, height: '78vh' }}>
 
-          {/* Conversations List */}
+          {/* Conversations */}
           <div style={{
             background: '#fff', borderRadius: 20, border: '1px solid #D0F5F0',
             overflow: 'hidden', display: 'flex', flexDirection: 'column',
@@ -97,12 +144,13 @@ export default function Messages() {
               padding: '18px 20px', borderBottom: '1px solid #E0F5F0',
               fontWeight: 800, color: '#0D2B35', fontSize: 15,
               background: 'linear-gradient(135deg, #F8FFFE, #F0FFFE)',
+              display: 'flex', alignItems: 'center', gap: 8,
             }}>
               Conversations
               {conversations.length > 0 && (
                 <span style={{
-                  marginLeft: 8, background: 'linear-gradient(135deg, #00C9B1, #00A896)',
-                  color: '#fff', borderRadius: 20, padding: '2px 8px', fontSize: 12,
+                  background: 'linear-gradient(135deg, #00C9B1, #00A896)',
+                  color: '#fff', borderRadius: 20, padding: '2px 8px', fontSize: 12, fontWeight: 700,
                 }}>{conversations.length}</span>
               )}
             </div>
@@ -124,10 +172,10 @@ export default function Messages() {
                 <div style={{ padding: '40px 20px', textAlign: 'center' }}>
                   <div style={{ fontSize: 40, marginBottom: 12 }}>📭</div>
                   <p style={{ color: '#7A9BA8', fontSize: 14, fontWeight: 600, marginBottom: 8 }}>No messages yet</p>
-                  <p style={{ color: '#A0BCBB', fontSize: 13 }}>Browse listings and contact sellers to start chatting</p>
+                  <p style={{ color: '#A0BCBB', fontSize: 13, marginBottom: 16 }}>Browse listings and contact sellers</p>
                   <Link to="/listings" style={{
-                    display: 'inline-block', marginTop: 16, padding: '8px 18px',
-                    borderRadius: 10, background: 'linear-gradient(135deg, #00C9B1, #00A896)',
+                    display: 'inline-block', padding: '8px 18px', borderRadius: 10,
+                    background: 'linear-gradient(135deg, #00C9B1, #00A896)',
                     color: '#fff', fontWeight: 700, fontSize: 13, textDecoration: 'none',
                   }}>Browse Listings</Link>
                 </div>
@@ -140,14 +188,12 @@ export default function Messages() {
                     style={{
                       padding: '14px 18px', cursor: 'pointer',
                       background: activeConv?.conversation_id === conv.conversation_id
-                        ? 'linear-gradient(135deg, rgba(0,201,177,0.08), rgba(0,168,150,0.04))'
-                        : 'transparent',
+                        ? 'rgba(0,201,177,0.08)' : 'transparent',
                       borderLeft: activeConv?.conversation_id === conv.conversation_id
                         ? '3px solid #00C9B1' : '3px solid transparent',
                       borderBottom: '1px solid #F5FFFE',
                       transition: 'all 0.2s',
                     }}
-                    whileHover={{ backgroundColor: 'rgba(0,201,177,0.04)' }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                       <div style={{
@@ -157,18 +203,16 @@ export default function Messages() {
                         color: '#fff', fontWeight: 800, fontSize: 17,
                       }}>{conv.other_user_name?.[0]?.toUpperCase() || '?'}</div>
                       <div style={{ minWidth: 0, flex: 1 }}>
-                        <div style={{ fontWeight: 700, color: '#0D2B35', fontSize: 14, marginBottom: 3 }}>
+                        <div style={{ fontWeight: 700, color: '#0D2B35', fontSize: 14, marginBottom: 2 }}>
                           {conv.other_user_name}
                         </div>
-                        <div style={{
-                          fontSize: 12, color: '#00A896', fontWeight: 600,
-                          whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                        }}>📦 {conv.listing_title}</div>
+                        <div style={{ fontSize: 12, color: '#00A896', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          📦 {conv.listing_title}
+                        </div>
                         {conv.last_message && (
-                          <div style={{
-                            fontSize: 12, color: '#A0BCBB', marginTop: 2,
-                            whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                          }}>{conv.last_message}</div>
+                          <div style={{ fontSize: 12, color: '#A0BCBB', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {conv.last_message}
+                          </div>
                         )}
                       </div>
                     </div>
@@ -185,17 +229,14 @@ export default function Messages() {
             boxShadow: '0 4px 20px rgba(0,201,177,0.07)',
           }}>
             {!activeConv ? (
-              <div style={{
-                flex: 1, display: 'flex', alignItems: 'center',
-                justifyContent: 'center', flexDirection: 'column',
-              }}>
-                <div style={{ fontSize: 64, marginBottom: 16, opacity: 0.5 }}>💬</div>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+                <div style={{ fontSize: 64, marginBottom: 16, opacity: 0.4 }}>💬</div>
                 <h3 style={{ color: '#0D2B35', fontWeight: 800, marginBottom: 8 }}>Select a conversation</h3>
                 <p style={{ color: '#7A9BA8', fontSize: 14 }}>Choose from the left to start chatting</p>
               </div>
             ) : (
               <>
-                {/* Chat Header */}
+                {/* Header */}
                 <div style={{
                   padding: '16px 24px', borderBottom: '1px solid #E0F5F0',
                   display: 'flex', alignItems: 'center', gap: 14,
@@ -207,15 +248,11 @@ export default function Messages() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     color: '#fff', fontWeight: 800, fontSize: 18,
                   }}>{activeConv.other_user_name?.[0]?.toUpperCase()}</div>
-                  <div>
-                    <div style={{ fontWeight: 800, color: '#0D2B35', fontSize: 15 }}>
-                      {activeConv.other_user_name}
-                    </div>
-                    <div style={{ fontSize: 12, color: '#00A896', fontWeight: 600 }}>
-                      📦 {activeConv.listing_title}
-                    </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 800, color: '#0D2B35', fontSize: 15 }}>{activeConv.other_user_name}</div>
+                    <div style={{ fontSize: 12, color: '#00A896', fontWeight: 600 }}>📦 {activeConv.listing_title}</div>
                   </div>
-                  <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                     <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#00C9B1' }} />
                     <span style={{ fontSize: 12, color: '#7A9BA8' }}>Online</span>
                   </div>
@@ -232,55 +269,115 @@ export default function Messages() {
                       <div style={{ fontSize: 32, marginBottom: 8 }}>👋</div>
                       <p style={{ fontSize: 14 }}>Start the conversation!</p>
                     </div>
-                  ) : (
-                    messages.map((m, i) => {
-                      const isMine = m.sender_id === user?.id
-                      return (
-                        <motion.div key={m.id || i}
-                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          style={{ display: 'flex', justifyContent: isMine ? 'flex-end' : 'flex-start' }}
-                        >
+                  ) : messages.map((m, i) => {
+                    const isMine = m.sender_id === user?.id
+                    return (
+                      <motion.div key={m.id || i}
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        style={{ display: 'flex', justifyContent: isMine ? 'flex-end' : 'flex-start' }}
+                      >
+                        {!isMine && (
                           <div style={{
-                            maxWidth: '70%', padding: '11px 16px', borderRadius: 18,
-                            borderBottomRightRadius: isMine ? 4 : 18,
-                            borderBottomLeftRadius: isMine ? 18 : 4,
-                            background: isMine
-                              ? 'linear-gradient(135deg, #00C9B1, #00A896)'
-                              : '#fff',
-                            color: isMine ? '#fff' : '#0D2B35',
-                            fontSize: 14, lineHeight: 1.5,
-                            border: isMine ? 'none' : '1px solid #E0F5F0',
-                            boxShadow: isMine
-                              ? '0 4px 12px rgba(0,201,177,0.3)'
-                              : '0 2px 8px rgba(0,0,0,0.05)',
-                          }}>
-                            {m.content}
-                            <div style={{
-                              fontSize: 10, opacity: 0.7, marginTop: 4,
-                              textAlign: 'right',
-                            }}>
-                              {new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </div>
+                            width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
+                            background: 'linear-gradient(135deg, #00C9B1, #00A8E8)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            color: '#fff', fontWeight: 800, fontSize: 13, marginRight: 8, alignSelf: 'flex-end',
+                          }}>{activeConv.other_user_name?.[0]?.toUpperCase()}</div>
+                        )}
+                        <div style={{
+                          maxWidth: '65%', padding: '11px 16px', borderRadius: 18,
+                          borderBottomRightRadius: isMine ? 4 : 18,
+                          borderBottomLeftRadius: isMine ? 18 : 4,
+                          background: isMine ? 'linear-gradient(135deg, #00C9B1, #00A896)' : '#fff',
+                          color: isMine ? '#fff' : '#0D2B35',
+                          fontSize: 14, lineHeight: 1.5,
+                          border: isMine ? 'none' : '1px solid #E0F5F0',
+                          boxShadow: isMine ? '0 4px 12px rgba(0,201,177,0.3)' : '0 2px 8px rgba(0,0,0,0.05)',
+                        }}>
+                          {m.content}
+                          <div style={{ fontSize: 10, opacity: 0.7, marginTop: 4, textAlign: 'right' }}>
+                            {new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            {isMine && ' ✓'}
                           </div>
-                        </motion.div>
-                      )
-                    })
-                  )}
+                        </div>
+                      </motion.div>
+                    )
+                  })}
                   <div ref={bottomRef} />
                 </div>
 
-                {/* Input */}
+                {/* Quick Replies Panel */}
+                <AnimatePresence>
+                  {showQuickReplies && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      style={{ borderTop: '1px solid #E0F5F0', background: '#F8FFFE', overflow: 'hidden' }}
+                    >
+                      {/* Category Tabs */}
+                      <div style={{ display: 'flex', gap: 4, padding: '10px 16px', overflowX: 'auto', borderBottom: '1px solid #E0F5F0' }}>
+                        {replyCategories.map(cat => (
+                          <button key={cat.key} onClick={() => setActiveCategory(cat.key)} style={{
+                            padding: '5px 12px', borderRadius: 20, border: 'none', whiteSpace: 'nowrap',
+                            background: activeCategory === cat.key ? 'linear-gradient(135deg, #00C9B1, #00A896)' : '#fff',
+                            color: activeCategory === cat.key ? '#fff' : '#4A6572',
+                            fontWeight: 600, fontSize: 12, cursor: 'pointer',
+                            border: activeCategory === cat.key ? 'none' : '1px solid #E0F5F0',
+                            transition: 'all 0.2s',
+                          }}>{cat.label}</button>
+                        ))}
+                      </div>
+
+                      {/* Reply Options */}
+                      <div style={{ padding: '10px 16px', display: 'flex', flexWrap: 'wrap', gap: 8, maxHeight: 140, overflowY: 'auto' }}>
+                        {quickReplies[activeCategory]?.map((reply, i) => (
+                          <motion.button key={i}
+                            whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                            onClick={() => sendMessage(reply.text)}
+                            style={{
+                              padding: '8px 14px', borderRadius: 20,
+                              border: '1.5px solid #D0ECE8', background: '#fff',
+                              color: '#0D2B35', fontSize: 13, cursor: 'pointer',
+                              fontWeight: 500, transition: 'all 0.2s',
+                              display: 'flex', alignItems: 'center', gap: 6,
+                            }}
+                          >
+                            {reply.icon} {reply.text.substring(0, 35)}{reply.text.length > 35 ? '...' : ''}
+                          </motion.button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Input Bar */}
                 <div style={{
-                  padding: '14px 18px', borderTop: '1px solid #E0F5F0',
-                  display: 'flex', gap: 10, alignItems: 'center',
-                  background: '#fff',
+                  padding: '12px 16px', borderTop: '1px solid #E0F5F0',
+                  display: 'flex', gap: 10, alignItems: 'center', background: '#fff',
                 }}>
+                  {/* Quick Reply Toggle */}
+                  <motion.button
+                    whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
+                    onClick={() => setShowQuickReplies(!showQuickReplies)}
+                    title="Quick Replies"
+                    style={{
+                      width: 40, height: 40, borderRadius: '50%', border: 'none',
+                      background: showQuickReplies ? 'linear-gradient(135deg, #00C9B1, #00A896)' : '#F0FFFE',
+                      color: showQuickReplies ? '#fff' : '#00A896',
+                      fontSize: 18, cursor: 'pointer', flexShrink: 0,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'all 0.2s',
+                      border: showQuickReplies ? 'none' : '1.5px solid #D0ECE8',
+                    }}
+                  >⚡</button>
+
                   <input
                     value={input}
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
-                    placeholder="Type a message..."
+                    placeholder="Type a message or use ⚡ quick replies..."
                     style={{
                       flex: 1, padding: '12px 16px', borderRadius: 24,
                       border: '1.5px solid #D0ECE8', outline: 'none',
@@ -290,19 +387,19 @@ export default function Messages() {
                     onFocus={e => e.target.style.borderColor = '#00C9B1'}
                     onBlur={e => e.target.style.borderColor = '#D0ECE8'}
                   />
+
                   <motion.button
                     whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }}
-                    onClick={sendMessage} disabled={sending || !input.trim()}
+                    onClick={() => sendMessage()}
+                    disabled={sending || !input.trim()}
                     style={{
-                      width: 46, height: 46, borderRadius: '50%', border: 'none',
-                      background: input.trim()
-                        ? 'linear-gradient(135deg, #00C9B1, #00A896)'
-                        : '#E0F5F0',
+                      width: 44, height: 44, borderRadius: '50%', border: 'none',
+                      background: input.trim() ? 'linear-gradient(135deg, #00C9B1, #00A896)' : '#E0F5F0',
                       color: input.trim() ? '#fff' : '#A0BCBB',
                       fontSize: 18, cursor: input.trim() ? 'pointer' : 'not-allowed',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       boxShadow: input.trim() ? '0 4px 12px rgba(0,201,177,0.4)' : 'none',
-                      transition: 'all 0.2s',
+                      transition: 'all 0.2s', flexShrink: 0,
                     }}
                   >↑</motion.button>
                 </div>
