@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, and_
-from typing import List
 from database import get_db
 from models import Message, User, Listing
-from schemas import MessageCreate, MessageResponse
+from schemas import MessageCreate
 from auth import get_current_user
 
 router = APIRouter(prefix="/messages", tags=["Messages"])
@@ -19,7 +18,6 @@ def message_to_dict(msg: Message, db: Session) -> dict:
         "receiver_id": msg.receiver_id,
         "listing_id": msg.listing_id,
         "created_at": str(msg.created_at),
-        "is_auto_reply": getattr(msg, 'is_auto_reply', False),
     }
 
 @router.post("/")
@@ -45,8 +43,8 @@ def send_message(
     db.commit()
     db.refresh(new_message)
 
-    # Check if this is the FIRST message in this conversation
-    existing_messages = db.query(Message).filter(
+    # Check if first message in this conversation
+    existing_count = db.query(Message).filter(
         Message.listing_id == message_data.listing_id,
         or_(
             and_(Message.sender_id == current_user.id, Message.receiver_id == message_data.receiver_id),
@@ -54,16 +52,18 @@ def send_message(
         )
     ).count()
 
-    # Send auto-reply only on first message
-    if existing_messages <= 1:
+    # Auto-reply only on first message
+    if existing_count <= 1:
         seller = db.query(User).filter(User.id == message_data.receiver_id).first()
         if seller:
             availability = getattr(seller, 'availability', 'after 7 PM')
-            auto_reply_text = getattr(seller, 'auto_reply', None)
-
-            if not auto_reply_text:
-                auto_reply_text = f"Hi! Thanks for your interest in my listing. I am usually available {availability}. I will get back to you soon! 🙏"
-
+            # Include contact details in auto-reply
+            auto_reply_text = (
+                f"Hi {current_user.name}! 👋 Thanks for your interest in my listing.\n\n"
+                f"🕐 I am usually available {availability}.\n"
+                f"📧 You can also reach me directly at: {seller.email}\n\n"
+                f"I will get back to you soon. Feel free to ask anything! 🙏"
+            )
             auto_reply = Message(
                 content=auto_reply_text,
                 sender_id=message_data.receiver_id,
@@ -98,6 +98,7 @@ def get_conversations(
                 "conversation_id": key,
                 "other_user_id": other_user_id,
                 "other_user_name": other_user.name if other_user else "Unknown",
+                "other_user_email": other_user.email if other_user else "",
                 "listing_id": msg.listing_id,
                 "listing_title": listing.title if listing else "Unknown",
                 "last_message": msg.content,
@@ -125,3 +126,21 @@ def get_messages(
         )
     ).order_by(Message.created_at.asc()).all()
     return [message_to_dict(m, db) for m in messages]
+
+@router.delete("/{listing_id}/{other_user_id}")
+def delete_conversation(
+    listing_id: int,
+    other_user_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    # Only delete messages where current user is sender or receiver
+    db.query(Message).filter(
+        Message.listing_id == listing_id,
+        or_(
+            and_(Message.sender_id == current_user.id, Message.receiver_id == other_user_id),
+            and_(Message.sender_id == other_user_id, Message.receiver_id == current_user.id)
+        )
+    ).delete(synchronize_session=False)
+    db.commit()
+    return {"message": "Conversation deleted"}
