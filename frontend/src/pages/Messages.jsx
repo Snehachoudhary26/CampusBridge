@@ -5,50 +5,117 @@ import API from '../api/axios'
 import useAuthStore from '../store/authStore'
 import toast from 'react-hot-toast'
 
-const quickReplies = {
-  availability: [
-    { icon: '✅', text: 'Yes, still available!' },
-    { icon: '❌', text: 'Sorry, it has already been sold.' },
-    { icon: '⏳', text: 'Hold on, let me check and get back to you.' },
-  ],
-  price: [
-    { icon: '💰', text: 'Price is fixed, no negotiation.' },
-    { icon: '🤝', text: 'Yes, price is negotiable. Make me an offer!' },
-    { icon: '📉', text: 'I can do a small discount for quick pickup.' },
-  ],
-  location: [
-    { icon: '📍', text: 'I am in Boys Hostel Block B, Room 204.' },
-    { icon: '📍', text: 'I am in Girls Hostel Block A, Room 102.' },
-    { icon: '🏫', text: 'We can meet near the main gate of RGPV campus.' },
-    { icon: '☕', text: 'Let\'s meet at the college canteen tomorrow.' },
-  ],
-  condition: [
-    { icon: '⭐', text: 'Item is in excellent condition, barely used.' },
-    { icon: '✅', text: 'Works perfectly fine, no issues at all.' },
-    { icon: '📝', text: 'Minor wear and tear but fully functional.' },
-  ],
-  timing: [
-    { icon: '📅', text: 'I am available today evening after 5 PM.' },
-    { icon: '📅', text: 'Available this weekend, Saturday or Sunday.' },
-    { icon: '⚡', text: 'Available right now, come whenever you want!' },
-  ],
-  general: [
-    { icon: '👍', text: 'Sure, sounds good!' },
-    { icon: '🙏', text: 'Thank you for your interest!' },
-    { icon: '📞', text: 'Please call me on my number for faster response.' },
-    { icon: '✅', text: 'Deal confirmed! See you soon.' },
-    { icon: '❓', text: 'Can you please share more details?' },
-  ],
+// Smart reply engine — detects what buyer asked and suggests relevant replies
+function getSmartReplies(messages, currentUserId) {
+  const lastMsg = [...messages].reverse().find(m => m.sender_id !== currentUserId)
+  if (!lastMsg) return getDefaultReplies()
+
+  const text = lastMsg.content.toLowerCase()
+
+  if (text.includes('negotia') || text.includes('price') || text.includes('discount') || text.includes('rate') || text.includes('kitna')) {
+    return {
+      label: '💰 Price Replies',
+      replies: [
+        { icon: '🤝', text: 'Price is slightly negotiable. You can contact me directly after 7 PM, we can discuss!' },
+        { icon: '💰', text: 'Price is fixed at the listed amount. Best quality at this price!' },
+        { icon: '📉', text: 'For quick pickup today, I can do a small discount. Come meet me after 8 PM.' },
+        { icon: '📞', text: 'Let\'s talk about price in person. I am available after 7 PM in hostel.' },
+      ]
+    }
+  }
+
+  if (text.includes('available') || text.includes('still') || text.includes('baki') || text.includes('sold')) {
+    return {
+      label: '📦 Availability Replies',
+      replies: [
+        { icon: '✅', text: 'Yes, still available! You can come and collect it. I am available after 7 PM.' },
+        { icon: '⚡', text: 'Available right now! Come to my hostel room anytime today.' },
+        { icon: '⏳', text: 'One person is already interested. First come first served. Contact me before 6 PM!' },
+        { icon: '❌', text: 'Sorry, this item has been sold already. Check other listings!' },
+      ]
+    }
+  }
+
+  if (text.includes('where') || text.includes('location') || text.includes('hostel') || text.includes('block') || text.includes('collect') || text.includes('kahan')) {
+    return {
+      label: '📍 Location Replies',
+      replies: [
+        { icon: '🏠', text: 'I am in Boys Hostel Block B, Room 204. Come after 7 PM on any weekday.' },
+        { icon: '🏠', text: 'I am in Girls Hostel Block A, Room 102. Available after 6 PM.' },
+        { icon: '🏫', text: 'We can meet near the RGPV main gate. I am free after 5 PM today.' },
+        { icon: '☕', text: 'Let\'s meet at the college canteen tomorrow between 1-2 PM during lunch break.' },
+        { icon: '📍', text: 'I stay near campus. Share your location and I will suggest a meeting point.' },
+      ]
+    }
+  }
+
+  if (text.includes('condition') || text.includes('working') || text.includes('damage') || text.includes('scratch') || text.includes('photo') || text.includes('pic')) {
+    return {
+      label: '⭐ Condition Replies',
+      replies: [
+        { icon: '✅', text: 'Item is in excellent condition, works perfectly. No damage at all. You can inspect before buying!' },
+        { icon: '📸', text: 'I will send more photos on WhatsApp. Share your number and I will send clear pics.' },
+        { icon: '🔍', text: 'Minor wear and tear but fully functional. You can come and check it yourself before deciding.' },
+        { icon: '⭐', text: 'Condition is exactly as shown. Barely used, like new. Come see it in person after 7 PM.' },
+      ]
+    }
+  }
+
+  if (text.includes('when') || text.includes('time') || text.includes('today') || text.includes('tomorrow') || text.includes('kab')) {
+    return {
+      label: '📅 Timing Replies',
+      replies: [
+        { icon: '🌙', text: 'I am free today after 7 PM. Come to my hostel and we can finalize the deal!' },
+        { icon: '📅', text: 'Available tomorrow evening after 6 PM. Does that work for you?' },
+        { icon: '⚡', text: 'I am free right now! Come whenever you want today.' },
+        { icon: '🗓️', text: 'This weekend works best for me — Saturday or Sunday afternoon after 2 PM.' },
+        { icon: '📞', text: 'My schedule is flexible. Just message me an hour before coming, I will be ready.' },
+      ]
+    }
+  }
+
+  if (text.includes('interest') || text.includes('buy') || text.includes('lena') || text.includes('want') || text.includes('need')) {
+    return {
+      label: '🎉 Interested Buyer Replies',
+      replies: [
+        { icon: '🎉', text: 'Great! Come meet me after 7 PM today and we can finalize the deal in person.' },
+        { icon: '✅', text: 'Awesome! Item is ready. Just come and collect it whenever you are free today.' },
+        { icon: '🤝', text: 'Perfect! Let\'s meet near the campus canteen tomorrow at 1 PM for the handover.' },
+        { icon: '📞', text: 'Glad to hear! Share your number, I will call you to coordinate the pickup.' },
+      ]
+    }
+  }
+
+  if (text.includes('borrow') || text.includes('rent') || text.includes('return') || text.includes('kitne din')) {
+    return {
+      label: '🤝 Borrow/Rent Replies',
+      replies: [
+        { icon: '📅', text: 'You can borrow it for up to 3 days. Return in same condition. Come after 7 PM.' },
+        { icon: '✅', text: 'Sure! Borrow for your exam. Just return it within 2 days. No charges if returned on time.' },
+        { icon: '🔑', text: 'Rental available. Minimum 1 week. Come collect it today evening after 6 PM.' },
+        { icon: '🤝', text: 'Happy to lend! Just take care of it and return in same condition. Come meet me today.' },
+      ]
+    }
+  }
+
+  return getDefaultReplies()
 }
 
-const replyCategories = [
-  { key: 'general', label: '👍 General', },
-  { key: 'availability', label: '📦 Availability' },
-  { key: 'price', label: '💰 Price' },
-  { key: 'location', label: '📍 Location' },
-  { key: 'condition', label: '⭐ Condition' },
-  { key: 'timing', label: '📅 Timing' },
-]
+function getDefaultReplies() {
+  return {
+    label: '💬 Quick Replies',
+    replies: [
+      { icon: '✅', text: 'Yes, still available! Come meet me after 7 PM today.' },
+      { icon: '🤝', text: 'Price is slightly negotiable. Let\'s discuss in person after 7 PM.' },
+      { icon: '📍', text: 'I am in hostel Block B. Come after 7 PM any weekday.' },
+      { icon: '👍', text: 'Sounds good! Let\'s finalize the deal today evening.' },
+      { icon: '📸', text: 'I will send more photos. Share your WhatsApp number.' },
+      { icon: '⏰', text: 'I am available after 7 PM daily. Come whenever suits you.' },
+      { icon: '🙏', text: 'Thank you for your interest! Feel free to ask anything.' },
+      { icon: '✅', text: 'Deal confirmed! See you soon. 🎉' },
+    ]
+  }
+}
 
 export default function Messages() {
   const { isAuthenticated, user } = useAuthStore()
@@ -60,7 +127,7 @@ export default function Messages() {
   const [sending, setSending] = useState(false)
   const [loading, setLoading] = useState(true)
   const [showQuickReplies, setShowQuickReplies] = useState(false)
-  const [activeCategory, setActiveCategory] = useState('general')
+  const [smartReplies, setSmartReplies] = useState(getDefaultReplies())
   const bottomRef = useRef(null)
 
   useEffect(() => {
@@ -70,6 +137,9 @@ export default function Messages() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (messages.length > 0 && user) {
+      setSmartReplies(getSmartReplies(messages, user.id))
+    }
   }, [messages])
 
   const fetchConversations = async () => {
@@ -87,7 +157,11 @@ export default function Messages() {
     setShowQuickReplies(false)
     try {
       const res = await API.get(`/messages/${conv.listing_id}/${conv.other_user_id}`)
-      setMessages(Array.isArray(res.data) ? res.data : [])
+      const msgs = Array.isArray(res.data) ? res.data : []
+      setMessages(msgs)
+      if (msgs.length > 0 && user) {
+        setSmartReplies(getSmartReplies(msgs, user.id))
+      }
     } catch { setMessages([]) }
   }
 
@@ -123,6 +197,8 @@ export default function Messages() {
 
   if (!isAuthenticated) return null
 
+  const lastReceivedMsg = [...messages].reverse().find(m => m.sender_id !== user?.id)
+
   return (
     <div style={{ minHeight: '100vh', background: '#F5FFFE' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '28px 24px' }}>
@@ -134,7 +210,7 @@ export default function Messages() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: 20, height: '78vh' }}>
 
-          {/* Conversations */}
+          {/* Conversations List */}
           <div style={{
             background: '#fff', borderRadius: 20, border: '1px solid #D0F5F0',
             overflow: 'hidden', display: 'flex', flexDirection: 'column',
@@ -179,46 +255,39 @@ export default function Messages() {
                     color: '#fff', fontWeight: 700, fontSize: 13, textDecoration: 'none',
                   }}>Browse Listings</Link>
                 </div>
-              ) : (
-                conversations.map((conv, i) => (
-                  <motion.div key={conv.conversation_id || i}
-                    initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    onClick={() => openConversation(conv)}
-                    style={{
-                      padding: '14px 18px', cursor: 'pointer',
-                      background: activeConv?.conversation_id === conv.conversation_id
-                        ? 'rgba(0,201,177,0.08)' : 'transparent',
-                      borderLeft: activeConv?.conversation_id === conv.conversation_id
-                        ? '3px solid #00C9B1' : '3px solid transparent',
-                      borderBottom: '1px solid #F5FFFE',
-                      transition: 'all 0.2s',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                      <div style={{
-                        width: 44, height: 44, borderRadius: '50%', flexShrink: 0,
-                        background: 'linear-gradient(135deg, #00C9B1, #00A8E8)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        color: '#fff', fontWeight: 800, fontSize: 17,
-                      }}>{conv.other_user_name?.[0]?.toUpperCase() || '?'}</div>
-                      <div style={{ minWidth: 0, flex: 1 }}>
-                        <div style={{ fontWeight: 700, color: '#0D2B35', fontSize: 14, marginBottom: 2 }}>
-                          {conv.other_user_name}
-                        </div>
-                        <div style={{ fontSize: 12, color: '#00A896', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          📦 {conv.listing_title}
-                        </div>
-                        {conv.last_message && (
-                          <div style={{ fontSize: 12, color: '#A0BCBB', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {conv.last_message}
-                          </div>
-                        )}
+              ) : conversations.map((conv, i) => (
+                <motion.div key={conv.conversation_id || i}
+                  initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  onClick={() => openConversation(conv)}
+                  style={{
+                    padding: '14px 18px', cursor: 'pointer',
+                    background: activeConv?.conversation_id === conv.conversation_id ? 'rgba(0,201,177,0.08)' : 'transparent',
+                    borderLeft: activeConv?.conversation_id === conv.conversation_id ? '3px solid #00C9B1' : '3px solid transparent',
+                    borderBottom: '1px solid #F5FFFE', transition: 'all 0.2s',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{
+                      width: 44, height: 44, borderRadius: '50%', flexShrink: 0,
+                      background: 'linear-gradient(135deg, #00C9B1, #00A8E8)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: '#fff', fontWeight: 800, fontSize: 17,
+                    }}>{conv.other_user_name?.[0]?.toUpperCase() || '?'}</div>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <div style={{ fontWeight: 700, color: '#0D2B35', fontSize: 14, marginBottom: 2 }}>{conv.other_user_name}</div>
+                      <div style={{ fontSize: 12, color: '#00A896', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        📦 {conv.listing_title}
                       </div>
+                      {conv.last_message && (
+                        <div style={{ fontSize: 12, color: '#A0BCBB', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {conv.last_message}
+                        </div>
+                      )}
                     </div>
-                  </motion.div>
-                ))
-              )}
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
 
@@ -275,14 +344,14 @@ export default function Messages() {
                       <motion.div key={m.id || i}
                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        style={{ display: 'flex', justifyContent: isMine ? 'flex-end' : 'flex-start' }}
+                        style={{ display: 'flex', justifyContent: isMine ? 'flex-end' : 'flex-start', alignItems: 'flex-end', gap: 8 }}
                       >
                         {!isMine && (
                           <div style={{
                             width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
                             background: 'linear-gradient(135deg, #00C9B1, #00A8E8)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            color: '#fff', fontWeight: 800, fontSize: 13, marginRight: 8, alignSelf: 'flex-end',
+                            color: '#fff', fontWeight: 800, fontSize: 13,
                           }}>{activeConv.other_user_name?.[0]?.toUpperCase()}</div>
                         )}
                         <div style={{
@@ -307,7 +376,7 @@ export default function Messages() {
                   <div ref={bottomRef} />
                 </div>
 
-                {/* Quick Replies Panel */}
+                {/* Smart Quick Replies Panel */}
                 <AnimatePresence>
                   {showQuickReplies && (
                     <motion.div
@@ -316,35 +385,51 @@ export default function Messages() {
                       exit={{ opacity: 0, height: 0 }}
                       style={{ borderTop: '1px solid #E0F5F0', background: '#F8FFFE', overflow: 'hidden' }}
                     >
-                      {/* Category Tabs */}
-                      <div style={{ display: 'flex', gap: 4, padding: '10px 16px', overflowX: 'auto', borderBottom: '1px solid #E0F5F0' }}>
-                        {replyCategories.map(cat => (
-                          <button key={cat.key} onClick={() => setActiveCategory(cat.key)} style={{
-                            padding: '5px 12px', borderRadius: 20, border: 'none', whiteSpace: 'nowrap',
-                            background: activeCategory === cat.key ? 'linear-gradient(135deg, #00C9B1, #00A896)' : '#fff',
-                            color: activeCategory === cat.key ? '#fff' : '#4A6572',
-                            fontWeight: 600, fontSize: 12, cursor: 'pointer',
-                            border: activeCategory === cat.key ? 'none' : '1px solid #E0F5F0',
-                            transition: 'all 0.2s',
-                          }}>{cat.label}</button>
-                        ))}
+                      {/* Smart context label */}
+                      <div style={{
+                        padding: '10px 16px 6px',
+                        display: 'flex', alignItems: 'center', gap: 8,
+                        borderBottom: '1px solid #E0F5F0',
+                      }}>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: '#00A896' }}>
+                          ⚡ {smartReplies.label}
+                        </span>
+                        {lastReceivedMsg && (
+                          <span style={{
+                            fontSize: 11, color: '#A0BCBB', background: '#F0FFFE',
+                            padding: '2px 10px', borderRadius: 20, border: '1px solid #E0F5F0',
+                            maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                          }}>
+                            Re: "{lastReceivedMsg.content.substring(0, 30)}..."
+                          </span>
+                        )}
                       </div>
 
-                      {/* Reply Options */}
-                      <div style={{ padding: '10px 16px', display: 'flex', flexWrap: 'wrap', gap: 8, maxHeight: 140, overflowY: 'auto' }}>
-                        {quickReplies[activeCategory]?.map((reply, i) => (
+                      {/* Reply buttons */}
+                      <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 200, overflowY: 'auto' }}>
+                        {smartReplies.replies.map((reply, i) => (
                           <motion.button key={i}
-                            whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: i * 0.05 }}
+                            whileHover={{ scale: 1.01, x: 4 }}
+                            whileTap={{ scale: 0.98 }}
                             onClick={() => sendMessage(reply.text)}
                             style={{
-                              padding: '8px 14px', borderRadius: 20,
-                              border: '1.5px solid #D0ECE8', background: '#fff',
-                              color: '#0D2B35', fontSize: 13, cursor: 'pointer',
-                              fontWeight: 500, transition: 'all 0.2s',
-                              display: 'flex', alignItems: 'center', gap: 6,
+                              padding: '10px 16px', borderRadius: 12,
+                              border: '1.5px solid #D0ECE8',
+                              background: '#fff', color: '#0D2B35',
+                              fontSize: 13, cursor: 'pointer', fontWeight: 500,
+                              textAlign: 'left', transition: 'all 0.2s',
+                              display: 'flex', alignItems: 'center', gap: 10,
+                              boxShadow: '0 2px 8px rgba(0,201,177,0.05)',
                             }}
+                            onMouseEnter={e => { e.currentTarget.style.borderColor = '#00C9B1'; e.currentTarget.style.background = '#F0FFFE' }}
+                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#D0ECE8'; e.currentTarget.style.background = '#fff' }}
                           >
-                            {reply.icon} {reply.text.substring(0, 35)}{reply.text.length > 35 ? '...' : ''}
+                            <span style={{ fontSize: 18, flexShrink: 0 }}>{reply.icon}</span>
+                            <span style={{ flex: 1, lineHeight: 1.4 }}>{reply.text}</span>
+                            <span style={{ fontSize: 11, color: '#00C9B1', flexShrink: 0, fontWeight: 700 }}>Send →</span>
                           </motion.button>
                         ))}
                       </div>
@@ -357,27 +442,29 @@ export default function Messages() {
                   padding: '12px 16px', borderTop: '1px solid #E0F5F0',
                   display: 'flex', gap: 10, alignItems: 'center', background: '#fff',
                 }}>
-                  {/* Quick Reply Toggle */}
                   <motion.button
                     whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
                     onClick={() => setShowQuickReplies(!showQuickReplies)}
-                    title="Quick Replies"
+                    title="Smart Quick Replies"
                     style={{
-                      width: 40, height: 40, borderRadius: '50%', border: 'none',
-                      background: showQuickReplies ? 'linear-gradient(135deg, #00C9B1, #00A896)' : '#F0FFFE',
+                      width: 42, height: 42, borderRadius: '50%', border: 'none',
+                      background: showQuickReplies
+                        ? 'linear-gradient(135deg, #00C9B1, #00A896)'
+                        : '#F0FFFE',
                       color: showQuickReplies ? '#fff' : '#00A896',
                       fontSize: 18, cursor: 'pointer', flexShrink: 0,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       transition: 'all 0.2s',
+                      boxShadow: showQuickReplies ? '0 4px 12px rgba(0,201,177,0.4)' : 'none',
                       border: showQuickReplies ? 'none' : '1.5px solid #D0ECE8',
                     }}
-                  >⚡</button>
+                  >⚡</motion.button>
 
                   <input
                     value={input}
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
-                    placeholder="Type a message or use ⚡ quick replies..."
+                    placeholder="Type a message or tap ⚡ for smart replies..."
                     style={{
                       flex: 1, padding: '12px 16px', borderRadius: 24,
                       border: '1.5px solid #D0ECE8', outline: 'none',

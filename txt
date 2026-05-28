@@ -9,12 +9,13 @@ npm install react-router-dom@6 axios framer-motion react-hot-toast zustand
 npm install -D tailwindcss@3 postcss autoprefixer
 npm run dev
 
-cd /Users/snehachoudhary/Desktop/CampusBridge/campusbridge/backend
+cd "/Users/snehachoudhary/Library/Mobile Documents/com~apple~CloudDocs/CampusBridge/campusbridge/backend"
 source venv/bin/activate
+uvicorn main:app --reload
 uvicorn main:app --reload
 
 deactivate
-cd /Users/snehachoudhary/Desktop/CampusBridge/frontend
+cd /Users/snehachoudhary/Library/Mobile\ Documents/com\~apple\~CloudDocs/CampusBridge/frontend 
 npm run dev
 
 cd /Users/snehachoudhary/Desktop/CampusBridge/frontend
