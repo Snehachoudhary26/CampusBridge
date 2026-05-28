@@ -94,7 +94,28 @@ export default function Profile() {
           ))}
         </div>
 
-        {/* My Listings Tab */}
+        
+    {/* Availability Settings */}
+    {activeTab === "listings" && (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+        style={{ background: "#fff", borderRadius: 20, padding: 28, border: "1px solid #D0F5F0", marginBottom: 24, boxShadow: "0 4px 20px rgba(0,201,177,0.07)" }}>
+        <h2 style={{ fontWeight: 800, color: "#0D2B35", fontSize: 18, marginBottom: 6 }}>⚙️ Auto-Reply Settings</h2>
+        <p style={{ color: "#7A9BA8", fontSize: 14, marginBottom: 20 }}>Buyers will receive this auto-reply when they first message you</p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <div>
+            <label style={{ fontSize: 13, fontWeight: 600, color: "#4A6572", display: "block", marginBottom: 6 }}>Your Availability</label>
+            <select style={{ width: "100%", padding: "11px 14px", borderRadius: 10, border: "1.5px solid #D0ECE8", outline: "none", fontSize: 14, color: "#0D2B35", background: "#F8FFFE" }}>
+              <option>Available after 7 PM</option>
+              <option>Available after 6 PM</option>
+              <option>Available after 8 PM</option>
+              <option>Available on weekends</option>
+              <option>Available anytime</option>
+            </select>
+          </div>
+        </div>
+      </motion.div>
+    )}
+{/* My Listings Tab */}
         {activeTab === 'listings' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {loading ? (

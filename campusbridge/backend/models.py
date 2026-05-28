@@ -61,4 +61,7 @@ class ChatHistory(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     role = Column(String, nullable=False)
     content = Column(Text, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow)# Note: Run this SQL in your DB to add the column:
+# ALTER TABLE users ADD COLUMN IF NOT EXISTS availability VARCHAR DEFAULT 'Available after 7 PM';
+# ALTER TABLE users ADD COLUMN IF NOT EXISTS auto_reply VARCHAR DEFAULT 'Thanks for your interest! I will get back to you after 7 PM today. 🙏';
+# ALTER TABLE users ADD COLUMN IF NOT EXISTS whatsapp VARCHAR;

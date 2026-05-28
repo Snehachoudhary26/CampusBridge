@@ -9,7 +9,20 @@ from auth import get_current_user
 
 router = APIRouter(prefix="/messages", tags=["Messages"])
 
-@router.post("/", response_model=MessageResponse)
+def message_to_dict(msg: Message, db: Session) -> dict:
+    sender = db.query(User).filter(User.id == msg.sender_id).first()
+    return {
+        "id": msg.id,
+        "content": msg.content,
+        "sender_id": msg.sender_id,
+        "sender_name": sender.name if sender else "Unknown",
+        "receiver_id": msg.receiver_id,
+        "listing_id": msg.listing_id,
+        "created_at": str(msg.created_at),
+        "is_auto_reply": getattr(msg, 'is_auto_reply', False),
+    }
+
+@router.post("/")
 def send_message(
     message_data: MessageCreate,
     current_user: User = Depends(get_current_user),
@@ -21,6 +34,7 @@ def send_message(
     if listing.seller_id == current_user.id:
         raise HTTPException(status_code=400, detail="You cannot message yourself")
 
+    # Save buyer message
     new_message = Message(
         content=message_data.content,
         sender_id=current_user.id,
@@ -30,7 +44,36 @@ def send_message(
     db.add(new_message)
     db.commit()
     db.refresh(new_message)
-    return new_message
+
+    # Check if this is the FIRST message in this conversation
+    existing_messages = db.query(Message).filter(
+        Message.listing_id == message_data.listing_id,
+        or_(
+            and_(Message.sender_id == current_user.id, Message.receiver_id == message_data.receiver_id),
+            and_(Message.sender_id == message_data.receiver_id, Message.receiver_id == current_user.id)
+        )
+    ).count()
+
+    # Send auto-reply only on first message
+    if existing_messages <= 1:
+        seller = db.query(User).filter(User.id == message_data.receiver_id).first()
+        if seller:
+            availability = getattr(seller, 'availability', 'after 7 PM')
+            auto_reply_text = getattr(seller, 'auto_reply', None)
+
+            if not auto_reply_text:
+                auto_reply_text = f"Hi! Thanks for your interest in my listing. I am usually available {availability}. I will get back to you soon! 🙏"
+
+            auto_reply = Message(
+                content=auto_reply_text,
+                sender_id=message_data.receiver_id,
+                listing_id=message_data.listing_id,
+                receiver_id=current_user.id,
+            )
+            db.add(auto_reply)
+            db.commit()
+
+    return message_to_dict(new_message, db)
 
 @router.get("/conversations")
 def get_conversations(
@@ -48,7 +91,6 @@ def get_conversations(
     for msg in messages:
         other_user_id = msg.receiver_id if msg.sender_id == current_user.id else msg.sender_id
         key = f"{min(current_user.id, other_user_id)}_{max(current_user.id, other_user_id)}_{msg.listing_id}"
-
         if key not in conversations:
             other_user = db.query(User).filter(User.id == other_user_id).first()
             listing = db.query(Listing).filter(Listing.id == msg.listing_id).first()
@@ -59,7 +101,7 @@ def get_conversations(
                 "listing_id": msg.listing_id,
                 "listing_title": listing.title if listing else "Unknown",
                 "last_message": msg.content,
-                "last_message_time": msg.created_at
+                "last_message_time": msg.created_at,
             }
         else:
             if msg.created_at > conversations[key]["last_message_time"]:
@@ -68,7 +110,7 @@ def get_conversations(
 
     return {"conversations": list(conversations.values())}
 
-@router.get("/{listing_id}/{other_user_id}", response_model=List[MessageResponse])
+@router.get("/{listing_id}/{other_user_id}")
 def get_messages(
     listing_id: int,
     other_user_id: int,
@@ -82,4 +124,4 @@ def get_messages(
             and_(Message.sender_id == other_user_id, Message.receiver_id == current_user.id)
         )
     ).order_by(Message.created_at.asc()).all()
-    return messages
+    return [message_to_dict(m, db) for m in messages]
