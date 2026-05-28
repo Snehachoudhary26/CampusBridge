@@ -158,6 +158,23 @@ export default function ListingDetail() {
             {/* Price & Info */}
             <div style={{ background: '#fff', borderRadius: 20, padding: 28, border: '1px solid #D0F5F0', boxShadow: '0 4px 20px rgba(0,201,177,0.08)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                {/* AI Verified Badge */}
+                {listing.verification_label && (
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    background: listing.verification_bg || '#E8FBF8',
+                    color: listing.verification_color || '#00A896',
+                    borderRadius: 20, padding: '6px 14px',
+                    fontSize: 13, fontWeight: 700, marginBottom: 12,
+                    border: '1px solid rgba(0,201,177,0.2)',
+                  }}>
+                    {listing.verification_label}
+                    <span style={{ fontSize: 11, opacity: 0.7 }}>
+                      · AI Spam Score: {((1 - (listing.spam_score || 0)) * 100).toFixed(0)}% Safe
+                    </span>
+                  </div>
+                )}
+
                 <span style={{ padding: '4px 14px', borderRadius: 20, background: tc.bg, color: tc.color, fontWeight: 700, fontSize: 13 }}>
                   {listing.listing_type?.toUpperCase()}
                 </span>

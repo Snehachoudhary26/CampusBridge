@@ -12,9 +12,10 @@ npm run dev
 cd "/Users/snehachoudhary/Library/Mobile Documents/com~apple~CloudDocs/CampusBridge/campusbridge/backend"
 source venv/bin/activate
 uvicorn main:app --reload
-uvicorn main:app --reload
+
 
 deactivate
+
 cd /Users/snehachoudhary/Library/Mobile\ Documents/com\~apple\~CloudDocs/CampusBridge/frontend 
 npm run dev
 

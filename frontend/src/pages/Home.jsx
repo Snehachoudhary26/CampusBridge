@@ -211,6 +211,14 @@ export default function Home() {
                   </div>
                   <h3 style={{ fontWeight: 700, color: '#0D2B35', marginBottom: 6, fontSize: 15 }}>{item.title}</h3>
                   <p style={{ color: '#7A9BA8', fontSize: 13 }}>{item.category} · ⭐ {item.condition}/5</p>
+                                {item.verification_label && (
+                                  <span style={{
+                                    fontSize: 11, fontWeight: 700,
+                                    color: item.verification_color || '#00A896',
+                                    background: item.verification_bg || '#E8FBF8',
+                                    padding: '2px 8px', borderRadius: 10, marginTop: 4, display: 'inline-block'
+                                  }}>{item.verification_label}</span>
+                                )}
                 </div>
               </motion.div>
             ))}
