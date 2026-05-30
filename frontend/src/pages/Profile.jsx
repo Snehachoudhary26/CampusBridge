@@ -75,6 +75,20 @@ export default function Profile() {
               color: '#fff', fontWeight: 700, textAlign: 'center',
               boxShadow: '0 4px 15px rgba(0,201,177,0.3)',
             }}>+ New Listing</Link>
+            </div>
+            <div style={{ marginTop: 12 }}>
+              <p style={{ fontSize: 13, fontWeight: 700, color: '#4A6572', marginBottom: 8 }}>
+                📱 WhatsApp Number (for buyers to contact you faster)
+              </p>
+              <div style={{ display: 'flex', gap: 10 }}>
+                <input type='tel' placeholder='98765 43210'
+                  style={{ flex: 1, padding: '10px 14px', borderRadius: 10, border: '1.5px solid #D0ECE8', outline: 'none', fontSize: 14, color: '#0D2B35', background: '#F8FFFE' }}
+                />
+                <button style={{ padding: '10px 18px', borderRadius: 10, border: 'none', background: '#25D366', color: '#fff', fontWeight: 700, cursor: 'pointer', fontSize: 14 }}>
+                  Save 📱
+                </button>
+              </div>
+            <div style={{ display: 'none' }}>
             <button onClick={handleLogout} style={{
               padding: '10px 24px', borderRadius: 10, border: '1.5px solid #FFD0D0',
               background: '#FFF5F5', color: '#E05555', fontWeight: 600, cursor: 'pointer',

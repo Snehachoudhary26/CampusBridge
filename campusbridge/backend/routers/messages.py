@@ -30,9 +30,8 @@ def send_message(
     if not listing:
         raise HTTPException(status_code=404, detail="Listing not found")
     if listing.seller_id == current_user.id:
-        raise HTTPException(status_code=400, detail="You cannot message yourself")
+        raise HTTPException(status_code=400, detail="Cannot message yourself")
 
-    # Save buyer message
     new_message = Message(
         content=message_data.content,
         sender_id=current_user.id,
@@ -43,7 +42,7 @@ def send_message(
     db.commit()
     db.refresh(new_message)
 
-    # Check if first message in this conversation
+    # Auto-reply only on first message
     existing_count = db.query(Message).filter(
         Message.listing_id == message_data.listing_id,
         or_(
@@ -52,20 +51,21 @@ def send_message(
         )
     ).count()
 
-    # Auto-reply only on first message
     if existing_count <= 1:
         seller = db.query(User).filter(User.id == message_data.receiver_id).first()
         if seller:
             availability = getattr(seller, 'availability', 'after 7 PM')
-            # Include contact details in auto-reply
-            auto_reply_text = (
-                f"Hi {current_user.name}! 👋 Thanks for your interest in my listing.\n\n"
-                f"🕐 I am usually available {availability}.\n"
-                f"📧 You can also reach me directly at: {seller.email}\n\n"
-                f"I will get back to you soon. Feel free to ask anything! 🙏"
-            )
+            whatsapp = getattr(seller, 'whatsapp', None)
+
+            auto_text = f"Hi {current_user.name}! 👋 Thanks for your interest.\n\n"
+            auto_text += f"🕐 I am usually available {availability}.\n"
+            auto_text += f"📧 Email: {seller.email}\n"
+            if whatsapp:
+                auto_text += f"📱 WhatsApp: {whatsapp}\n"
+            auto_text += f"\nFeel free to ask anything! 🙏"
+
             auto_reply = Message(
-                content=auto_reply_text,
+                content=auto_text,
                 sender_id=message_data.receiver_id,
                 listing_id=message_data.listing_id,
                 receiver_id=current_user.id,
@@ -99,8 +99,10 @@ def get_conversations(
                 "other_user_id": other_user_id,
                 "other_user_name": other_user.name if other_user else "Unknown",
                 "other_user_email": other_user.email if other_user else "",
+                "other_user_whatsapp": getattr(other_user, 'whatsapp', None) if other_user else None,
                 "listing_id": msg.listing_id,
                 "listing_title": listing.title if listing else "Unknown",
+                "listing_image": listing.image_url if listing else None,
                 "last_message": msg.content,
                 "last_message_time": msg.created_at,
             }
@@ -110,6 +112,16 @@ def get_conversations(
                 conversations[key]["last_message_time"] = msg.created_at
 
     return {"conversations": list(conversations.values())}
+
+@router.get("/unread-count")
+def get_unread_count(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    count = db.query(Message).filter(
+        Message.receiver_id == current_user.id
+    ).count()
+    return {"unread_count": min(count, 99)}
 
 @router.get("/{listing_id}/{other_user_id}")
 def get_messages(
@@ -134,7 +146,6 @@ def delete_conversation(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    # Only delete messages where current user is sender or receiver
     db.query(Message).filter(
         Message.listing_id == listing_id,
         or_(
@@ -143,4 +154,4 @@ def delete_conversation(
         )
     ).delete(synchronize_session=False)
     db.commit()
-    return {"message": "Conversation deleted"}
+    return {"message": "Deleted"}

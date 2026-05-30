@@ -75,6 +75,7 @@ export default function Messages() {
   const [smartReplies, setSmartReplies] = useState(getDefaultReplies())
   const [refreshing, setRefreshing] = useState(false)
   const bottomRef = useRef(null)
+  const refreshTimerRef = useRef(null)
 
   useEffect(() => {
     if (!isAuthenticated) { navigate('/login'); return }
@@ -97,6 +98,21 @@ export default function Messages() {
     } catch { setConversations([]) }
     finally { setLoading(false) }
   }
+
+  // Auto-refresh every 5 seconds
+  useEffect(() => {
+    if (!activeConv) return
+    const autoRefresh = setInterval(async () => {
+      try {
+        const res = await API.get(`/messages/${activeConv.listing_id}/${activeConv.other_user_id}`)
+        const newMsgs = Array.isArray(res.data) ? res.data : []
+        if (newMsgs.length !== messages.length) {
+          setMessages(newMsgs)
+        }
+      } catch {}
+    }, 5000)
+    return () => clearInterval(autoRefresh)
+  }, [activeConv, messages.length])
 
   const openConversation = async (conv) => {
     setActiveConv(conv)
@@ -259,8 +275,18 @@ export default function Messages() {
                     <div style={{ fontWeight: 800, color: '#0D2B35', fontSize: 15 }}>{activeConv.other_user_name}</div>
                     <div style={{ fontSize: 12, color: '#00A896', fontWeight: 600 }}>📦 {activeConv.listing_title}</div>
                     {activeConv.other_user_email && (
-                      <div style={{ fontSize: 11, color: '#7A9BA8', marginTop: 2 }}>
-                        ✉️ {activeConv.other_user_email}
+                      <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 4, flexWrap: 'wrap' }}>
+                        {activeConv.other_user_email && (
+                          <a href={'mailto:' + activeConv.other_user_email} style={{ fontSize: 11, color: '#7A9BA8', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
+                            ✉️ {activeConv.other_user_email}
+                          </a>
+                        )}
+                        {activeConv.other_user_whatsapp && (
+                          <a href={'https://wa.me/91' + activeConv.other_user_whatsapp.replace(/[^0-9]/g, '')} target='_blank' rel='noreferrer'
+                            style={{ fontSize: 11, color: '#25D366', fontWeight: 700, textDecoration: 'none', background: '#E8FFF0', padding: '2px 8px', borderRadius: 10, display: 'flex', alignItems: 'center', gap: 4 }}>
+                            📱 WhatsApp
+                          </a>
+                        )}
                       </div>
                     )}
                   </div>

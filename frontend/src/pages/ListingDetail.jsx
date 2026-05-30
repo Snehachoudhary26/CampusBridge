@@ -161,17 +161,23 @@ export default function ListingDetail() {
                 {/* AI Verified Badge */}
                 {listing.verification_label && (
                   <div style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    display: 'inline-flex', alignItems: 'center', gap: 8,
                     background: listing.verification_bg || '#E8FBF8',
                     color: listing.verification_color || '#00A896',
-                    borderRadius: 20, padding: '6px 14px',
-                    fontSize: 13, fontWeight: 700, marginBottom: 12,
-                    border: '1px solid rgba(0,201,177,0.2)',
+                    borderRadius: 10, padding: '8px 16px',
+                    fontSize: 13, fontWeight: 700, marginBottom: 16,
+                    border: `1px solid ${listing.verification_color || '#00A896'}33`,
+                    width: 'fit-content',
                   }}>
-                    {listing.verification_label}
-                    <span style={{ fontSize: 11, opacity: 0.7 }}>
-                      · AI Spam Score: {((1 - (listing.spam_score || 0)) * 100).toFixed(0)}% Safe
+                    <span style={{ fontSize: 16 }}>
+                      {listing.ai_verified ? '🤖' : '⚠️'}
                     </span>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 800 }}>{listing.verification_label}</div>
+                      <div style={{ fontSize: 11, opacity: 0.8, fontWeight: 500 }}>
+                        {((1 - (listing.spam_score || 0)) * 100).toFixed(0)}% Safety Score · Powered by ML
+                      </div>
+                    </div>
                   </div>
                 )}
 
