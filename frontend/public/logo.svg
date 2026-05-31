@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="115" fill="url(#bg)"/>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512">
+      <stop offset="0%" stop-color="#00C9B1"/>
+      <stop offset="100%" stop-color="#00A8E8"/>
+    </linearGradient>
+  </defs>
+  <!-- Bridge arch -->
+  <path d="M80 360 Q256 160 432 360" stroke="white" stroke-width="28" fill="none" stroke-linecap="round"/>
+  <!-- Bridge pillars -->
+  <line x1="168" y1="280" x2="168" y2="380" stroke="white" stroke-width="24" stroke-linecap="round"/>
+  <line x1="344" y1="280" x2="344" y2="380" stroke="white" stroke-width="24" stroke-linecap="round"/>
+  <!-- Bridge road -->
+  <line x1="70" y1="380" x2="442" y2="380" stroke="white" stroke-width="28" stroke-linecap="round"/>
+  <!-- Graduation cap -->
+  <polygon points="256,110 330,148 256,186 182,148" fill="white"/>
+  <rect x="214" y="142" width="84" height="22" rx="4" fill="rgba(255,255,255,0.3)"/>
+  <line x1="330" y1="148" x2="330" y2="185" stroke="white" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="330" cy="192" r="12" fill="white"/>
+</svg>
