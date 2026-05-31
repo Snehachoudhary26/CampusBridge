@@ -8,16 +8,27 @@ import useAuthStore from '../store/authStore'
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' })
   const [loading, setLoading] = useState(false)
-  const [showSuggestion, setShowSuggestion] = useState(false)
-  const [savedEmail, setSavedEmail] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
+  const [savedEmails, setSavedEmails] = useState([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
   const { login } = useAuthStore()
   const navigate = useNavigate()
 
+  // Load saved emails from localStorage
   useEffect(() => {
-    const lastEmail = localStorage.getItem('lastLoginEmail')
-    if (lastEmail) setSavedEmail(lastEmail)
+    const emails = JSON.parse(localStorage.getItem('saved_emails') || '[]')
+    setSavedEmails(emails)
+    // Auto-fill last used email
+    if (emails.length > 0) {
+      setForm(f => ({ ...f, email: emails[0] }))
+    }
   }, [])
+
+  const saveEmail = (email) => {
+    const existing = JSON.parse(localStorage.getItem('saved_emails') || '[]')
+    const updated = [email, ...existing.filter(e => e !== email)].slice(0, 5)
+    localStorage.setItem('saved_emails', JSON.stringify(updated))
+    setSavedEmails(updated)
+  }
 
   const handleSubmit = async () => {
     if (!form.email) { toast.error('Enter your email'); return }
@@ -29,17 +40,21 @@ export default function Login() {
         password: form.password,
       })
       const { access_token, user } = res.data
-      localStorage.setItem('lastLoginEmail', form.email.trim().toLowerCase())
       login(user, access_token)
+      saveEmail(form.email.trim().toLowerCase())
       toast.success('Welcome back, ' + user.name + '! 🎓')
       navigate('/')
     } catch (err) {
       const detail = err.response?.data?.detail
       if (typeof detail === 'string') toast.error(detail)
-      else if (err.message === 'Network Error') toast.error('Backend offline — start it first!')
+      else if (err.message === 'Network Error') toast.error('Backend offline!')
       else toast.error('Login failed')
     } finally { setLoading(false) }
   }
+
+  const filteredSuggestions = savedEmails.filter(e =>
+    e.includes(form.email.toLowerCase()) && e !== form.email
+  )
 
   const inputStyle = {
     width: '100%', padding: '12px 16px', borderRadius: 10,
@@ -59,55 +74,69 @@ export default function Login() {
           <p style={{ color: '#7A9BA8', fontSize: 14 }}>Sign in to your CampusBridge account</p>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
 
-          {/* Email with suggestion */}
+          {/* Email with suggestions */}
           <div style={{ position: 'relative' }}>
             <label style={{ fontSize: 13, fontWeight: 600, color: '#4A6572', display: 'block', marginBottom: 6 }}>Email Address</label>
             <input type="email" placeholder="your@email.com"
               value={form.email}
-              onChange={e => { setForm({ ...form, email: e.target.value }); setShowSuggestion(savedEmail && e.target.value.length > 0 && savedEmail.includes(e.target.value)) }}
-              onFocus={() => { if (savedEmail && !form.email) setShowSuggestion(true) }}
-              onBlur={() => setTimeout(() => setShowSuggestion(false), 200)}
+              onChange={e => { setForm({ ...form, email: e.target.value }); setShowSuggestions(true) }}
+              onFocus={() => setShowSuggestions(true)}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
               onKeyDown={e => e.key === 'Enter' && handleSubmit()}
               style={inputStyle}
               onFocus2={e => e.target.style.borderColor = '#00C9B1'}
             />
-            {/* Email suggestion dropdown */}
-            {showSuggestion && savedEmail && (
-              <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }}
-                onClick={() => { setForm({ ...form, email: savedEmail }); setShowSuggestion(false) }}
-                style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 100, background: '#fff', border: '1.5px solid #D0ECE8', borderRadius: 10, padding: '10px 14px', cursor: 'pointer', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginTop: 4, display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span style={{ fontSize: 18 }}>👤</span>
-                <div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: '#0D2B35' }}>{savedEmail}</div>
-                  <div style={{ fontSize: 11, color: '#7A9BA8' }}>Last used account — tap to fill</div>
+
+            {/* Email suggestions dropdown */}
+            {showSuggestions && savedEmails.length > 0 && (
+              <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
+                style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: '#fff', borderRadius: 12, border: '1.5px solid #D0ECE8', boxShadow: '0 8px 24px rgba(0,201,177,0.15)', zIndex: 100, overflow: 'hidden', marginTop: 4 }}>
+                <div style={{ padding: '8px 12px', borderBottom: '1px solid #E0F5F0', fontSize: 11, color: '#A0BCBB', fontWeight: 700, letterSpacing: 0.5 }}>
+                  🕐 RECENTLY USED
                 </div>
-                <span style={{ marginLeft: 'auto', fontSize: 11, color: '#00A896', fontWeight: 700 }}>Use →</span>
+                {savedEmails.map((email, i) => (
+                  <div key={i}
+                    onClick={() => { setForm(f => ({ ...f, email })); setShowSuggestions(false) }}
+                    style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10, transition: 'background 0.15s', borderBottom: i < savedEmails.length - 1 ? '1px solid #F0F8F6' : 'none' }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#F8FFFE'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  >
+                    <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg, #00C9B1, #00A896)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 13, flexShrink: 0 }}>
+                      {email[0].toUpperCase()}
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: '#0D2B35' }}>{email}</div>
+                      <div style={{ fontSize: 11, color: '#A0BCBB' }}>Tap to fill</div>
+                    </div>
+                    <span style={{ marginLeft: 'auto', fontSize: 18, color: '#D0ECE8' }}>→</span>
+                  </div>
+                ))}
+                <div style={{ padding: '8px 16px', borderTop: '1px solid #E0F5F0' }}>
+                  <button onClick={() => { localStorage.removeItem('saved_emails'); setSavedEmails([]); setShowSuggestions(false) }}
+                    style={{ background: 'none', border: 'none', color: '#E05555', fontSize: 12, cursor: 'pointer', fontWeight: 600 }}>
+                    🗑️ Clear saved emails
+                  </button>
+                </div>
               </motion.div>
             )}
           </div>
 
-          {/* Password with show/hide */}
+          {/* Password */}
           <div>
             <label style={{ fontSize: 13, fontWeight: 600, color: '#4A6572', display: 'block', marginBottom: 6 }}>Password</label>
-            <div style={{ position: 'relative' }}>
-              <input type={showPassword ? 'text' : 'password'} placeholder="••••••••"
-                value={form.password}
-                onChange={e => setForm({ ...form, password: e.target.value })}
-                onKeyDown={e => e.key === 'Enter' && handleSubmit()}
-                style={{ ...inputStyle, paddingRight: 48 }}
-                onFocus={e => e.target.style.borderColor = '#00C9B1'}
-                onBlur={e => e.target.style.borderColor = '#D0ECE8'}
-              />
-              <button onClick={() => setShowPassword(!showPassword)}
-                style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, color: '#7A9BA8' }}>
-                {showPassword ? '🙈' : '👁️'}
-              </button>
-            </div>
+            <input type="password" placeholder="••••••••"
+              value={form.password}
+              onChange={e => setForm({ ...form, password: e.target.value })}
+              onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+              style={inputStyle}
+              onFocus={e => e.target.style.borderColor = '#00C9B1'}
+              onBlur={e => e.target.style.borderColor = '#D0ECE8'}
+            />
           </div>
 
-          {/* Sign In Button */}
+          {/* Login Button */}
           <motion.button onClick={handleSubmit} disabled={loading}
             whileHover={{ scale: loading ? 1 : 1.02 }} whileTap={{ scale: loading ? 1 : 0.98 }}
             style={{ width: '100%', padding: '14px', borderRadius: 10, border: 'none', background: loading ? '#B2EFE8' : 'linear-gradient(135deg, #00C9B1, #00A896)', color: '#fff', fontWeight: 700, fontSize: 16, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: loading ? 'none' : '0 6px 20px rgba(0,201,177,0.35)', marginTop: 4 }}>
@@ -115,57 +144,36 @@ export default function Login() {
           </motion.button>
 
           {/* Divider */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '4px 0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ flex: 1, height: 1, background: '#E0F0EC' }} />
             <span style={{ color: '#A0BCBB', fontSize: 13 }}>or continue with</span>
             <div style={{ flex: 1, height: 1, background: '#E0F0EC' }} />
           </div>
 
-          {/* Google Login */}
+          {/* Google Login Button */}
           <motion.button
             whileHover={{ scale: 1.02, boxShadow: '0 6px 20px rgba(0,0,0,0.12)' }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => toast('Google login coming soon! Use email login for now 😊', { icon: '🔜' })}
-            style={{ width: '100%', padding: '13px', borderRadius: 10, border: '1.5px solid #E0ECEE', background: '#fff', color: '#0D2B35', fontWeight: 600, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', transition: 'all 0.2s' }}>
-            <svg width="20" height="20" viewBox="0 0 48 48">
-              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            onClick={() => toast('Google login coming soon! Use email login for now 🙏', { icon: '🔜' })}
+            style={{ width: '100%', padding: '13px', borderRadius: 10, border: '1.5px solid #E0ECF0', background: '#fff', color: '#0D2B35', fontWeight: 600, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
             </svg>
             Continue with Google
           </motion.button>
-
-          {/* Saved accounts section */}
-          {savedEmail && (
-            <div style={{ background: '#F8FFFE', borderRadius: 12, padding: '12px 16px', border: '1px solid #D0F5F0' }}>
-              <p style={{ fontSize: 12, color: '#7A9BA8', fontWeight: 600, marginBottom: 8 }}>LAST USED ACCOUNT</p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, #00C9B1, #00A8E8)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 14, flexShrink: 0 }}>
-                  {savedEmail[0]?.toUpperCase()}
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: '#0D2B35', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{savedEmail}</div>
-                  <div style={{ fontSize: 11, color: '#7A9BA8' }}>Tap to use this account</div>
-                </div>
-                <motion.button
-                  whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}
-                  onClick={() => { setForm({ email: savedEmail, password: '' }); toast('Email filled! Enter your password 🔐') }}
-                  style={{ padding: '6px 14px', borderRadius: 8, border: 'none', background: 'linear-gradient(135deg, #00C9B1, #00A896)', color: '#fff', fontWeight: 700, fontSize: 12, cursor: 'pointer', flexShrink: 0 }}>
-                  Use
-                </motion.button>
-              </div>
-            </div>
-          )}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '20px 0 0' }}>
+        {/* Footer */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '24px 0 16px' }}>
           <div style={{ flex: 1, height: 1, background: '#E0F0EC' }} />
           <span style={{ color: '#A0BCBB', fontSize: 13 }}>New to CampusBridge?</span>
           <div style={{ flex: 1, height: 1, background: '#E0F0EC' }} />
         </div>
 
-        <Link to="/register" style={{ display: 'block', textAlign: 'center', padding: '13px', borderRadius: 10, border: '1.5px solid #00C9B1', color: '#00A896', fontWeight: 700, fontSize: 15, textDecoration: 'none', marginTop: 16 }}>
+        <Link to="/register" style={{ display: 'block', textAlign: 'center', padding: '13px', borderRadius: 10, border: '1.5px solid #00C9B1', color: '#00A896', fontWeight: 700, fontSize: 15, textDecoration: 'none' }}>
           Create Account
         </Link>
       </motion.div>
