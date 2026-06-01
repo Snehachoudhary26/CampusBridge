@@ -154,7 +154,7 @@ export default function Login() {
           <motion.button
             whileHover={{ scale: 1.02, boxShadow: '0 6px 20px rgba(0,0,0,0.12)' }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => toast('Google login coming soon! Use email login for now 🙏', { icon: '🔜' })}
+            onClick={() => toast('💡 Enter your Gmail address above! e.g. yourname@gmail.com', { duration: 3000 })}
             style={{ width: '100%', padding: '13px', borderRadius: 10, border: '1.5px solid #E0ECF0', background: '#fff', color: '#0D2B35', fontWeight: 600, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
             <svg width="20" height="20" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
