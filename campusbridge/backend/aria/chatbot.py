@@ -8,66 +8,51 @@ load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-def get_live_listings_summary(db: Session) -> str:
+def get_live_listings_summary(db):
     try:
-        listings = db.query(Listing).filter(
-            Listing.is_active == True,
-            Listing.is_flagged == False
-        ).order_by(Listing.created_at.desc()).limit(20).all()
+        listings = db.query(Listing).filter(Listing.is_active == True).limit(20).all()
         if not listings:
-            return "No listings currently available."
-        summary = "LIVE LISTINGS ON CAMPUSBRIDGE:\n"
+            return "No listings available."
+        summary = "LIVE LISTINGS:\n"
         for l in listings:
-            summary += f"- {l.title} | {l.category} | {l.listing_type} | ₹{l.price} | Condition:{l.condition}/5\n"
+            ltype = l.listing_type.value if hasattr(l.listing_type, "value") else l.listing_type
+            summary += f"- {l.title} | {l.category} | {ltype} | Rs.{l.price}\n"
         return summary
-    except:
-        return "Listings unavailable right now."
+    except Exception as e:
+        return "Listings unavailable."
 
-def save_message(user_id: int, role: str, content: str, db: Session):
+def save_message(user_id, role, msg_content, db):
     try:
-        msg = ChatHistory(user_id=user_id, role=role, content=content)
+        msg = ChatHistory(user_id=user_id, role=role, content=msg_content)
         db.add(msg)
         db.commit()
     except:
         pass
 
-def get_fallback_response(message: str) -> str:
+def get_fallback_response(message):
     msg = message.lower()
-    if any(w in msg for w in ['borrow', 'borrowing']):
-        return "🤝 **Borrow Feature** — Borrow items from RGPV students temporarily! Browse listings with 'Borrow' tag, contact seller, agree on duration and return in same condition. Perfect for exam season!"
-    if any(w in msg for w in ['calculator', 'casio']):
-        return "🔢 **Calculators Available!** Casio fx-991ES PLUS available to borrow for ₹100/day. Browse → Calculator category!"
-    if any(w in msg for w in ['book', 'books', 'notes']):
-        return "📚 **Books Available!** Engineering Mathematics ₹130, CS Books Set ₹800, GATE Papers ₹400 and more! Browse → Books category."
-    if any(w in msg for w in ['laptop']):
-        return "💻 **Laptop Available!** HP Laptop to borrow for ₹200/day. Browse → Laptop category!"
-    if any(w in msg for w in ['hostel', 'fan', 'cooler', 'bed', 'almirah']):
-        return "🏠 **Hostel Items!** Bed ₹1500, Almirah ₹2400, Fan ₹600, Cooler rent ₹500/month, Kettle ₹700. Browse → Hostel Items!"
-    if any(w in msg for w in ['hi', 'hello', 'hey']):
-        return "👋 Hi! I'm **ARIA** — your RGPV Campus AI!\n\nI can help you:\n🔍 Find listings\n💰 Know fair prices\n📚 Find books by semester\n🤝 Understand features\n\nWhat do you need?"
-    if any(w in msg for w in ['sell', 'post', 'list']):
-        return "📦 **Post a Listing!** Click '+ List Item' → Fill 3 steps → AI suggests price → Go live instantly with AI verification badge!"
-    if any(w in msg for w in ['price', 'cost']):
-        return "💰 **Price Guide:** Books ₹100-500, Calculator ₹500-700, Laptop borrow ₹200/day, Hostel items ₹100-4000. All negotiable!"
-    return "🤖 **ARIA here!** Ask me:\n• 'What books are available?'\n• 'How does borrowing work?'\n• 'Show hostel items'\n• 'How to sell my item?'"
+    if "borrow" in msg:
+        return "Borrow items from RGPV students temporarily! Browse Borrow listings and contact the seller."
+    if "calculator" in msg or "casio" in msg:
+        return "Casio fx-991ES PLUS available to borrow for Rs.100/day! Check Calculator category."
+    if "book" in msg or "notes" in msg:
+        return "Books available: Engineering Maths Rs.130, CS Books Rs.800, GATE Papers Rs.400. Browse Books!"
+    if "laptop" in msg:
+        return "HP Laptop available to borrow for Rs.200/day. Check Laptop category!"
+    if "hostel" in msg or "fan" in msg or "cooler" in msg or "bed" in msg:
+        return "Hostel Items: Bed Rs.1500, Almirah Rs.2400, Fan Rs.600, Cooler rent Rs.500/month!"
+    if "hi" in msg or "hello" in msg or "hey" in msg:
+        return "Hello! I am ARIA your RGPV Campus AI. Ask me about listings, prices, or features!"
+    if "sell" in msg or "post" in msg:
+        return "Click + List Item in navbar, fill 3 steps, AI suggests price, go live instantly!"
+    return "I am ARIA! Ask me: What books are available? How does borrowing work? Show hostel items?"
 
-def chat_with_aria(message: str, user_id: int, db: Session,
-                   user_name: str = None, user_department: str = None,
-                   user_semester: int = None) -> str:
+def chat_with_aria(message, user_id, db, user_name=None, user_department=None, user_semester=None):
     try:
         live_listings = get_live_listings_summary(db)
-        user_context = ""
-        if user_name: user_context += f"Student: {user_name}\n"
-        if user_department: user_context += f"Department: {user_department}\n"
-        if user_semester: user_context += f"Semester: {user_semester}\n"
-
-        full_message = ""
-        if user_context: full_message += f"[{user_context}]\n"
-        full_message += f"[{live_listings}]\n"
-        full_message += f"Question: {message}"
-
+        context = f"Student: {user_name}, Dept: {user_department}, Sem: {user_semester}"
+        full_message = f"[{context}]\n[{live_listings}]\nQuestion: {message}"
         save_message(user_id, "user", message, db)
-
         response = client.models.generate_content(
             model="gemini-2.0-flash",
             contents=full_message,
@@ -76,7 +61,6 @@ def chat_with_aria(message: str, user_id: int, db: Session,
         aria_response = response.text
         save_message(user_id, "model", aria_response, db)
         return aria_response
-
     except Exception as e:
-        print(f"ARIA Gemini Error: {e}")
+        print(f"ARIA Error: {e}")
         return get_fallback_response(message)

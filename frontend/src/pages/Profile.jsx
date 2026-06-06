@@ -47,10 +47,8 @@ export default function Profile() {
   return (
     <div style={{ minHeight: '100vh', background: '#F5FFFE', padding: '32px 24px' }}>
       <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
-          style={{ background: '#fff', borderRadius: 24, padding: '36px', border: '1px solid #D0F5F0', boxShadow: '0 8px 40px rgba(0,201,177,0.1)', marginBottom: 28 }}>
-
+          style={{ background: '#fff', borderRadius: 24, padding: 36, border: '1px solid #D0F5F0', boxShadow: '0 8px 40px rgba(0,201,177,0.1)', marginBottom: 28 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 28, flexWrap: 'wrap' }}>
             <div style={{ width: 88, height: 88, borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg, #00C9B1, #00A8E8)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 900, fontSize: 36, boxShadow: '0 6px 20px rgba(0,201,177,0.35)' }}>
               {user?.name?.[0]?.toUpperCase() || '?'}
@@ -59,7 +57,7 @@ export default function Profile() {
               <h1 style={{ fontSize: 26, fontWeight: 900, color: '#0D2B35', marginBottom: 6 }}>{user?.name}</h1>
               <p style={{ color: '#7A9BA8', marginBottom: 4 }}>✉️ {user?.email}</p>
               <p style={{ color: '#7A9BA8', marginBottom: 12 }}>🎓 {user?.school || 'RGPV Bhopal'} · Sem {user?.semester || '—'}</p>
-              <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: 16 }}>
                 <div style={{ textAlign: 'center', background: '#F0FFFE', borderRadius: 12, padding: '10px 20px', border: '1px solid #B2EFE8' }}>
                   <div style={{ fontWeight: 800, color: '#00A896', fontSize: 20 }}>{myListings.length}</div>
                   <div style={{ fontSize: 12, color: '#7A9BA8' }}>Listings</div>
@@ -71,15 +69,10 @@ export default function Profile() {
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <Link to="/post" style={{ padding: '10px 24px', borderRadius: 10, textDecoration: 'none', background: 'linear-gradient(135deg, #00C9B1, #00A896)', color: '#fff', fontWeight: 700, textAlign: 'center', boxShadow: '0 4px 15px rgba(0,201,177,0.3)' }}>
-                + New Listing
-              </Link>
-              <button onClick={handleLogout} style={{ padding: '10px 24px', borderRadius: 10, border: '1.5px solid #FFD0D0', background: '#FFF5F5', color: '#E05555', fontWeight: 600, cursor: 'pointer' }}>
-                Logout
-              </button>
+              <Link to="/post" style={{ padding: '10px 24px', borderRadius: 10, textDecoration: 'none', background: 'linear-gradient(135deg, #00C9B1, #00A896)', color: '#fff', fontWeight: 700, textAlign: 'center', boxShadow: '0 4px 15px rgba(0,201,177,0.3)' }}>+ New Listing</Link>
+              <button onClick={handleLogout} style={{ padding: '10px 24px', borderRadius: 10, border: '1.5px solid #FFD0D0', background: '#FFF5F5', color: '#E05555', fontWeight: 600, cursor: 'pointer' }}>Logout</button>
             </div>
           </div>
-
           <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #E0F5F0' }}>
             <p style={{ fontSize: 14, fontWeight: 700, color: '#0D2B35', marginBottom: 4 }}>📱 Add WhatsApp — Buyers contact you instantly</p>
             <p style={{ fontSize: 12, color: '#7A9BA8', marginBottom: 12 }}>Shows as WhatsApp button on your listings</p>
@@ -100,7 +93,7 @@ export default function Profile() {
 
         <div style={{ display: 'flex', gap: 4, marginBottom: 24, background: '#fff', borderRadius: 12, padding: 6, border: '1px solid #D0F5F0', width: 'fit-content' }}>
           {[['listings', '📦 My Listings'], ['stats', '📊 Stats']].map(([key, label]) => (
-            <button key={key} onClick={() => setActiveTab(key)} style={{ padding: '8px 22px', borderRadius: 8, border: 'none', cursor: 'pointer', background: activeTab === key ? 'linear-gradient(135deg, #00C9B1, #00A896)' : 'transparent', color: activeTab === key ? '#fff' : '#4A6572', fontWeight: 600, fontSize: 14, transition: 'all 0.2s' }}>
+            <button key={key} onClick={() => setActiveTab(key)} style={{ padding: '8px 22px', borderRadius: 8, border: 'none', cursor: 'pointer', background: activeTab === key ? 'linear-gradient(135deg, #00C9B1, #00A896)' : 'transparent', color: activeTab === key ? '#fff' : '#4A6572', fontWeight: 600, fontSize: 14 }}>
               {label}
             </button>
           ))}
@@ -109,14 +102,12 @@ export default function Profile() {
         {activeTab === 'listings' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {loading ? (
-              <div style={{ textAlign: 'center', padding: '60px', color: '#7A9BA8' }}>Loading...</div>
+              <div style={{ textAlign: 'center', padding: 60, color: '#7A9BA8' }}>Loading...</div>
             ) : myListings.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '80px 0', background: '#fff', borderRadius: 20, border: '1px dashed #B2EFE8' }}>
                 <div style={{ fontSize: 56, marginBottom: 16 }}>📭</div>
                 <h3 style={{ color: '#0D2B35', marginBottom: 8 }}>No listings yet</h3>
-                <Link to="/post" style={{ display: 'inline-block', marginTop: 16, padding: '12px 28px', borderRadius: 10, background: 'linear-gradient(135deg, #00C9B1, #00A896)', color: '#fff', fontWeight: 700, textDecoration: 'none' }}>
-                  Post Your First Listing
-                </Link>
+                <Link to="/post" style={{ display: 'inline-block', marginTop: 16, padding: '12px 28px', borderRadius: 10, background: 'linear-gradient(135deg, #00C9B1, #00A896)', color: '#fff', fontWeight: 700, textDecoration: 'none' }}>Post Your First Listing</Link>
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -166,7 +157,6 @@ export default function Profile() {
             ))}
           </motion.div>
         )}
-
       </div>
     </div>
   )
