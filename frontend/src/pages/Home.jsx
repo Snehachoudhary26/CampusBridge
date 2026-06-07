@@ -173,25 +173,85 @@ export default function Home() {
             </motion.div>
           </div>
 
-          {/* Right — Animated stats card */}
+
+          {/* Right — Animated floating illustration */}
           <motion.div
-            initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.9, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-            style={{ background: '#fff', borderRadius: 28, padding: '44px 48px', boxShadow: '0 20px 60px rgba(0,201,177,0.15)', border: '1px solid #D0F5F0', minWidth: 300 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 36 }}>
-              <StatCounter value="8" suffix="+" label="RGPV Schools" delay={0.6} />
-              <StatCounter value="27" suffix="+" label="Courses" delay={0.7} />
-              <StatCounter value="4" label="Trade Modes" delay={0.8} />
-              <StatCounter value="96" suffix="%" label="AI Accuracy" delay={0.9} />
-            </div>
-            <div style={{ marginTop: 28, paddingTop: 24, borderTop: '1px solid #E0F5F0', textAlign: 'center' }}>
-              <div style={{ fontSize: 12, color: '#A0BCBB', fontWeight: 600, letterSpacing: 1, marginBottom: 8 }}>POWERED BY</div>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
-                {['Random Forest', 'TF-IDF', 'Gemini AI'].map(t => (
-                  <span key={t} style={{ fontSize: 11, background: '#F0FFFE', color: '#00A896', padding: '4px 12px', borderRadius: 20, border: '1px solid #B2EFE8', fontWeight: 600 }}>{t}</span>
-                ))}
+            initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.9, delay: 0.4 }}
+            style={{ position: 'relative', width: 420, height: 420, flexShrink: 0 }}>
+
+            {/* Main floating card */}
+            <motion.div
+              animate={{ y: [-8, 8, -8] }}
+              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+              style={{ position: 'absolute', top: '15%', left: '10%', width: 260, background: '#fff', borderRadius: 24, padding: 24, boxShadow: '0 20px 60px rgba(0,201,177,0.2)', border: '1px solid #D0F5F0', zIndex: 3 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: 'linear-gradient(135deg, #00C9B1, #00A8E8)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>📚</div>
+                <div>
+                  <div style={{ fontWeight: 700, color: '#0D2B35', fontSize: 14 }}>RD Sharma Maths</div>
+                  <div style={{ fontSize: 12, color: '#7A9BA8' }}>Sem 3 · Like New</div>
+                </div>
               </div>
-            </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: 11, background: '#E8FBF8', color: '#00A896', padding: '3px 10px', borderRadius: 20, fontWeight: 700 }}>SELL</span>
+                <span style={{ fontWeight: 900, fontSize: 18, background: 'linear-gradient(135deg, #00C9B1, #00A896)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>₹280</span>
+              </div>
+              {/* AI Verified badge */}
+              <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid #F0F8F6', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontSize: 14 }}>🤖</span>
+                <span style={{ fontSize: 11, color: '#00A896', fontWeight: 700 }}>✅ AI Verified · 98% Safe</span>
+              </div>
+            </motion.div>
+
+            {/* Floating price card */}
+            <motion.div
+              animate={{ y: [6, -6, 6] }}
+              transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 0.5 }}
+              style={{ position: 'absolute', top: '5%', right: '0%', background: 'linear-gradient(135deg, #00C9B1, #00A896)', borderRadius: 20, padding: '16px 20px', boxShadow: '0 12px 40px rgba(0,201,177,0.4)', zIndex: 4 }}>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)', marginBottom: 4 }}>AI Price Prediction</div>
+              <div style={{ fontSize: 28, fontWeight: 900, color: '#fff' }}>₹280</div>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)', marginTop: 2 }}>96.76% accurate 🎯</div>
+            </motion.div>
+
+            {/* Floating laptop card */}
+            <motion.div
+              animate={{ y: [-5, 10, -5] }}
+              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
+              style={{ position: 'absolute', bottom: '10%', right: '5%', width: 200, background: '#fff', borderRadius: 20, padding: 18, boxShadow: '0 16px 40px rgba(0,168,232,0.2)', border: '1px solid #E0F5F0', zIndex: 3 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: '#EBF5FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>💻</div>
+                <div>
+                  <div style={{ fontWeight: 700, color: '#0D2B35', fontSize: 13 }}>HP Laptop</div>
+                  <div style={{ fontSize: 11, color: '#7A9BA8' }}>Borrow · ₹200/day</div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#00C9B1' }} />
+                <span style={{ fontSize: 11, color: '#00A896', fontWeight: 600 }}>Available Now</span>
+              </div>
+            </motion.div>
+
+            {/* Floating ARIA message */}
+            <motion.div
+              animate={{ y: [4, -10, 4] }}
+              transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 1.5 }}
+              style={{ position: 'absolute', bottom: '30%', left: '0%', background: '#0D2B35', borderRadius: 20, borderBottomLeftRadius: 4, padding: '12px 16px', boxShadow: '0 12px 30px rgba(13,43,53,0.25)', zIndex: 4, maxWidth: 180 }}>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', marginBottom: 4 }}>🤖 ARIA says</div>
+              <div style={{ fontSize: 12, color: '#fff', fontWeight: 600, lineHeight: 1.4 }}>Found 3 calculators near you! ₹100/day</div>
+            </motion.div>
+
+            {/* Background decorative circle */}
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+              style={{ position: 'absolute', top: '20%', left: '20%', width: 220, height: 220, borderRadius: '50%', border: '2px dashed rgba(0,201,177,0.2)', zIndex: 1 }} />
+
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
+              style={{ position: 'absolute', top: '30%', left: '30%', width: 140, height: 140, borderRadius: '50%', border: '2px dashed rgba(0,168,232,0.15)', zIndex: 1 }} />
           </motion.div>
+
         </div>
 
         {/* Scroll indicator */}
