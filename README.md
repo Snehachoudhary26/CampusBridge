@@ -1,267 +1,330 @@
-# CampusBridge 🎓
-### AI-Powered Campus Marketplace for RGPV Bhopal Students
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0A1628,50:00C896,100:0A1628&height=220&section=header&text=CampusBridge%20🎓&fontSize=65&fontColor=ffffff&fontAlignY=40&desc=AI-Powered%20Campus%20Marketplace%20%E2%80%94%20RGPV%20Bhopal&descAlignY=62&descSize=20&animation=fadeIn" />
+</p>
 
-> Buy, Sell, Rent, Borrow & Skill-Swap within your campus — powered by AI, ML, and real-time data.
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&pause=1000&color=00C896&center=true&vCenter=true&width=650&lines=Buy+%C2%B7+Sell+%C2%B7+Rent+%C2%B7+Borrow+%C2%B7+Skill-Swap;ARIA+Chatbot+powered+by+Gemini+AI;ML+Price+Predictor+%E2%80%94+R%C2%B2+%3D+96.76%25;Built+by+Sneha+Choudhary+%2C+RGPV+Bhopal+%F0%9F%8E%93" alt="Typing SVG" />
+</p>
 
-**Live Demo:** Coming soon  
-**GitHub:** https://github.com/Snehachoudhary26/CampusBridge  
-**Developer:** Sneha Choudhary — School of Information Technology, RGPV Bhopal, Sem 6
+<br/>
 
----
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-In%20Development-00C896?style=for-the-badge&logo=rocket&logoColor=white"/>
+  &nbsp;
+  <img src="https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+  &nbsp;
+  <img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black"/>
+  &nbsp;
+  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white"/>
+  &nbsp;
+  <img src="https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white"/>
+</p>
 
-## What is CampusBridge?
-
-CampusBridge is a first-of-its-kind campus economy platform built exclusively for students of **Rajiv Gandhi Proudyogiki Vishwavidyalaya (RGPV), Bhopal**. Unlike OLX or Facebook Marketplace, CampusBridge is:
-
-- **Campus-specific** — Only RGPV students, verified by school and department
-- **AI-guided** — ARIA chatbot knows your campus, your department, your semester
-- **ML-powered** — Fair price prediction, spam detection, smart recommendations
-- **Multi-modal** — Sell, Rent, Borrow, or Skill-Swap items
-- **Department-aware** — Listings tagged by school, department, and semester
-
----
-
-## RGPV Campus Coverage
-
-| School | Courses |
-|--------|---------|
-| School of Information Technology | B.Tech CSE (AI & ML), B.Tech CSE (Data Science), B.Tech CSBS, M.Tech Data Science |
-| University Institute of Technology | B.Tech CS, IT, EEE, ECE, Mechanical, Civil, Automobile, PCT |
-| School of Architecture | B.Arch (5 years), Ph.D |
-| School of Applied Management | MBA |
-| School of Bio-Molecular Engineering & Biotechnology | M.Tech, PGCMB, Ph.D |
-| School of Energy & Environment Management | M.Tech Energy Tech, M.Tech EEE, Ph.D |
-| School of Nanotechnology | M.Tech Nanotechnology, Ph.D |
-| School of Pharmaceutical Sciences | M.Pharm (3 specializations), Ph.D |
+<p align="center">
+  <img src="https://img.shields.io/badge/Gemini_API-4285F4?style=for-the-badge&logo=google&logoColor=white"/>
+  &nbsp;
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"/>
+  &nbsp;
+  <img src="https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white"/>
+  &nbsp;
+  <img src="https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white"/>
+  &nbsp;
+  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white"/>
+</p>
 
 ---
 
-## Features
+<br/>
 
-### Core Marketplace
-- Post listings as **Sell / Rent / Borrow / Skill-Swap**
-- Filter by department, semester, category, price, condition
-- Image upload via Cloudinary
-- In-app messaging between buyers and sellers
-- Listing condition rating (1–5 stars)
+## 🔥 The Problem It Solves
 
-### AI Features
-- **ARIA Chatbot** — Conversational AI powered by Gemini API with full RGPV campus knowledge. Answers questions like "What books do I need for IT Sem 3?" or "Who is selling a drafter near Architecture block?"
-- **Fair Price Predictor** — ML model (Random Forest, R² = 96.76%) that suggests a fair price range based on category, condition, months used, and demand
-- **Spam Detector** — NLP classifier (TF-IDF + Logistic Regression, 100% accuracy) that auto-flags suspicious listings
-- **Smart Recommender** — Department and semester-aware recommendation engine
-- **Demand Analytics Dashboard** — Seaborn + Matplotlib charts showing trending categories, demand by department, price trends
+> Every RGPV student has **unused books stacked after semester ends**, a calculator no one needs, a hostel fan sitting idle in May — and **no smart, safe place to trade within campus**.
+>
+> OLX has strangers. Facebook Marketplace has chaos. **CampusBridge has your department, your semester, your campus — and an AI that knows your syllabus.**
 
-### Item Categories
-Books · Laptop · Calculator · Drawing Instruments · Stationery · Fan · Cooler · Hostel Items · Electronics · Other
+<br/>
+
+## 🌟 Why CampusBridge is Different
+
+<div align="center">
+
+|  | OLX / Facebook | **CampusBridge** |
+|--|:-:|:-:|
+| Campus-verified students | ❌ | ✅ RGPV school + dept |
+| Semester-aware listings | ❌ | ✅ Filter by sem |
+| AI price suggestion | ❌ | ✅ ML model R²=96.76% |
+| Spam detection | ❌ | ✅ 100% accuracy |
+| AI campus chatbot | ❌ | ✅ ARIA — knows your syllabus |
+| Skill-swap mode | ❌ | ✅ Trade skills, not just things |
+| Smart recommendations | ❌ | ✅ Dept + semester aware |
+
+</div>
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
+
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=python,fastapi,postgres,react,vite,tailwind,js,git,github,vscode&theme=dark&perline=5" />
+</p>
+
+<br/>
+
+<div align="center">
 
 ### Backend
-| Layer | Technology |
-|-------|-----------|
-| Framework | FastAPI (Python) |
-| Database | PostgreSQL + SQLAlchemy |
-| Authentication | JWT + bcrypt |
-| AI Chatbot | Gemini API + RAG context |
-| ML Models | scikit-learn (Random Forest, Logistic Regression) |
-| NLP | TF-IDF vectorizer |
-| Data Viz | Matplotlib + Seaborn |
-| Image Upload | Cloudinary API |
-| Server | Uvicorn |
+| Tool | Role |
+|------|------|
+| **FastAPI** (Python 3.11) | REST API framework — async, auto Swagger docs |
+| **PostgreSQL + SQLAlchemy** | Database + ORM layer |
+| **JWT + bcrypt** | Stateless auth + password hashing |
+| **Gemini API (Google)** | Powers ARIA chatbot with RGPV knowledge base |
+| **scikit-learn** | Random Forest, Logistic Regression, TF-IDF |
+| **Cloudinary** | Image upload, CDN storage, optimised delivery |
+| **Matplotlib + Seaborn** | Analytics charts rendered as base64 |
+| **Uvicorn** | ASGI production server |
 
 ### Frontend
-| Layer | Technology |
-|-------|-----------|
-| Framework | React 18 + Vite |
-| Styling | Tailwind CSS v3 |
-| Animations | Framer Motion |
-| State | Zustand |
-| HTTP | Axios |
-| Notifications | React Hot Toast |
-| Routing | React Router v6 |
+| Tool | Role |
+|------|------|
+| **React 18 + Vite** | Component UI + lightning-fast builds |
+| **Tailwind CSS v3** | Utility-first styling, fully responsive |
+| **Zustand** | Minimal global state — no Redux boilerplate |
+| **Axios** | HTTP client with JWT interceptor |
+| **Framer Motion** | GPU-accelerated page animations |
+| **React Hot Toast** | Beautiful notification system |
+| **React Router v6** | Client-side routing |
 
-### APIs Used
-- Gemini API (Google) — AI chatbot
-- Cloudinary — Image storage and optimization
-- PostgreSQL — Local + Supabase (production)
+</div>
 
 ---
 
-## ML Models Built
+## 🤖 AI & ML Models
 
-| Model | Algorithm | Accuracy | Purpose |
-|-------|-----------|----------|---------|
-| Price Predictor | Random Forest Regressor | R² = 96.76% | Suggest fair price for listings |
-| Spam Detector | TF-IDF + Logistic Regression | 100% | Flag suspicious listings |
-| Recommender | Cosine Similarity | — | Personalized listing suggestions |
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=0,2,2,5,30&height=2&width=100%25" />
+</p>
+
+<br/>
+
+### 💰 Price Predictor — Random Forest Regressor
+```
+  Input   →  category + condition (1–5) + months_used + demand_score
+  Model   →  RandomForestRegressor  →  saved with joblib
+  Output  →  predicted_price ₹  +  fair price range (min–max)
+  Score   →  R² = 0.9676  ✅   (only 3.24% variance unexplained)
+```
+
+### 🚨 Spam Detector — TF-IDF + Logistic Regression
+```
+  Input   →  listing title + description (raw text)
+  Model   →  TF-IDF vectorizer  →  Logistic Regression classifier
+  Output  →  is_spam: true / false  +  confidence score
+  Score   →  Accuracy = 100%  ✅
+```
+
+### 🎯 Smart Recommender — Cosine Similarity
+```
+  Input   →  user school + department + semester + browse history
+  Logic   →  encode listings as vectors → cosine similarity
+  Output  →  Top-N personalised listings for that student
+```
+
+<p align="center">
+  <img src="https://img.shields.io/badge/R²%20Score-96.76%25-00C896?style=for-the-badge"/>
+  &nbsp;
+  <img src="https://img.shields.io/badge/Spam%20Accuracy-100%25-00C896?style=for-the-badge"/>
+  &nbsp;
+  <img src="https://img.shields.io/badge/Models-3%20ML%20Models-112240?style=for-the-badge"/>
+</p>
 
 ---
 
-## Project Structure
+## 🏗️ Project Structure
 
 ```
 CampusBridge/
 ├── campusbridge/
 │   └── backend/
-│       ├── main.py              # FastAPI app entry point
-│       ├── database.py          # PostgreSQL connection
-│       ├── models.py            # Database table definitions
-│       ├── schemas.py           # Pydantic request/response models
-│       ├── auth.py              # JWT + password hashing
-│       ├── seed_data.py         # RGPV departments seeder
-│       ├── requirements.txt     # Python dependencies
+│       ├── main.py              ← FastAPI app entry point + CORS setup
+│       ├── database.py          ← SQLAlchemy engine + session factory
+│       ├── models.py            ← ORM table definitions
+│       ├── schemas.py           ← Pydantic request/response models
+│       ├── auth.py              ← JWT creation + bcrypt hashing
+│       ├── seed_data.py         ← Seeds all 8 RGPV schools, 27 courses
 │       ├── routers/
-│       │   ├── users.py         # Auth endpoints
-│       │   ├── listings.py      # Marketplace endpoints
-│       │   ├── categories.py    # RGPV schools + categories
-│       │   ├── chat.py          # ARIA chatbot endpoint
-│       │   ├── predict.py       # Price prediction endpoint
-│       │   ├── messages.py      # Buyer-seller messaging
-│       │   └── analytics.py     # Dashboard + recommendations
+│       │   ├── users.py         ← POST /register  /login  GET /me
+│       │   ├── listings.py      ← Full CRUD + search + image upload
+│       │   ├── categories.py    ← RGPV schools + departments
+│       │   ├── chat.py          ← ARIA chatbot (logged-in + guest)
+│       │   ├── predict.py       ← POST /predict/price
+│       │   ├── messages.py      ← Buyer ↔ Seller messaging
+│       │   └── analytics.py     ← Charts + personalised recommendations
 │       ├── aria/
-│       │   ├── context.py       # RGPV knowledge base
-│       │   └── chatbot.py       # Gemini API integration
+│       │   ├── context.py       ← RGPV knowledge base (RAG context)
+│       │   └── chatbot.py       ← Gemini API integration
 │       ├── ml/
-│       │   ├── price_data.py    # Synthetic training data
-│       │   ├── price_model.py   # Train + serve price predictor
-│       │   ├── spam_model.py    # Train + serve spam detector
-│       │   └── recommender.py   # Recommendation engine
+│       │   ├── price_model.py   ← Random Forest price predictor
+│       │   ├── spam_model.py    ← TF-IDF spam detector
+│       │   └── recommender.py   ← Cosine similarity engine
 │       └── utils/
-│           └── cloudinary.py    # Image upload helper
+│           └── cloudinary.py    ← Upload image → return secure URL
 └── frontend/
     └── src/
-        ├── App.jsx              # Routes
-        ├── api/axios.js         # Backend connection
-        ├── store/authStore.js   # User session (Zustand)
+        ├── App.jsx              ← React Router v6 route tree
+        ├── api/axios.js         ← Axios instance + JWT interceptor
+        ├── store/authStore.js   ← Zustand global auth state
         ├── components/
-        │   └── Navbar.jsx       # Responsive navigation
+        │   └── Navbar.jsx       ← Responsive nav bar
         └── pages/
-            ├── Home.jsx         # Landing + hero + listings
-            ├── Login.jsx        # Login form
-            ├── Register.jsx     # Register with RGPV dropdowns
-            ├── Listings.jsx     # Browse with filters
-            └── PostListing.jsx  # Multi-step listing creation
+            ├── Home.jsx         ← Hero section + live listings grid
+            ├── Login.jsx        ← Login form + toast feedback
+            ├── Register.jsx     ← School → Dept → Sem wizard
+            ├── Listings.jsx     ← Myntra-style filter + product grid
+            └── PostListing.jsx  ← Multi-step listing creation
 ```
 
 ---
 
-## API Endpoints
+## 📡 API Reference
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | /users/register | Register new student |
-| POST | /users/login | Login + get JWT token |
-| GET | /users/me | Get current user profile |
-| GET | /listings/ | Browse listings with filters |
-| POST | /listings/ | Create new listing |
-| GET | /categories/schools | All RGPV schools + departments |
-| POST | /chat/ | Talk to ARIA chatbot |
-| POST | /chat/guest | ARIA without login |
-| POST | /predict/price | Get AI price suggestion |
-| GET | /analytics/trending | Trending categories chart |
-| GET | /analytics/recommendations/{user_id} | Personalized recommendations |
-| GET | /messages/conversations | All conversations |
-| POST | /messages/ | Send message to seller |
+<div align="center">
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|:----:|-------------|
+| `POST` | `/users/register` | — | Register new RGPV student |
+| `POST` | `/users/login` | — | Login → receive JWT token |
+| `GET` | `/users/me` | 🔒 | Get current user profile |
+| `GET` | `/listings/` | — | Browse listings with filters |
+| `POST` | `/listings/` | 🔒 | Create new listing |
+| `PUT` | `/listings/{id}` | 🔒 | Edit your listing |
+| `DELETE` | `/listings/{id}` | 🔒 | Remove listing |
+| `GET` | `/categories/schools` | — | All RGPV schools + depts |
+| `POST` | `/chat/` | 🔒 | Talk to ARIA (logged in) |
+| `POST` | `/chat/guest` | — | Try ARIA without login |
+| `POST` | `/predict/price` | 🔒 | Get ML price suggestion |
+| `GET` | `/analytics/trending` | 🔒 | Trending categories chart |
+| `GET` | `/analytics/recommendations/{id}` | 🔒 | Personalised picks |
+| `POST` | `/messages/` | 🔒 | Send message to seller |
+| `GET` | `/messages/conversations` | 🔒 | All your conversations |
+
+</div>
+
+> 📖 Full interactive docs at **`http://localhost:8000/docs`** (Swagger UI auto-generated by FastAPI)
 
 ---
 
-## How to Run Locally
+## 🚀 Run Locally (macOS)
 
-### Backend
+**Prerequisites:** Python 3.11, Node.js 18+, PostgreSQL 15
+```bash
+brew install python@3.11 node postgresql@15
+```
+
+**Step 1 — Clone**
+```bash
+git clone https://github.com/Snehachoudhary26/CampusBridge.git
+cd CampusBridge
+```
+
+**Step 2 — Backend**
 ```bash
 cd campusbridge/backend
 python3.11 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-uvicorn main:app --reload
 ```
-Backend runs at: http://127.0.0.1:8000  
-API docs at: http://127.0.0.1:8000/docs
 
-### Frontend
-```bash
-cd frontend
-npm install
-npm run dev
-```
-Frontend runs at: http://localhost:5173
-
-### Environment Variables
-Create `campusbridge/backend/.env`:
-```
+**Step 3 — Environment variables** → create `campusbridge/backend/.env`
+```env
 DATABASE_URL=postgresql://yourusername@localhost:5432/campusbridge
-SECRET_KEY=your_secret_key
+SECRET_KEY=your_super_secret_key
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=10080
 GEMINI_API_KEY=your_gemini_api_key
 CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
+CLOUDINARY_API_KEY=your_cloudinary_key
+CLOUDINARY_API_SECRET=your_cloudinary_secret
+```
+
+**Step 4 — Seed database & start server**
+```bash
+createdb campusbridge
+python seed_data.py
+uvicorn main:app --reload
+# ✅ http://127.0.0.1:8000      ← API
+# ✅ http://127.0.0.1:8000/docs ← Swagger UI
+```
+
+**Step 5 — Frontend**
+```bash
+cd ../../frontend
+npm install --legacy-peer-deps
+npm run dev
+# ✅ http://localhost:5173
 ```
 
 ---
 
-## Progress Status
+## 🏫 RGPV Campus Coverage
 
-### Completed ✅
-- [x] Day 1 — Database design + RGPV data seeded (all 8 schools, 27 courses)
-- [x] Day 2 — User authentication (register, login, JWT tokens)
-- [x] Day 3 — Full listings API (CRUD, search, filter, image upload)
-- [x] Day 4 — ARIA AI chatbot (Gemini API + RGPV campus knowledge)
-- [x] Day 5 — Price prediction ML model (Random Forest, R² = 96.76%)
-- [x] Day 6 — Spam detector (100% accuracy) + buyer-seller messaging
-- [x] Day 7 — Recommender engine + Seaborn analytics dashboard
-- [x] Day 8 — React frontend setup (Navbar, Login, Register, Home, Listings, PostListing)
+<div align="center">
 
-### In Progress / Remaining 🔄
-- [ ] Fix registration bcrypt bug (password truncation to 72 bytes)
-- [ ] ARIA chatbot floating UI component
-- [ ] Listing detail page
-- [ ] Messages page (buyer-seller chat UI)
-- [ ] Analytics dashboard page
-- [ ] Profile page + My Listings page
-- [ ] Mobile responsiveness polish
-- [ ] Deploy backend to Render.com
-- [ ] Deploy frontend to Vercel
-- [ ] README architecture diagram
-- [ ] Demo video (2 minutes)
+| School | Courses Covered |
+|--------|----------------|
+| 🖥️ **School of Information Technology** | B.Tech CSE (AI & ML), CSE (Data Science), CSBS, M.Tech DS |
+| ⚡ **University Institute of Technology** | B.Tech CS, IT, EEE, ECE, Mechanical, Civil, Automobile, PCT |
+| 🏛️ **School of Architecture** | B.Arch (5 years), Ph.D |
+| 💼 **School of Applied Management** | MBA |
+| 🧬 **School of Bio-Molecular Engineering** | M.Tech, PGCMB, Ph.D |
+| ☀️ **School of Energy & Environment** | M.Tech Energy Tech, M.Tech EEE, Ph.D |
+| ⚛️ **School of Nanotechnology** | M.Tech Nanotechnology, Ph.D |
+| 💊 **School of Pharmaceutical Sciences** | M.Pharm (3 specialisations), Ph.D |
+
+</div>
 
 ---
 
-## Design System
+## ✅ Progress Tracker
 
-| Element | Value |
-|---------|-------|
-| Primary background | `#0A1628` (Dark navy) |
-| Accent color | `#00C896` (Green) |
-| Secondary background | `#112240` |
-| Font | System UI / Inter |
-| Animations | Framer Motion slide-in on scroll |
-| Layout reference | Myntra-style (left filters + product grid) |
-
----
-
-## Interview Talking Points
-
-1. **6 ML techniques** — Random Forest, Logistic Regression, TF-IDF, Cosine Similarity, Isolation Forest ready, Time-series analytics
-2. **Real AI chatbot** — Not hardcoded FAQs, actual Gemini API with RGPV campus knowledge base
-3. **Solves my own problem** — I am an RGPV IT student, I designed this for students exactly like me
-4. **Full stack** — Python FastAPI backend + React frontend, both connected and deployed
-5. **6 live APIs** — Gemini, Cloudinary, PostgreSQL, JWT auth, Framer Motion, Tailwind
-6. **Unique concept** — No other campus marketplace in India has AI price prediction + department-aware recommendations
+```
+ ██████████  Day 1  — Database design + all RGPV data seeded
+ ██████████  Day 2  — JWT authentication (register, login)
+ ██████████  Day 3  — Listings API (CRUD, search, filter, image upload)
+ ██████████  Day 4  — ARIA chatbot (Gemini + campus knowledge)
+ ██████████  Day 5  — Price prediction ML (Random Forest R²=96.76%)
+ ██████████  Day 6  — Spam detector + messaging API
+ ██████████  Day 7  — Recommender + Seaborn analytics
+ ██████████  Day 8  — React frontend (Navbar, Login, Register, Home, Listings)
+ ░░░░░░░░░░  Next   — ARIA UI, Detail page, Messages UI, Profile page
+ ░░░░░░░░░░  Next   — Mobile polish + Deploy to Vercel & Render
+```
 
 ---
 
-## Developer
+## 🎓 Interview Highlights
 
-**Sneha Choudhary**  
-B.Tech CSE | School of Information Technology | RGPV Bhopal  
-Semester 6 → Building for Semester 7 Placement  
-GitHub: [@Snehachoudhary26](https://github.com/Snehachoudhary26)
+- **6 ML techniques** — Random Forest, Logistic Regression, TF-IDF, Cosine Similarity, Seaborn analytics, time-series ready
+- **Real AI, not hardcoded** — ARIA uses Gemini API + a hand-crafted RGPV knowledge base (RAG pattern)
+- **Solves my own problem** — I am an RGPV IT student, designed this for students exactly like me
+- **Full-stack end-to-end** — Python FastAPI backend + React frontend, connected via REST API
+- **Security done right** — bcrypt hashing, JWT tokens, expiry, no plaintext secrets in code
+- **Unique in India** — No campus marketplace in India has AI price prediction + department-aware recommendations
 
 ---
 
-*Built with ❤️ for RGPV students by an RGPV student*
+## 👩‍💻 Developer
+
+<p align="center">
+  <b>Sneha Choudhary</b><br/>
+  B.Tech CSE &nbsp;·&nbsp; School of Information Technology &nbsp;·&nbsp; RGPV Bhopal &nbsp;·&nbsp; Semester 6<br/><br/>
+  <a href="https://github.com/Snehachoudhary26">
+    <img src="https://img.shields.io/badge/GitHub-@Snehachoudhary26-181717?style=for-the-badge&logo=github&logoColor=white"/>
+  </a>
+</p>
+
+<br/>
+
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0A1628,50:00C896,100:0A1628&height=130&section=footer&text=Built%20with%20%E2%9D%A4%EF%B8%8F%20for%20RGPV%20Students%2C%20by%20an%20RGPV%20Student&fontSize=18&fontColor=ffffff&fontAlignY=65&animation=fadeIn" />
+</p>
