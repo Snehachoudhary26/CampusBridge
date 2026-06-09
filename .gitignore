@@ -1,1 +1,19 @@
+# Environment files - NEVER commit these
+.env
+.env.local
+.env.production
+.env.*
+
+# Python
 campusbridge/backend/venv/
+campusbridge/backend/__pycache__/
+campusbridge/backend/*.pyc
+campusbridge/backend/.pytest_cache/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/.vercel/
+
+# macOS
+.DS_Store
