@@ -1,3 +1,27 @@
+For backend info 
+
+cd "/Users/snehachoudhary/Library/Mobile Documents/com~apple~CloudDocs/CampusBridge/campusbridge/backend"
+source venv/bin/activate
+python3 << 'EOF'
+from database import SessionLocal
+from models import User, Listing, Message
+
+db = SessionLocal()
+
+print("\n" + "="*60)
+print("👥 ALL REGISTERED USERS")
+print("="*60)
+for u in db.query(User).all():
+    print(f"ID:{u.id} | {u.name} | {u.email} | {u.school} | Sem:{u.semester}")
+
+print("\n" + "="*60)
+print(f"📦 TOTAL LISTINGS: {db.query(Listing).count()}")
+print(f"💬 TOTAL MESSAGES: {db.query(Message).count()}")
+print("="*60)
+db.close()
+EOF
+
+
 pkill -f uvicorn
 
 http://127.0.0.1:8000/docs
@@ -45,6 +69,9 @@ rm -rf node_modules package-lock.json
 
 npm install
 npm run dev
+
+
+
 
 
 cd /Users/snehachoudhary/Desktop/CampusBridge/frontend
