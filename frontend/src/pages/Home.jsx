@@ -109,7 +109,7 @@ export default function Home() {
 
       {/* Hero Section — GISI style */}
       <section ref={heroRef} style={{
-        minHeight: '92vh', position: 'relative', overflow: 'hidden',
+        minHeight: 'auto', position: 'relative', overflow: 'hidden',
         background: 'linear-gradient(160deg, #FFFFFF 0%, #E8FDFB 40%, #D0F8F3 100%)',
         display: 'flex', alignItems: 'center', padding: "0 clamp(20px, 5vw, 48px)",
       }}>
