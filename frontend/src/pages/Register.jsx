@@ -25,7 +25,7 @@ export default function Register() {
         const schoolList = Array.isArray(data) ? data : data.schools || []
         setSchools(schoolList)
       })
-      .catch(() => toast.error('Cannot connect to backend — is it running?'))
+      .catch(() => toast.error('Connecting to server, please wait a moment ⏳'))
       .finally(() => setSchoolsLoading(false))
   }, [])
 
@@ -82,7 +82,7 @@ export default function Register() {
       } else if (Array.isArray(detail)) {
         toast.error(detail.map(d => d.msg).join(', '))
       } else if (err.message === 'Network Error') {
-        toast.error('Backend is offline — start it with uvicorn main:app --reload')
+        toast.error('Server is busy, please try again in a moment ⏳')
       } else {
         toast.error('Registration failed — check console')
       }
