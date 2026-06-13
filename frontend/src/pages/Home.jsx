@@ -111,7 +111,7 @@ export default function Home() {
       <section ref={heroRef} style={{
         minHeight: '92vh', position: 'relative', overflow: 'hidden',
         background: 'linear-gradient(160deg, #FFFFFF 0%, #E8FDFB 40%, #D0F8F3 100%)',
-        display: 'flex', alignItems: 'center', padding: '0 48px',
+        display: 'flex', alignItems: 'center', padding: "0 clamp(20px, 5vw, 48px)",
       }}>
         {/* Animated background orbs */}
         <motion.div
@@ -268,7 +268,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section style={{ padding: '100px 48px', maxWidth: 1200, margin: '0 auto' }}>
+      <section style={{ padding: "clamp(60px, 8vw, 100px) clamp(20px, 5vw, 48px)", maxWidth: 1200, margin: '0 auto' }}>
         <FadeIn>
           <div style={{ textAlign: 'center', marginBottom: 16 }}>
             <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: 2, color: '#00A896', textTransform: 'uppercase' }}>Why CampusBridge</span>
@@ -297,7 +297,7 @@ export default function Home() {
       </section>
 
       {/* Browse Section */}
-      <section style={{ padding: '0 48px 100px', maxWidth: 1200, margin: '0 auto' }}>
+      <section style={{ padding: "0 clamp(20px, 5vw, 48px) clamp(60px, 8vw, 100px)", maxWidth: 1200, margin: '0 auto' }}>
         <FadeIn>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 32, flexWrap: 'wrap', gap: 16 }}>
             <div>
@@ -394,7 +394,7 @@ export default function Home() {
       </section>
 
       {/* CTA Banner — GISI style */}
-      <section style={{ margin: '0 48px 80px', borderRadius: 28, overflow: 'hidden', position: 'relative' }}>
+      <section style={{ margin: "0 clamp(16px, 4vw, 48px) 80px", borderRadius: 28, overflow: 'hidden', position: 'relative' }}>
         <FadeIn>
           <div style={{ background: 'linear-gradient(135deg, #00C9B1 0%, #00A8E8 100%)', padding: '80px 60px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
             {/* Animated circles */}
@@ -426,7 +426,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer style={{ background: '#0D2B35', padding: '48px', textAlign: 'center' }}>
+      <footer style={{ background: '#0D2B35', padding: "clamp(24px, 5vw, 48px)", textAlign: 'center' }}>
         <div style={{ fontSize: 22, fontWeight: 900, color: '#fff', marginBottom: 8 }}>🎓 CampusBridge</div>
         <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>Built with ❤️ for RGPV students · Sneha Choudhary</p>
         <div style={{ display: 'flex', gap: 24, justifyContent: 'center', marginTop: 20 }}>
