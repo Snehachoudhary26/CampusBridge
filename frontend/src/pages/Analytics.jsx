@@ -18,7 +18,7 @@ function StatCard({ icon, label, value, sub, color, delay }) {
       transition={{ delay }}
       whileHover={{ y: -4, boxShadow: '0 12px 35px rgba(0,201,177,0.15)' }}
       style={{
-        background: '#fff', borderRadius: 20, padding: '24px',
+        background: '#fff', borderRadius: 20, padding: '16px',
         border: '1px solid #D0F5F0',
         boxShadow: '0 4px 20px rgba(0,201,177,0.06)',
         transition: 'all 0.3s',
@@ -30,7 +30,7 @@ function StatCard({ icon, label, value, sub, color, delay }) {
         justifyContent: 'center', fontSize: 26, marginBottom: 16,
       }}>{icon}</div>
       <div style={{
-        fontSize: 32, fontWeight: 900, marginBottom: 4,
+        fontSize: 26, fontWeight: 900, marginBottom: 4,
         background: 'linear-gradient(135deg, #00C9B1, #00A8E8)',
         WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
       }}>{value}</div>
@@ -80,12 +80,12 @@ export default function Analytics() {
   const maxCount = Math.max(...trending.map(t => t.count || 0), 1)
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F5FFFE', padding: '32px 24px' }}>
+    <div style={{ minHeight: '100vh', background: '#F5FFFE', padding: '20px 24px' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
-          style={{ marginBottom: 36 }}>
+          style={{ marginBottom: 20 }}>
           <h1 style={{ fontSize: 30, fontWeight: 900, color: '#0D2B35', marginBottom: 6 }}>
             📊 Analytics Dashboard
           </h1>
@@ -127,7 +127,7 @@ export default function Analytics() {
             {/* Trending Chart from Backend */}
             {chart && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-                style={{ background: '#fff', borderRadius: 20, padding: 32, border: '1px solid #D0F5F0', boxShadow: '0 4px 20px rgba(0,201,177,0.07)' }}>
+                style={{ background: '#fff', borderRadius: 20, padding: 20, border: '1px solid #D0F5F0', boxShadow: '0 4px 20px rgba(0,201,177,0.07)' }}>
                 <h2 style={{ fontWeight: 800, color: '#0D2B35', marginBottom: 20, fontSize: 20 }}>
                   🔥 Trending Categories — Live Chart
                 </h2>
@@ -139,8 +139,8 @@ export default function Analytics() {
             {/* Trending Bar Chart (custom) */}
             {trending.length > 0 && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-                style={{ background: '#fff', borderRadius: 20, padding: 32, border: '1px solid #D0F5F0', boxShadow: '0 4px 20px rgba(0,201,177,0.07)' }}>
-                <h2 style={{ fontWeight: 800, color: '#0D2B35', marginBottom: 24, fontSize: 20 }}>
+                style={{ background: '#fff', borderRadius: 20, padding: 20, border: '1px solid #D0F5F0', boxShadow: '0 4px 20px rgba(0,201,177,0.07)' }}>
+                <h2 style={{ fontWeight: 800, color: '#0D2B35', marginBottom: 12, fontSize: 17 }}>
                   📈 Category Breakdown
                 </h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -182,7 +182,7 @@ export default function Analytics() {
             {/* Recommendations */}
             {isAuthenticated && recommendations.length > 0 && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}
-                style={{ background: '#fff', borderRadius: 20, padding: 32, border: '1px solid #D0F5F0', boxShadow: '0 4px 20px rgba(0,201,177,0.07)' }}>
+                style={{ background: '#fff', borderRadius: 20, padding: 20, border: '1px solid #D0F5F0', boxShadow: '0 4px 20px rgba(0,201,177,0.07)' }}>
                 <h2 style={{ fontWeight: 800, color: '#0D2B35', marginBottom: 6, fontSize: 20 }}>
                   ✨ Recommended for You
                 </h2>
