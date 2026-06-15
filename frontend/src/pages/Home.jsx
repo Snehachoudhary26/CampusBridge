@@ -125,10 +125,10 @@ export default function Home() {
           style={{ position: 'absolute', bottom: '-10%', left: '-5%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,168,232,0.1) 0%, transparent 70%)', pointerEvents: 'none' }}
         />
 
-        <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 60, flexWrap: 'wrap' }}>
+        <div className='hero-inner' style={{ maxWidth: 1200, margin: '0 auto', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 60, flexWrap: 'wrap' }}>
 
           {/* Left — Text */}
-          <div style={{ maxWidth: 580 }}>
+          <div className='hero-text' style={{ maxWidth: 580 }}>
             <motion.div
               initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(0,201,177,0.1)', border: '1px solid rgba(0,201,177,0.3)', borderRadius: 24, padding: '6px 16px', fontSize: 13, color: '#00A896', fontWeight: 600, marginBottom: 28 }}>
@@ -159,7 +159,7 @@ export default function Home() {
 
             <motion.div
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.65 }}
-              style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              className='hero-buttons' style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
               <Link to="/listings" style={{ textDecoration: 'none', padding: '15px 34px', borderRadius: 12, background: 'linear-gradient(135deg, #00C9B1, #00A896)', color: '#fff', fontWeight: 700, fontSize: 16, boxShadow: '0 8px 25px rgba(0,201,177,0.4)', transition: 'all 0.3s' }}
                 onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 35px rgba(0,201,177,0.5)' }}
                 onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,201,177,0.4)' }}>
@@ -178,7 +178,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.9, delay: 0.4 }}
-            style={{ position: 'relative', width: 420, height: 420, flexShrink: 0 }}>
+            style={{ position: 'relative', width: 420, height: 420, flexShrink: 0, className: 'hero-float-right' }}>
 
             {/* Main floating card */}
             <motion.div
