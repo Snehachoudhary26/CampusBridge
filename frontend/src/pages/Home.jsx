@@ -185,7 +185,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.9, delay: 0.4 }}
-            style={{ position: 'relative', width: 420, height: 420, flexShrink: 0, className: 'hero-float-right' }}>
+            style={{ position: 'relative', width: 420, height: 420, flexShrink: 0, display: isMobile ? 'none' : 'block' }}>
 
             {/* Main floating card */}
             <motion.div
