@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useInView, useMotionValue, useSpring } from 'framer-motion'
@@ -87,6 +88,12 @@ function StatCounter({ value, suffix = '', prefix = '', label, delay = 0 }) {
 }
 
 export default function Home() {
+  const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768)
+  React.useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
   const [listings, setListings] = useState([])
   const [activeCategory, setActiveCategory] = useState('All')
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
@@ -109,7 +116,7 @@ export default function Home() {
 
       {/* Hero Section — GISI style */}
       <section ref={heroRef} style={{
-        minHeight: 'calc(100vh - 68px)', position: 'relative', overflow: 'hidden',
+        minHeight: isMobile ? 'auto' : 'calc(100vh - 68px)', position: 'relative', overflow: 'hidden',
         background: 'linear-gradient(160deg, #FFFFFF 0%, #E8FDFB 40%, #D0F8F3 100%)',
         display: 'flex', alignItems: 'center', padding: "0 clamp(20px, 5vw, 48px)",
       }}>
@@ -125,10 +132,10 @@ export default function Home() {
           style={{ position: 'absolute', bottom: '-10%', left: '-5%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,168,232,0.1) 0%, transparent 70%)', pointerEvents: 'none' }}
         />
 
-        <div className='hero-inner' className='hero-inner' style={{ maxWidth: 1200, margin: '0 auto', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 60, flexWrap: 'wrap', padding: '0 clamp(20px, 5vw, 48px)' }}>
+        <div className='hero-inner' style={{ maxWidth: 1200, margin: '0 auto', width: '100%', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: 'center', justifyContent: isMobile ? 'center' : 'space-between', gap: isMobile ? 32 : 60, padding: isMobile ? '40px 20px' : '0 48px', minHeight: isMobile ? 'calc(100vh - 68px)' : 'auto', textAlign: isMobile ? 'center' : 'left' }}>
 
           {/* Left — Text */}
-          <div className='hero-text' style={{ maxWidth: 580 }}>
+          <div style={{ maxWidth: isMobile ? '100%' : 580, display: 'flex', flexDirection: 'column', alignItems: isMobile ? 'center' : 'flex-start' }}>
             <motion.div
               initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(0,201,177,0.1)', border: '1px solid rgba(0,201,177,0.3)', borderRadius: 24, padding: '6px 16px', fontSize: 13, color: '#00A896', fontWeight: 600, marginBottom: 28 }}>
@@ -159,7 +166,7 @@ export default function Home() {
 
             <motion.div
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.65 }}
-              className='hero-buttons' className='hero-buttons' style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              className='hero-buttons' style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 16, width: isMobile ? '100%' : 'auto' }}>
               <Link to="/listings" style={{ textDecoration: 'none', padding: '15px 34px', borderRadius: 12, background: 'linear-gradient(135deg, #00C9B1, #00A896)', color: '#fff', fontWeight: 700, fontSize: 16, boxShadow: '0 8px 25px rgba(0,201,177,0.4)', transition: 'all 0.3s' }}
                 onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 35px rgba(0,201,177,0.5)' }}
                 onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,201,177,0.4)' }}>
