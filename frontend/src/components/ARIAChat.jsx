@@ -49,7 +49,7 @@ export default function ARIAChat() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         style={{
-          position: 'fixed', bottom: 28, right: 28, zIndex: 9999,
+          position: 'fixed', bottom: 20, right: 16, zIndex: 9999,
           width: 60, height: 60, borderRadius: '50%', border: 'none',
           background: 'linear-gradient(135deg, #00C9B1, #00A896)',
           boxShadow: '0 6px 24px rgba(0,201,177,0.5)',
@@ -69,8 +69,8 @@ export default function ARIAChat() {
             exit={{ opacity: 0, y: 40, scale: 0.9 }}
             transition={{ type: 'spring', damping: 20 }}
             style={{
-              position: 'fixed', bottom: 100, right: 28, zIndex: 9998,
-              width: 360, height: 520, borderRadius: 24,
+              position: 'fixed', bottom: 100, right: 12, zIndex: 9998,
+              width: 'min(360px, calc(100vw - 24px))', height: 'min(520px, calc(100vh - 140px))', borderRadius: 24,
               background: '#fff', border: '1px solid #D0F5F0',
               boxShadow: '0 20px 60px rgba(0,201,177,0.2)',
               display: 'flex', flexDirection: 'column', overflow: 'hidden',
