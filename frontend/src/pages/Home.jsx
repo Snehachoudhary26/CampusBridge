@@ -125,7 +125,7 @@ export default function Home() {
           style={{ position: 'absolute', bottom: '-10%', left: '-5%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,168,232,0.1) 0%, transparent 70%)', pointerEvents: 'none' }}
         />
 
-        <div className='hero-inner' style={{ maxWidth: 1200, margin: '0 auto', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 60, flexWrap: 'wrap' }}>
+        <div className='hero-inner' className='hero-inner' style={{ maxWidth: 1200, margin: '0 auto', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 60, flexWrap: 'wrap' }}>
 
           {/* Left — Text */}
           <div className='hero-text' style={{ maxWidth: 580 }}>
@@ -159,7 +159,7 @@ export default function Home() {
 
             <motion.div
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.65 }}
-              className='hero-buttons' style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              className='hero-buttons' className='hero-buttons' style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
               <Link to="/listings" style={{ textDecoration: 'none', padding: '15px 34px', borderRadius: 12, background: 'linear-gradient(135deg, #00C9B1, #00A896)', color: '#fff', fontWeight: 700, fontSize: 16, boxShadow: '0 8px 25px rgba(0,201,177,0.4)', transition: 'all 0.3s' }}
                 onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 35px rgba(0,201,177,0.5)' }}
                 onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,201,177,0.4)' }}>
