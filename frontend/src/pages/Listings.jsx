@@ -347,12 +347,12 @@ export default function Listings() {
         ))}
       </div>
 
-      <div style={{ display: 'flex', maxWidth: 1400, margin: '0 auto', padding: '24px 24px', gap: 24 }}>
+      <div style={{ display: 'flex', maxWidth: 1400, margin: '0 auto', padding: '24px 16px', gap: 24, flexWrap: 'wrap' }}>
 
         {/* ── SIDEBAR ── */}
         <motion.aside
           initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
-          style={{
+          className='listings-sidebar' style={{
             width: 230, flexShrink: 0, background: '#fff',
             borderRadius: 20, padding: 24,
             border: '1px solid #D0F5F0',

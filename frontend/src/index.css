@@ -17,3 +17,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; o
   h2 { font-size: 22px !important; }
   p { font-size: 14px !important; }
 }
+
+@media (max-width: 768px) {
+  .listings-sidebar {
+    display: none !important;
+  }
+  .hero-float-right {
+    display: none !important;
+  }
+}
