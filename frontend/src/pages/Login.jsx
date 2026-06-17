@@ -58,8 +58,8 @@ export default function Login() {
   )
 
   const inputStyle = {
-    width: '100%', padding: '12px 16px', borderRadius: 10,
-    border: '1.5px solid #D0ECE8', outline: 'none', fontSize: 15,
+    width: '100%', padding: isMobile ? '8px 12px' : '12px 16px', borderRadius: 10,
+    border: '1.5px solid #D0ECE8', outline: 'none', fontSize: isMobile ? 13 : 15,
     color: '#0D2B35', background: '#F8FFFE', boxSizing: 'border-box',
     transition: 'border 0.2s', fontFamily: 'inherit',
   }
@@ -69,13 +69,13 @@ export default function Login() {
       <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
         style={{ background: '#fff', borderRadius: 24, padding: isMobile ? '24px 20px' : '48px 44px', boxShadow: '0 8px 40px rgba(0,201,177,0.12)', border: '1px solid #D0F5F0', width: '100%', maxWidth: 440 }}>
 
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
+        <div style={{ textAlign: 'center', marginBottom: isMobile ? 16 : 32 }}>
           <div style={{ fontSize: isMobile ? 28 : 40, marginBottom: isMobile ? 4 : 8 }}>🎓</div>
           <h1 style={{ fontSize: isMobile ? 20 : 26, fontWeight: 900, color: '#0D2B35', marginBottom: 6 }}>Welcome Back</h1>
           <p style={{ color: '#7A9BA8', fontSize: 14 }}>Sign in to your CampusBridge account</p>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 10 : 18 }}>
 
           {/* Email with suggestions */}
           <div style={{ position: 'relative' }}>
@@ -140,7 +140,7 @@ export default function Login() {
           {/* Login Button */}
           <motion.button onClick={handleSubmit} disabled={loading}
             whileHover={{ scale: loading ? 1 : 1.02 }} whileTap={{ scale: loading ? 1 : 0.98 }}
-            style={{ width: '100%', padding: '14px', borderRadius: 10, border: 'none', background: loading ? '#B2EFE8' : 'linear-gradient(135deg, #00C9B1, #00A896)', color: '#fff', fontWeight: 700, fontSize: 16, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: loading ? 'none' : '0 6px 20px rgba(0,201,177,0.35)', marginTop: 4 }}>
+            style={{ width: '100%', padding: isMobile ? '10px' : '14px', borderRadius: 10, border: 'none', background: loading ? '#B2EFE8' : 'linear-gradient(135deg, #00C9B1, #00A896)', color: '#fff', fontWeight: 700, fontSize: 16, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: loading ? 'none' : '0 6px 20px rgba(0,201,177,0.35)', marginTop: 4 }}>
             {loading ? '⏳ Signing in...' : 'Sign In →'}
           </motion.button>
 
