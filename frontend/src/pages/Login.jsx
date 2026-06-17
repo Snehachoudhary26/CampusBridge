@@ -65,7 +65,7 @@ export default function Login() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(160deg, #FFFFFF 0%, #E8FDFB 50%, #D0F8F3 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '12px 16px' : '40px 20px' }}>
+    <div style={{ minHeight: 'unset', background: 'linear-gradient(160deg, #FFFFFF 0%, #E8FDFB 50%, #D0F8F3 100%)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: isMobile ? '12px 16px' : '40px 20px', paddingTop: isMobile ? '12px' : '40px' }}>
       <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
         style={{ background: '#fff', borderRadius: 24, padding: isMobile ? '24px 20px' : '48px 44px', boxShadow: '0 8px 40px rgba(0,201,177,0.12)', border: '1px solid #D0F5F0', width: '100%', maxWidth: 440 }}>
 
@@ -100,11 +100,11 @@ export default function Login() {
                 {savedEmails.map((email, i) => (
                   <div key={i}
                     onClick={() => { setForm(f => ({ ...f, email })); setShowSuggestions(false) }}
-                    style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10, transition: 'background 0.15s', borderBottom: i < savedEmails.length - 1 ? '1px solid #F0F8F6' : 'none' }}
+                    style={{ padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'flex-start', gap: 10, transition: 'background 0.15s', borderBottom: i < savedEmails.length - 1 ? '1px solid #F0F8F6' : 'none' }}
                     onMouseEnter={e => e.currentTarget.style.background = '#F8FFFE'}
                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                   >
-                    <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg, #00C9B1, #00A896)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 13, flexShrink: 0 }}>
+                    <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg, #00C9B1, #00A896)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 13, flexShrink: 0 }}>
                       {email[0].toUpperCase()}
                     </div>
                     <div>
@@ -145,7 +145,7 @@ export default function Login() {
           </motion.button>
 
           {/* Divider */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
             <div style={{ flex: 1, height: 1, background: '#E0F0EC' }} />
             <span style={{ color: '#A0BCBB', fontSize: 13 }}>or continue with</span>
             <div style={{ flex: 1, height: 1, background: '#E0F0EC' }} />
@@ -156,7 +156,7 @@ export default function Login() {
             whileHover={{ scale: 1.02, boxShadow: '0 6px 20px rgba(0,0,0,0.12)' }}
             whileTap={{ scale: 0.98 }}
             onClick={() => toast('💡 Enter your Gmail address above! e.g. yourname@gmail.com', { duration: 3000 })}
-            style={{ width: '100%', padding: '13px', borderRadius: 10, border: '1.5px solid #E0ECF0', background: '#fff', color: '#0D2B35', fontWeight: 600, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+            style={{ width: '100%', padding: '13px', borderRadius: 10, border: '1.5px solid #E0ECF0', background: '#fff', color: '#0D2B35', fontWeight: 600, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
             <svg width="20" height="20" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -168,7 +168,7 @@ export default function Login() {
         </div>
 
         {/* Footer */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '24px 0 16px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, margin: '24px 0 16px' }}>
           <div style={{ flex: 1, height: 1, background: '#E0F0EC' }} />
           <span style={{ color: '#A0BCBB', fontSize: 13 }}>New to CampusBridge?</span>
           <div style={{ flex: 1, height: 1, background: '#E0F0EC' }} />

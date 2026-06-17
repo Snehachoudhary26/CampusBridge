@@ -102,10 +102,10 @@ export default function Register() {
 
   return (
     <div style={{
-      minHeight: '100vh',
+      minHeight: 'unset',
       background: 'linear-gradient(160deg, #FFFFFF 0%, #E8FDFB 50%, #D0F8F3 100%)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '40px 20px',
+      padding: isMobile ? '12px 16px' : '40px 20px',
     }}>
       <motion.div
         initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
