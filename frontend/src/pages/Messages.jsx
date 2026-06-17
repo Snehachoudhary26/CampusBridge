@@ -196,7 +196,7 @@ export default function Messages() {
           💬 Messages
         </motion.h1>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: 20, height: '78vh' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth < 768 ? '1fr' : '300px 1fr', gap: 20, height: window.innerWidth < 768 ? 'auto' : '78vh' }}>
 
           {/* Conversations */}
           <div style={{ background: '#fff', borderRadius: 20, border: '1px solid #D0F5F0', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 20px rgba(0,201,177,0.07)' }}>

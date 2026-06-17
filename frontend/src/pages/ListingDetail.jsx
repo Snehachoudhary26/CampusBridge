@@ -107,7 +107,7 @@ export default function ListingDetail() {
   const templates = quickMessages[listing.listing_type] || quickMessages.sell
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F5FFFE', padding: '32px 24px' }}>
+    <div style={{ minHeight: '100vh', background: '#F5FFFE', padding: window.innerWidth < 768 ? '16px' : '32px 24px' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
         {/* Breadcrumb */}
@@ -117,7 +117,7 @@ export default function ListingDetail() {
           <span style={{ color: '#0D2B35', fontWeight: 600 }}>{listing.title?.substring(0, 30)}...</span>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: 28, alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth < 768 ? '1fr' : '1fr 400px', gap: 28, alignItems: 'start' }}>
 
           {/* LEFT */}
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>

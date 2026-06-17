@@ -119,7 +119,7 @@ export default function Home() {
         position: 'relative', overflow: 'hidden',
         background: 'linear-gradient(160deg, #FFFFFF 0%, #E8FDFB 40%, #D0F8F3 100%)',
         display: 'flex', alignItems: 'center', padding: '0',
-        minHeight: isMobile ? 'auto' : '92vh',
+        
       }}>
         {/* Animated background orbs */}
         <motion.div
