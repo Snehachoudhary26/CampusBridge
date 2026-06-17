@@ -93,8 +93,8 @@ export default function Register() {
   }
 
   const inputStyle = {
-    width: '100%', padding: '12px 16px', borderRadius: 10,
-    border: '1.5px solid #D0ECE8', outline: 'none', fontSize: 15,
+    width: '100%', padding: isMobile ? '8px 12px' : '12px 16px', borderRadius: 10,
+    border: '1.5px solid #D0ECE8', outline: 'none', fontSize: isMobile ? 13 : 15,
     color: '#0D2B35', background: '#F8FFFE', boxSizing: 'border-box',
     transition: 'border 0.2s', fontFamily: 'inherit',
   }
@@ -116,9 +116,9 @@ export default function Register() {
         }}
       >
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{ fontSize: 40, marginBottom: 8 }}>🎓</div>
-          <h1 style={{ fontSize: 24, fontWeight: 900, color: '#0D2B35', marginBottom: 6 }}>Join CampusBridge</h1>
+        <div style={{ textAlign: 'center', marginBottom: isMobile ? 16 : 32 }}>
+          <div style={{ fontSize: isMobile ? 28 : 40, marginBottom: isMobile ? 4 : 8 }}>🎓</div>
+          <h1 style={{ fontSize: isMobile ? 18 : 24, fontWeight: 900, color: '#0D2B35', marginBottom: 4 }}>Join CampusBridge</h1>
           <p style={{ color: '#7A9BA8', fontSize: 14 }}>RGPV Students Only</p>
         </div>
 
@@ -139,7 +139,7 @@ export default function Register() {
         {/* STEP 1 */}
         {step === 1 && (
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
-            style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 10 : 16 }}>
 
             <div>
               <label style={labelStyle}>Full Name *</label>
@@ -198,7 +198,7 @@ export default function Register() {
         {/* STEP 2 */}
         {step === 2 && (
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
-            style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 10 : 16 }}>
 
             <div>
               <label style={labelStyle}>Enrollment Number</label>
