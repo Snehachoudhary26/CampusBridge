@@ -109,7 +109,7 @@ export default function Register() {
       <motion.div
         initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
         style={{
-          background: '#fff', borderRadius: 24, padding: '48px 44px',
+          background: '#fff', borderRadius: 24, padding: 'clamp(24px, 5vw, 48px) clamp(20px, 5vw, 44px)',
           boxShadow: '0 8px 40px rgba(0,201,177,0.12)',
           border: '1px solid #D0F5F0', width: '100%', maxWidth: 480,
         }}
