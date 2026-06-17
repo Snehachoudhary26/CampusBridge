@@ -6,6 +6,7 @@ import API from '../api/axios'
 import useAuthStore from '../store/authStore'
 
 export default function Login() {
+  const isMobile = window.innerWidth < 768
   const [form, setForm] = useState({ email: '', password: '' })
   const [loading, setLoading] = useState(false)
   const [savedEmails, setSavedEmails] = useState([])
@@ -64,13 +65,13 @@ export default function Login() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(160deg, #FFFFFF 0%, #E8FDFB 50%, #D0F8F3 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(16px, 3vw, 40px) 16px' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(160deg, #FFFFFF 0%, #E8FDFB 50%, #D0F8F3 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '12px 16px' : '40px 20px' }}>
       <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-        style={{ background: '#fff', borderRadius: 24, padding: 'clamp(24px, 5vw, 48px) clamp(20px, 5vw, 44px)', boxShadow: '0 8px 40px rgba(0,201,177,0.12)', border: '1px solid #D0F5F0', width: '100%', maxWidth: 440 }}>
+        style={{ background: '#fff', borderRadius: 24, padding: isMobile ? '24px 20px' : '48px 44px', boxShadow: '0 8px 40px rgba(0,201,177,0.12)', border: '1px solid #D0F5F0', width: '100%', maxWidth: 440 }}>
 
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{ fontSize: 40, marginBottom: 8 }}>🎓</div>
-          <h1 style={{ fontSize: 26, fontWeight: 900, color: '#0D2B35', marginBottom: 6 }}>Welcome Back</h1>
+          <div style={{ fontSize: isMobile ? 28 : 40, marginBottom: isMobile ? 4 : 8 }}>🎓</div>
+          <h1 style={{ fontSize: isMobile ? 20 : 26, fontWeight: 900, color: '#0D2B35', marginBottom: 6 }}>Welcome Back</h1>
           <p style={{ color: '#7A9BA8', fontSize: 14 }}>Sign in to your CampusBridge account</p>
         </div>
 
