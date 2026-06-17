@@ -118,7 +118,8 @@ export default function Home() {
       <section ref={heroRef} style={{
         position: 'relative', overflow: 'hidden',
         background: 'linear-gradient(160deg, #FFFFFF 0%, #E8FDFB 40%, #D0F8F3 100%)',
-        display: 'flex', alignItems: 'center', padding: "0 clamp(20px, 5vw, 48px)",
+        display: 'flex', alignItems: 'center', padding: isMobile ? '40px 20px' : '0 clamp(20px, 5vw, 48px)',
+        minHeight: isMobile ? 'auto' : '92vh',
       }}>
         {/* Animated background orbs */}
         <motion.div
