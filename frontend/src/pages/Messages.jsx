@@ -196,10 +196,10 @@ export default function Messages() {
           💬 Messages
         </motion.h1>
 
-        <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth < 768 ? '90px 1fr' : '300px 1fr', gap: window.innerWidth < 768 ? 8 : 20, height: '78vh' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth < 768 ? '1fr' : '300px 1fr', gap: 20, height: window.innerWidth < 768 ? '75vh' : '78vh' }}>
 
           {/* Conversations */}
-          <div style={{ background: '#fff', borderRadius: 20, border: '1px solid #D0F5F0', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 20px rgba(0,201,177,0.07)' }}>
+          <div style={{ background: '#fff', borderRadius: 20, border: '1px solid #D0F5F0', overflow: 'hidden', display: (window.innerWidth < 768 && activeConv) ? 'none' : 'flex', flexDirection: 'column', boxShadow: '0 4px 20px rgba(0,201,177,0.07)' }}>
             <div style={{ padding: '18px 20px', borderBottom: '1px solid #E0F5F0', fontWeight: 800, color: '#0D2B35', fontSize: 15, background: 'linear-gradient(135deg, #F8FFFE, #F0FFFE)', display: 'flex', alignItems: 'center', gap: 8 }}>
               Conversations
               {conversations.length > 0 && (
@@ -257,7 +257,7 @@ export default function Messages() {
           </div>
 
           {/* Chat Window */}
-          <div style={{ background: '#fff', borderRadius: 20, border: '1px solid #D0F5F0', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,201,177,0.07)' }}>
+          <div style={{ background: '#fff', borderRadius: 20, border: '1px solid #D0F5F0', display: (window.innerWidth < 768 && !activeConv) ? 'none' : 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,201,177,0.07)' }}>
             {!activeConv ? (
               <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
                 <div style={{ fontSize: 64, marginBottom: 16, opacity: 0.4 }}>💬</div>
@@ -268,6 +268,9 @@ export default function Messages() {
               <>
                 {/* Header */}
                 <div style={{ padding: '14px 20px', borderBottom: '1px solid #E0F5F0', display: 'flex', alignItems: 'center', gap: 14, background: 'linear-gradient(135deg, #F8FFFE, #F0FFFE)' }}>
+                  {window.innerWidth < 768 && (
+                    <button onClick={() => setActiveConv(null)} style={{ background: 'none', border: 'none', fontSize: 22, cursor: 'pointer', color: '#00A896', flexShrink: 0, padding: 0 }}>←</button>
+                  )}
                   
                   <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #00C9B1, #00A8E8)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 18 }}>
                     {activeConv.other_user_name?.[0]?.toUpperCase()}
