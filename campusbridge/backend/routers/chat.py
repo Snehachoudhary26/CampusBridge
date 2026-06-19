@@ -49,3 +49,17 @@ def clear_history(
     ).delete()
     db.commit()
     return {"message": "Chat history cleared"}
+from aria.agent import run_listing_agent
+from pydantic import BaseModel
+
+class AgentRequest(BaseModel):
+    message: str
+
+@router.post("/agent")
+def chat_agent(request: AgentRequest):
+    """
+    Agent Mode — autonomously chains price prediction + spam detection
+    to draft a ready-to-post listing from a single natural language message.
+    """
+    result = run_listing_agent(request.message)
+    return result
