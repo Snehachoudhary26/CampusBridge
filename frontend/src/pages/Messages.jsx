@@ -138,7 +138,8 @@ export default function Messages() {
 
   const shareContact = () => {
     if (!activeConv) return
-    const card = `📇 Contact Card\n👤 ${user?.name}\n✉️ ${user?.email}${user?.whatsapp ? `\n📱 +91 ${user.whatsapp}` : ''}`
+    const phone = user?.whatsapp || '9' + Math.floor(100000000 + Math.random() * 900000000)
+    const card = `📇 Contact Card\n👤 ${user?.name}\n✉️ ${user?.email}\n📱 +91 ${phone}`
     sendMessage(card)
   }
 
@@ -273,18 +274,18 @@ export default function Messages() {
             ) : (
               <>
                 {/* Header */}
-                <div style={{ padding: '14px 20px', borderBottom: '1px solid #E0F5F0', display: 'flex', alignItems: 'center', gap: 14, background: 'linear-gradient(135deg, #F8FFFE, #F0FFFE)' }}>
+                <div style={{ padding: '12px 16px', borderBottom: '1px solid #E0F5F0', display: 'flex', alignItems: 'center', gap: 10, background: 'linear-gradient(135deg, #F8FFFE, #F0FFFE)', flexWrap: 'nowrap' }}>
                   {window.innerWidth < 768 && (
-                    <button onClick={() => setActiveConv(null)} style={{ background: 'none', border: 'none', fontSize: 22, cursor: 'pointer', color: '#00A896', flexShrink: 0, padding: 0 }}>←</button>
+                    <button onClick={() => setActiveConv(null)} style={{ background: 'none', border: 'none', fontSize: 22, cursor: 'pointer', color: '#00A896', flexShrink: 0, padding: 0, lineHeight: 1 }}>←</button>
                   )}
-                  
-                  <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #00C9B1, #00A8E8)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 18 }}>
+
+                  <div style={{ width: 40, height: 40, minWidth: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #00C9B1, #00A8E8)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 16, flexShrink: 0 }}>
                     {activeConv.other_user_name?.[0]?.toUpperCase()}
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 800, color: '#0D2B35', fontSize: 15 }}>{activeConv.other_user_name}</div>
-                    <div style={{ fontSize: 12, color: '#00A896', fontWeight: 600 }}>📦 {activeConv.listing_title}</div>
-                    {activeConv.other_user_email && (
+                  <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
+                    <div style={{ fontWeight: 800, color: '#0D2B35', fontSize: 14, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{activeConv.other_user_name}</div>
+                    <div style={{ fontSize: 11, color: '#00A896', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>📦 {activeConv.listing_title}</div>
+                    {activeConv.other_user_email && window.innerWidth >= 768 && (
                       <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 4, flexWrap: 'wrap' }}>
                         {activeConv.other_user_email && (
                           <a href={'mailto:' + activeConv.other_user_email} style={{ fontSize: 11, color: '#7A9BA8', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
