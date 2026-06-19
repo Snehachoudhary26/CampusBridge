@@ -336,12 +336,12 @@ export default function Messages() {
                           </div>
                         )}
                         <div style={{
-                          maxWidth: '65%', padding: '11px 16px', borderRadius: 18,
+                          maxWidth: window.innerWidth < 768 ? '78%' : '65%', padding: window.innerWidth < 768 ? '9px 13px' : '11px 16px', borderRadius: 18,
                           borderBottomRightRadius: isMine ? 4 : 18,
                           borderBottomLeftRadius: isMine ? 18 : 4,
                           background: isMine ? 'linear-gradient(135deg, #00C9B1, #00A896)' : '#fff',
                           color: isMine ? '#fff' : '#0D2B35',
-                          fontSize: 14, lineHeight: 1.6,
+                          fontSize: window.innerWidth < 768 ? 13 : 14, lineHeight: 1.5,
                           border: isMine ? 'none' : '1px solid #E0F5F0',
                           boxShadow: isMine ? '0 4px 12px rgba(0,201,177,0.3)' : '0 2px 8px rgba(0,0,0,0.05)',
                           whiteSpace: 'pre-line',
