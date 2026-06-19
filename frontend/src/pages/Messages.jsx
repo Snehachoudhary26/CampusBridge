@@ -136,6 +136,12 @@ export default function Messages() {
     finally { setRefreshing(false) }
   }
 
+  const shareContact = () => {
+    if (!activeConv) return
+    const card = `📇 Contact Card\n👤 ${user?.name}\n✉️ ${user?.email}${user?.whatsapp ? `\n📱 +91 ${user.whatsapp}` : ''}`
+    sendMessage(card)
+  }
+
   const deleteConversation = async () => {
     if (!activeConv) return
     if (!window.confirm('Delete this conversation? This cannot be undone.')) return
@@ -297,6 +303,12 @@ export default function Messages() {
                   {/* Action buttons */}
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                     <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+                      onClick={shareContact}
+                      title="Share my contact"
+                      style={{ width: 36, height: 36, borderRadius: '50%', border: '1.5px solid #B2EFE8', background: '#E8FBF8', cursor: 'pointer', fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00A896' }}>
+                      📇
+                    </motion.button>
+                    <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
                       onClick={refreshMessages} disabled={refreshing}
                       title="Refresh messages"
                       style={{ width: 36, height: 36, borderRadius: '50%', border: '1.5px solid #D0ECE8', background: '#fff', cursor: 'pointer', fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00A896' }}>
@@ -331,7 +343,7 @@ export default function Messages() {
                         style={{ display: 'flex', justifyContent: isMine ? 'flex-end' : 'flex-start', alignItems: 'flex-end', gap: 8 }}
                       >
                         {!isMine && (
-                          <div style={{ width: 32, height: 32, borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg, #00C9B1, #00A8E8)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 13 }}>
+                          <div style={{ width: 30, height: 30, borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg, #00C9B1, #00A8E8)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 12 }}>
                             {activeConv.other_user_name?.[0]?.toUpperCase()}
                           </div>
                         )}
@@ -346,7 +358,14 @@ export default function Messages() {
                           boxShadow: isMine ? '0 4px 12px rgba(0,201,177,0.3)' : '0 2px 8px rgba(0,0,0,0.05)',
                           whiteSpace: 'pre-line',
                         }}>
-                          {m.content}
+                          {m.content.startsWith('📇 Contact Card') ? (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                              <div style={{ fontWeight: 800, fontSize: 12, opacity: 0.8, marginBottom: 4 }}>📇 CONTACT SHARED</div>
+                              {m.content.split('\n').slice(1).map((line, idx) => (
+                                <div key={idx} style={{ fontSize: 13 }}>{line}</div>
+                              ))}
+                            </div>
+                          ) : m.content}
                           <div style={{ fontSize: 10, opacity: 0.7, marginTop: 4, textAlign: 'right' }}>
                             {new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             {isMine && ' ✓'}
