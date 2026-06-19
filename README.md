@@ -43,7 +43,7 @@
 | 🌐 **Frontend** | [campusbridge-one.vercel.app](https://campusbridge-one.vercel.app) | ![Live](https://img.shields.io/badge/Live-00C896?style=flat-square) |
 | ⚙️ **Backend API** | [campusbridge-2gsg.onrender.com](https://campusbridge-2gsg.onrender.com) | ![Live](https://img.shields.io/badge/Live-00C896?style=flat-square) |
 | 📖 **API Docs** | [campusbridge-2gsg.onrender.com/docs](https://campusbridge-2gsg.onrender.com/docs) | ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black) |
-| 🗄️ **Database** | Render PostgreSQL (Singapore) | ![Connected](https://img.shields.io/badge/Connected-00C896?style=flat-square) |
+| 🗄️ **Database** | Render PostgreSQL (Singapore region) | ![Connected](https://img.shields.io/badge/Connected-00C896?style=flat-square) |
 
 </div>
 
@@ -51,13 +51,28 @@
 
 ---
 
-<br/>
+## 😤 Why I Built This — The Real Problem
 
-## 🔥 The Problem It Solves
+> **Every RGPV student knows this scene:**
 
-> Every RGPV student has **unused books stacked after semester ends**, a calculator no one needs, a hostel fan sitting idle in May — and **no smart, safe place to trade within campus**.
+<div align="center">
+
+| The WhatsApp Chaos 😩 | The CampusBridge Way ✅ |
+|----------------------|------------------------|
+| *"If anyone wants to buy this DM me"* posted in 5 random groups | Structured listing with photo, price, condition, category |
+| No price mentioned — awkward negotiation over DM | AI suggests fair price instantly (R²=96.76%) |
+| Strangers from outside campus | Only verified RGPV students |
+| Lost in 200 other messages within minutes | Searchable, filterable, always discoverable |
+| No way to know if it's relevant to your semester | Filtered by your department and semester |
+| Seller's personal number exposed publicly | Private in-app messaging — no number sharing |
+
+</div>
+
+> I saw students posting purple almirahs, Casio calculators, red buckets in RGPV WhatsApp groups at 11 PM — and nobody could find what they needed. So I built the solution.
 >
-> OLX has strangers. Facebook Marketplace has chaos. **CampusBridge has your department, your semester, your campus — and an AI that knows your syllabus.**
+> **OLX has strangers. Facebook has chaos. CampusBridge has your campus — with AI.**
+
+---
 
 <br/>
 
@@ -65,15 +80,16 @@
 
 <div align="center">
 
-|  | OLX / Facebook | **CampusBridge** |
-|--|:-:|:-:|
-| Campus-verified students | ❌ | ✅ RGPV school + dept |
-| Semester-aware listings | ❌ | ✅ Filter by sem |
-| AI price suggestion | ❌ | ✅ ML model R²=96.76% |
-| Spam detection | ❌ | ✅ 100% accuracy |
-| AI campus chatbot | ❌ | ✅ ARIA — knows your syllabus |
-| Skill-swap mode | ❌ | ✅ Trade skills, not just things |
-| Smart recommendations | ❌ | ✅ Dept + semester aware |
+|  | OLX / Facebook | WhatsApp Groups | **CampusBridge** |
+|--|:-:|:-:|:-:|
+| Campus-verified students | ❌ | ❌ | ✅ RGPV school + dept |
+| Semester-aware listings | ❌ | ❌ | ✅ Filter by sem |
+| AI price suggestion | ❌ | ❌ | ✅ ML model R²=96.76% |
+| Spam detection | ❌ | ❌ | ✅ 100% accuracy |
+| AI campus chatbot | ❌ | ❌ | ✅ ARIA — knows your syllabus |
+| Skill-swap mode | ❌ | ❌ | ✅ Trade skills, not just things |
+| Smart recommendations | ❌ | ❌ | ✅ Dept + semester aware |
+| Private messaging | ✅ | ❌ | ✅ No number sharing needed |
 
 </div>
 
@@ -116,9 +132,9 @@
 | Service | Role |
 |---------|------|
 | **Vercel** | Frontend hosting — auto-deploy from GitHub |
-| **Render** | Backend hosting — Python web service (free tier) |
+| **Render** | Backend hosting — Python web service |
 | **Render PostgreSQL** | Cloud database — Singapore region |
-| **Supabase** | (backup database option) |
+| **cron-job.org** | Keeps backend alive — pings every 10 minutes |
 
 </div>
 
@@ -200,13 +216,19 @@ CampusBridge/
         ├── api/axios.js         ← Axios instance + JWT interceptor
         ├── store/authStore.js   ← Zustand global auth state
         ├── components/
-        │   └── Navbar.jsx       ← Responsive nav bar
+        │   ├── Navbar.jsx       ← Responsive nav bar + mobile hamburger
+        │   ├── Logo.jsx         ← CampusBridge SVG logo
+        │   └── ARIAChat.jsx     ← Floating ARIA chatbot UI
         └── pages/
             ├── Home.jsx         ← Hero section + live listings grid
             ├── Login.jsx        ← Login form + toast feedback
             ├── Register.jsx     ← School → Dept → Sem wizard
             ├── Listings.jsx     ← Myntra-style filter + product grid
-            └── PostListing.jsx  ← Multi-step listing creation
+            ├── ListingDetail.jsx← Full detail + contact seller + AI badge
+            ├── PostListing.jsx  ← Multi-step listing creation
+            ├── Messages.jsx     ← Real-time buyer↔seller chat
+            ├── Analytics.jsx    ← Live charts + ML stats dashboard
+            └── Profile.jsx      ← My listings + stats + WhatsApp
 ```
 
 ---
@@ -341,20 +363,20 @@ Add `VITE_API_URL=https://your-render-url.onrender.com` in Vercel environment va
  ██████████  Day 5  — Price prediction ML (Random Forest R²=96.76%)
  ██████████  Day 6  — Spam detector + messaging API
  ██████████  Day 7  — Recommender + Seaborn analytics
- ██████████  Day 8  — React frontend (Navbar, Login, Register, Home, Listings)
- ██████████  Day 9  — Deployed backend to Render + database seeded
- ██████████  Day 10 — Deployed frontend to Vercel — LIVE 🎉
- ░░░░░░░░░░  Next   — ARIA UI, Detail page, Messages UI, Profile page
- ░░░░░░░░░░  Next   — Mobile responsiveness polish
+ ██████████  Day 8  — React frontend (all pages built)
+ ██████████  Day 9  — Backend deployed to Render + DB seeded
+ ██████████  Day 10 — Frontend deployed to Vercel — LIVE 🎉
+ ██████████  Day 11 — Listing Detail, Messages UI, Analytics, Profile, ARIA UI
+ ██████████  Day 12 — Mobile responsiveness + bcrypt fix + favicon + cron ping
 ```
 
 ---
 
 ## 🎓 Interview Highlights
 
-- **6 ML techniques** — Random Forest, Logistic Regression, TF-IDF, Cosine Similarity, Seaborn analytics, time-series ready
+- **Solves a real problem** — I saw RGPV students posting "DM me to buy" in WhatsApp groups at 11 PM with no price, no search, no structure. I built the fix.
+- **6 ML techniques** — Random Forest, Logistic Regression, TF-IDF, Cosine Similarity, Seaborn analytics
 - **Real AI, not hardcoded** — ARIA uses Gemini API + a hand-crafted RGPV knowledge base (RAG pattern)
-- **Solves my own problem** — I am an RGPV IT student, designed this for students exactly like me
 - **Full-stack end-to-end** — Python FastAPI backend + React frontend, connected via REST API, deployed on cloud
 - **Security done right** — bcrypt hashing, JWT tokens, expiry, no plaintext secrets in code
 - **Unique in India** — No campus marketplace in India has AI price prediction + department-aware recommendations
