@@ -302,29 +302,31 @@ export default function Messages() {
                     )}
                   </div>
                   {/* Action buttons */}
-                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                  <div style={{ display: 'flex', gap: window.innerWidth < 768 ? 4 : 8, alignItems: 'center', flexShrink: 0 }}>
                     <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
                       onClick={shareContact}
                       title="Share my contact"
-                      style={{ width: 36, height: 36, borderRadius: '50%', border: '1.5px solid #B2EFE8', background: '#E8FBF8', cursor: 'pointer', fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00A896' }}>
+                      style={{ width: window.innerWidth < 768 ? 30 : 36, height: window.innerWidth < 768 ? 30 : 36, borderRadius: '50%', border: '1.5px solid #B2EFE8', background: '#E8FBF8', cursor: 'pointer', fontSize: window.innerWidth < 768 ? 13 : 16, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00A896', flexShrink: 0 }}>
                       📇
                     </motion.button>
                     <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
                       onClick={refreshMessages} disabled={refreshing}
                       title="Refresh messages"
-                      style={{ width: 36, height: 36, borderRadius: '50%', border: '1.5px solid #D0ECE8', background: '#fff', cursor: 'pointer', fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00A896' }}>
+                      style={{ width: window.innerWidth < 768 ? 30 : 36, height: window.innerWidth < 768 ? 30 : 36, borderRadius: '50%', border: '1.5px solid #D0ECE8', background: '#fff', cursor: 'pointer', fontSize: window.innerWidth < 768 ? 13 : 16, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00A896', flexShrink: 0 }}>
                       {refreshing ? '⏳' : '🔄'}
                     </motion.button>
                     <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
                       onClick={deleteConversation}
                       title="Delete conversation"
-                      style={{ width: 36, height: 36, borderRadius: '50%', border: '1.5px solid #FFD0D0', background: '#FFF5F5', cursor: 'pointer', fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#E05555' }}>
+                      style={{ width: window.innerWidth < 768 ? 30 : 36, height: window.innerWidth < 768 ? 30 : 36, borderRadius: '50%', border: '1.5px solid #FFD0D0', background: '#FFF5F5', cursor: 'pointer', fontSize: window.innerWidth < 768 ? 13 : 16, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#E05555', flexShrink: 0 }}>
                       🗑️
                     </motion.button>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#00C9B1' }} />
-                      <span style={{ fontSize: 12, color: '#7A9BA8' }}>Online</span>
-                    </div>
+                    {window.innerWidth >= 768 && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#00C9B1' }} />
+                        <span style={{ fontSize: 12, color: '#7A9BA8' }}>Online</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -417,23 +419,23 @@ export default function Messages() {
                 </AnimatePresence>
 
                 {/* Input */}
-                <div style={{ padding: '12px 16px', borderTop: '1px solid #E0F5F0', display: 'flex', gap: 10, alignItems: 'center', background: '#fff' }}>
+                <div style={{ padding: window.innerWidth < 768 ? '10px 10px' : '12px 16px', borderTop: '1px solid #E0F5F0', display: 'flex', gap: window.innerWidth < 768 ? 6 : 10, alignItems: 'center', background: '#fff' }}>
                   <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
                     onClick={() => setShowQuickReplies(!showQuickReplies)}
-                    style={{ width: 42, height: 42, borderRadius: '50%', border: showQuickReplies ? 'none' : '1.5px solid #D0ECE8', background: showQuickReplies ? 'linear-gradient(135deg, #00C9B1, #00A896)' : '#F0FFFE', color: showQuickReplies ? '#fff' : '#00A896', fontSize: 18, cursor: 'pointer', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
+                    style={{ width: window.innerWidth < 768 ? 36 : 42, height: window.innerWidth < 768 ? 36 : 42, borderRadius: '50%', border: showQuickReplies ? 'none' : '1.5px solid #D0ECE8', background: showQuickReplies ? 'linear-gradient(135deg, #00C9B1, #00A896)' : '#F0FFFE', color: showQuickReplies ? '#fff' : '#00A896', fontSize: 16, cursor: 'pointer', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
                     ⚡
                   </motion.button>
                   <input
                     value={input} onChange={e => setInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
-                    placeholder="Type a message or tap ⚡ for smart replies..."
-                    style={{ flex: 1, padding: '12px 16px', borderRadius: 24, border: '1.5px solid #D0ECE8', outline: 'none', fontSize: 14, color: '#0D2B35', background: '#F8FFFE', transition: 'all 0.2s' }}
+                    placeholder={window.innerWidth < 768 ? "Type a message..." : "Type a message or tap ⚡ for smart replies..."}
+                    style={{ flex: 1, minWidth: 0, padding: window.innerWidth < 768 ? '10px 12px' : '12px 16px', borderRadius: 24, border: '1.5px solid #D0ECE8', outline: 'none', fontSize: window.innerWidth < 768 ? 13 : 14, color: '#0D2B35', background: '#F8FFFE', transition: 'all 0.2s' }}
                     onFocus={e => e.target.style.borderColor = '#00C9B1'}
                     onBlur={e => e.target.style.borderColor = '#D0ECE8'}
                   />
                   <motion.button whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }}
                     onClick={() => sendMessage()} disabled={sending || !input.trim()}
-                    style={{ width: 44, height: 44, borderRadius: '50%', border: 'none', background: input.trim() ? 'linear-gradient(135deg, #00C9B1, #00A896)' : '#E0F5F0', color: input.trim() ? '#fff' : '#A0BCBB', fontSize: 18, cursor: input.trim() ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: input.trim() ? '0 4px 12px rgba(0,201,177,0.4)' : 'none', transition: 'all 0.2s', flexShrink: 0 }}>
+                    style={{ width: window.innerWidth < 768 ? 38 : 44, height: window.innerWidth < 768 ? 38 : 44, borderRadius: '50%', border: 'none', background: input.trim() ? 'linear-gradient(135deg, #00C9B1, #00A896)' : '#E0F5F0', color: input.trim() ? '#fff' : '#A0BCBB', fontSize: 18, cursor: input.trim() ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: input.trim() ? '0 4px 12px rgba(0,201,177,0.4)' : 'none', transition: 'all 0.2s', flexShrink: 0 }}>
                     ↑
                   </motion.button>
                 </div>
