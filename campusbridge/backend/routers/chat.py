@@ -63,3 +63,31 @@ def chat_agent(request: AgentRequest):
     """
     result = run_listing_agent(request.message)
     return result
+
+
+from aria.agent import run_search_agent
+from database import get_db
+from sqlalchemy.orm import Session as _Session
+
+@router.post("/agent/search")
+def chat_agent_search(request: AgentRequest, db: _Session = Depends(get_db)):
+    """
+    Agent Mode (Search) — autonomously queries the live listings database
+    based on a natural language buyer request, ranks results, and explains picks.
+    """
+    result = run_search_agent(request.message, db)
+    return result
+
+
+from aria.agent import run_search_agent
+from database import get_db
+from sqlalchemy.orm import Session as _Session
+
+@router.post("/agent/search")
+def chat_agent_search(request: AgentRequest, db: _Session = Depends(get_db)):
+    """
+    Agent Mode (Search) — autonomously queries the live listings database
+    based on a natural language buyer request, ranks results, and explains picks.
+    """
+    result = run_search_agent(request.message, db)
+    return result
