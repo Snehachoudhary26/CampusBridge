@@ -24,6 +24,8 @@ export default function ARIAChat() {
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [postingIndex, setPostingIndex] = useState(null)
+  const [postedIndexes, setPostedIndexes] = useState([])
   const bottomRef = useRef(null)
   const { isAuthenticated } = useAuthStore()
 
@@ -67,6 +69,31 @@ export default function ARIAChat() {
       setMessages(prev => [...prev, { role: 'aria', text: "Agent ran into an issue. Please try rephrasing your request." }])
     } finally {
       setLoading(false)
+    }
+  }
+
+  const postDraft = async (draft, index) => {
+    setPostingIndex(index)
+    try {
+      const formData = new FormData()
+      formData.append('title', draft.title)
+      formData.append('description', `Posted via ARIA Agent. AI-suggested price range: ${draft.price_range}`)
+      formData.append('price', draft.suggested_price)
+      formData.append('condition', draft.condition)
+      formData.append('category', draft.category)
+      formData.append('listing_type', draft.listing_type)
+
+      await API.post('/listings/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+
+      setPostedIndexes(prev => [...prev, index])
+      setMessages(prev => [...prev, { role: 'aria', text: '✅ Done! Your listing has been posted to CampusBridge.' }])
+    } catch (err) {
+      const detail = err.response?.data?.detail
+      setMessages(prev => [...prev, { role: 'aria', text: typeof detail === 'string' ? `Couldn't post: ${detail}` : "Sorry, I couldn't post that listing. Please try the Post Listing page instead." }])
+    } finally {
+      setPostingIndex(null)
     }
   }
 
@@ -217,6 +244,24 @@ export default function ARIAChat() {
                           <span style={{ fontWeight: 800, color: '#00A896' }}>₹{m.draft.suggested_price}</span>
                         </div>
                         <div style={{ fontSize: 11, color: '#A0BCBB', marginTop: 2 }}>Fair range: {m.draft.price_range}</div>
+
+                        {postedIndexes.includes(i) ? (
+                          <div style={{ marginTop: 8, padding: '8px 10px', borderRadius: 10, background: '#E8FBF8', color: '#00A896', fontSize: 12, fontWeight: 700, textAlign: 'center' }}>
+                            ✅ Posted to CampusBridge
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => postDraft(m.draft, i)}
+                            disabled={postingIndex === i}
+                            style={{
+                              marginTop: 8, width: '100%', padding: '8px 10px', borderRadius: 10, border: 'none',
+                              background: postingIndex === i ? '#B2EFE8' : 'linear-gradient(135deg, #00C9B1, #00A896)',
+                              color: '#fff', fontSize: 12, fontWeight: 700, cursor: postingIndex === i ? 'not-allowed' : 'pointer',
+                            }}
+                          >
+                            {postingIndex === i ? '⏳ Posting...' : '✅ Confirm & Post Listing'}
+                          </button>
+                        )}
                       </div>
                     )}
 
