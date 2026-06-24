@@ -160,9 +160,16 @@
 ```
   Input   →  listing title + description (raw text)
   Model   →  TF-IDF vectorizer  →  Logistic Regression classifier
+  Dataset →  41 spam + 41 real samples (campus-marketplace specific patterns)
   Output  →  is_spam: true / false  +  confidence score
-  Score   →  Accuracy = 100%  ✅
+  Score   →  100% on held-out test split  +  8/8 (100%) on completely
+             unseen, hand-written sentences never present in any form
+             in training (verified separately from the test split)
 ```
+> Honest note: an earlier version of this model was trained on a smaller
+> 25+25 sample set. After a LinkedIn comment fairly questioned the 100%
+> claim, the dataset was expanded and re-evaluated against fresh,
+> never-seen sentences to confirm it wasn't just memorizing patterns.
 
 ### 🎯 Smart Recommender — Cosine Similarity
 ```
