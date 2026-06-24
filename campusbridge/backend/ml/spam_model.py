@@ -35,6 +35,21 @@ SPAM_LISTINGS = [
     "Illegal items available contact privately",
     "Stolen goods cheap price no questions",
     "100 percent guaranteed results or money back",
+    "Pay advance booking amount to secure this laptop today",
+    "Send registration fee to unlock free scholarship offer",
+    "Investment scheme doubles your pocket money in a week",
+    "DM for crypto trading tips guaranteed daily profit",
+    "Hostel room available pay deposit via this UPI link only",
+    "Job vacancy part time data entry no interview needed",
+    "Loan available instant approval no documents required student",
+    "Sell your assignment solutions earn 5000 rupees daily",
+    "Selling exam leaked question paper contact urgently",
+    "Free recharge offer limited stock hurry click now",
+    "Resell this for double price guaranteed buyer waiting",
+    "Cheap branded shoes wholesale price bulk only no returns",
+    "Get verified blue tick instantly pay small fee",
+    "Forex trading masterclass free seats limited register now",
+    "Win scholarship just share this message to 10 friends",
 ]
 
 REAL_LISTINGS = [
@@ -63,6 +78,21 @@ REAL_LISTINGS = [
     "Nanotechnology research papers printed collection",
     "Biotechnology lab manual semester 4 good condition",
     "MBA finance books hull options futures derivatives",
+    "Immersion water heater rod 500W good working condition",
+    "Stapler heavy duty with extra staples included",
+    "RD Sharma maths book semester 3 like new condition",
+    "HP laptop available for rent during exam week only",
+    "Wooden study table foldable hostel room size",
+    "Single bed mattress 4 inch thick barely used one year",
+    "Electric kettle 1 litre boiling water hostel approved",
+    "USB C to USB A cable 1 metre fast charging",
+    "Engineering graphics drafter complete set unused",
+    "Iron box hostel use selling before leaving campus",
+    "Bicycle single speed good condition for campus commute",
+    "Steel almirah cupboard hostel room storage selling",
+    "Chemistry lab coat size large used one semester",
+    "Wifi router TP-Link selling moving out of hostel",
+    "Guitar acoustic Yamaha beginner good condition",
 ]
 
 def generate_training_data():
