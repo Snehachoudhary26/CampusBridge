@@ -181,6 +181,54 @@
 
 ---
 
+## 🤖 Agentic AI — ARIA Agent Mode
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Agent%20Mode-NEW-FBBF24?style=for-the-badge&logo=robot&logoColor=black"/>
+  &nbsp;
+  <img src="https://img.shields.io/badge/Multi--Step%20Reasoning-Autonomous-00C896?style=for-the-badge"/>
+</p>
+
+Most chatbots answer one question at a time. **ARIA Agent Mode goes further** — it plans, calls multiple tools on its own, and completes an action without step-by-step guidance from the user. This is the difference between a chatbot and an **agent**.
+
+### 🧾 Agent 1 — Listing Draft Agent
+A single sentence becomes a real, posted listing — fully autonomous:
+```
+User: "sell my casio calculator, good condition, around 150 rupees"
+
+Agent reasoning (visible to the user):
+  🔍 Step 1 — Detects category        → Calculator
+  🤖 Step 2 — Calls price ML model     → ₹213 (fair range ₹192–₹234)
+  🛡️ Step 3 — Calls spam detector      → ✅ looks safe
+  📝 Step 4 — Builds a draft listing   → ready to review
+  ✅ Step 5 — User taps "Confirm & Post" → listing goes live on CampusBridge instantly
+```
+No manual form-filling, no separate price lookup — one sentence, five autonomous steps, one real result.
+
+### 🔍 Agent 2 — Buyer Search Agent
+Describes a need in plain language; the agent queries the **live database** itself:
+```
+User: "find me a calculator under 200 rupees in good condition"
+
+Agent reasoning (visible to the user):
+  🔍 Step 1 — Extracts filters     → category=Calculator, max_price=₹200, min_condition=3
+  🗂️ Step 2 — Queries listings DB   → real-time, not cached
+  📊 Step 3 — Ranks by condition    → best match first
+  💬 Step 4 — Explains the pick     → in plain English, with a direct link
+```
+
+### Why this is genuinely agentic (not just a chatbot)
+| Regular Chatbot | ARIA Agent Mode |
+|---|---|
+| One question → one text answer | One sentence → multiple tool calls chained automatically |
+| User has to act on the answer manually | Agent completes the action (posts the listing itself) |
+| No visibility into "thinking" | Step-by-step reasoning shown live in the chat |
+| Static response | Reads/writes the **real, live** CampusBridge database |
+
+Toggle **Agent Mode** inside the ARIA chat window (🤖 icon, bottom-right of any page) to try it.
+
+---
+
 ## 🏗️ Project Structure
 
 ```
@@ -203,7 +251,8 @@ CampusBridge/
 │       │   └── analytics.py     ← Charts + personalised recommendations
 │       ├── aria/
 │       │   ├── context.py       ← RGPV knowledge base (RAG context)
-│       │   └── chatbot.py       ← Gemini API integration
+│       │   ├── chatbot.py       ← Gemini API integration
+│       │   └── agent.py         ← 🤖 Agentic AI — autonomous draft + search agents
 │       ├── ml/
 │       │   ├── price_model.py   ← Random Forest price predictor
 │       │   ├── spam_model.py    ← TF-IDF spam detector
@@ -218,7 +267,7 @@ CampusBridge/
         ├── components/
         │   ├── Navbar.jsx       ← Responsive nav bar + mobile hamburger
         │   ├── Logo.jsx         ← CampusBridge SVG logo
-        │   └── ARIAChat.jsx     ← Floating ARIA chatbot UI
+        │   └── ARIAChat.jsx     ← Floating ARIA chatbot UI + 🤖 Agent Mode toggle
         └── pages/
             ├── Home.jsx         ← Hero section + live listings grid
             ├── Login.jsx        ← Login form + toast feedback
@@ -249,6 +298,8 @@ CampusBridge/
 | `GET` | `/categories/schools` | — | All RGPV schools + depts |
 | `POST` | `/chat/` | 🔒 | Talk to ARIA (logged in) |
 | `POST` | `/chat/guest` | — | Try ARIA without login |
+| `POST` | `/chat/agent` | 🔒 | 🤖 Agent: autonomous listing draft (price + spam check) |
+| `POST` | `/chat/agent/search` | — | 🤖 Agent: autonomous listing search + ranking |
 | `POST` | `/predict/price` | 🔒 | Get ML price suggestion |
 | `GET` | `/analytics/trending` | 🔒 | Trending categories chart |
 | `GET` | `/analytics/recommendations/{id}` | 🔒 | Personalised picks |
@@ -368,6 +419,7 @@ Add `VITE_API_URL=https://your-render-url.onrender.com` in Vercel environment va
  ██████████  Day 10 — Frontend deployed to Vercel — LIVE 🎉
  ██████████  Day 11 — Listing Detail, Messages UI, Analytics, Profile, ARIA UI
  ██████████  Day 12 — Mobile responsiveness + bcrypt fix + favicon + cron ping
+ ██████████  Day 13 — 🤖 Agentic AI: autonomous draft + search agents, Confirm & Post
 ```
 
 ---
@@ -375,6 +427,7 @@ Add `VITE_API_URL=https://your-render-url.onrender.com` in Vercel environment va
 ## 🎓 Interview Highlights
 
 - **Solves a real problem** — I saw RGPV students posting "DM me to buy" in WhatsApp groups at 11 PM with no price, no search, no structure. I built the fix.
+- **Genuinely agentic, not just a chatbot** — ARIA Agent Mode autonomously chains my own ML models (price prediction → spam check → draft → publish) from a single sentence, with visible step-by-step reasoning
 - **6 ML techniques** — Random Forest, Logistic Regression, TF-IDF, Cosine Similarity, Seaborn analytics
 - **Real AI, not hardcoded** — ARIA uses Gemini API + a hand-crafted RGPV knowledge base (RAG pattern)
 - **Full-stack end-to-end** — Python FastAPI backend + React frontend, connected via REST API, deployed on cloud
