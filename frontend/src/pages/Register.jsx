@@ -12,6 +12,8 @@ export default function Register() {
   const [departments, setDepartments] = useState([])
   const [loading, setLoading] = useState(false)
   const [schoolsLoading, setSchoolsLoading] = useState(true)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
   const [form, setForm] = useState({
     name: '', email: '', password: '', confirm: '',
     school_id: '', school_name: '', department: '', semester: '', enrollment_no: '',
@@ -159,18 +161,32 @@ export default function Register() {
 
             <div>
               <label style={labelStyle}>Password *</label>
-              <input style={inputStyle} type="password" placeholder="Minimum 6 characters"
-                value={form.password} onChange={e => update('password', e.target.value)}
-                onFocus={e => e.target.style.borderColor = '#00C9B1'}
-                onBlur={e => e.target.style.borderColor = '#D0ECE8'} />
+              <div style={{ position: 'relative' }}>
+                <input style={{ ...inputStyle, paddingRight: 44 }} type={showPassword ? "text" : "password"} placeholder="Minimum 6 characters"
+                  value={form.password} onChange={e => update('password', e.target.value)}
+                  onFocus={e => e.target.style.borderColor = '#00C9B1'}
+                  onBlur={e => e.target.style.borderColor = '#D0ECE8'} />
+                <button type="button" onClick={() => setShowPassword(s => !s)} style={{
+                  position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+                  background: 'none', border: 'none', cursor: 'pointer', fontSize: 16,
+                  color: '#7A9BA8', padding: 0, display: 'flex', alignItems: 'center',
+                }}>{showPassword ? '🙈' : '👁️'}</button>
+              </div>
             </div>
 
             <div>
               <label style={labelStyle}>Confirm Password *</label>
-              <input style={inputStyle} type="password" placeholder="Repeat password"
-                value={form.confirm} onChange={e => update('confirm', e.target.value)}
-                onFocus={e => e.target.style.borderColor = '#00C9B1'}
-                onBlur={e => e.target.style.borderColor = '#D0ECE8'} />
+              <div style={{ position: 'relative' }}>
+                <input style={{ ...inputStyle, paddingRight: 44 }} type={showConfirm ? "text" : "password"} placeholder="Repeat password"
+                  value={form.confirm} onChange={e => update('confirm', e.target.value)}
+                  onFocus={e => e.target.style.borderColor = '#00C9B1'}
+                  onBlur={e => e.target.style.borderColor = '#D0ECE8'} />
+                <button type="button" onClick={() => setShowConfirm(s => !s)} style={{
+                  position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+                  background: 'none', border: 'none', cursor: 'pointer', fontSize: 16,
+                  color: '#7A9BA8', padding: 0, display: 'flex', alignItems: 'center',
+                }}>{showConfirm ? '🙈' : '👁️'}</button>
+              </div>
               {form.confirm && (
                 <p style={{ fontSize: 12, marginTop: 4, color: form.password === form.confirm ? '#00A896' : '#E05555' }}>
                   {form.password === form.confirm ? '✅ Passwords match' : '⚠️ Passwords do not match'}

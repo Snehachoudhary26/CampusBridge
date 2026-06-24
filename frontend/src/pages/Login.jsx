@@ -8,6 +8,7 @@ import useAuthStore from '../store/authStore'
 export default function Login() {
   const isMobile = window.innerWidth < 768
   const [form, setForm] = useState({ email: '', password: '' })
+  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [savedEmails, setSavedEmails] = useState([])
   const [showSuggestions, setShowSuggestions] = useState(false)
@@ -127,14 +128,21 @@ export default function Login() {
           {/* Password */}
           <div>
             <label style={{ fontSize: 13, fontWeight: 600, color: '#4A6572', display: 'block', marginBottom: 6 }}>Password</label>
-            <input type="password" placeholder="••••••••"
-              value={form.password}
-              onChange={e => setForm({ ...form, password: e.target.value })}
-              onKeyDown={e => e.key === 'Enter' && handleSubmit()}
-              style={inputStyle}
-              onFocus={e => e.target.style.borderColor = '#00C9B1'}
-              onBlur={e => e.target.style.borderColor = '#D0ECE8'}
-            />
+            <div style={{ position: 'relative' }}>
+              <input type={showPassword ? "text" : "password"} placeholder="••••••••"
+                value={form.password}
+                onChange={e => setForm({ ...form, password: e.target.value })}
+                onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+                style={{ ...inputStyle, paddingRight: 44 }}
+                onFocus={e => e.target.style.borderColor = '#00C9B1'}
+                onBlur={e => e.target.style.borderColor = '#D0ECE8'}
+              />
+              <button type="button" onClick={() => setShowPassword(s => !s)} style={{
+                position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+                background: 'none', border: 'none', cursor: 'pointer', fontSize: 16,
+                color: '#7A9BA8', padding: 0, display: 'flex', alignItems: 'center',
+              }}>{showPassword ? '🙈' : '👁️'}</button>
+            </div>
           </div>
 
           {/* Login Button */}
